@@ -1,4 +1,4 @@
-export type ExplorerView = 'dashboard' | 'explorer';
+export type ExplorerView = 'dashboard' | 'explorer' | 'gallery';
 export type XyteWidgetMode = 'legacy' | 'modern';
 
 export type ThemeId =
@@ -7,7 +7,19 @@ export type ThemeId =
   | 'xyte_midnight_haze'
   | 'xyte_graphite_neo'
   | 'xyte_slate_cloud'
-  | 'xyte_teal_night';
+  | 'xyte_teal_night'
+  | 'xyte_ember_warm'
+  | 'xyte_arctic_frost'
+  | 'xyte_forest_deep'
+  | 'xyte_sunset_blaze'
+  | 'xyte_ocean_depth'
+  | 'xyte_high_contrast'
+  | 'xyte_solarized_light'
+  | 'xyte_nord_frost'
+  | 'xyte_dracula_pro'
+  | 'xyte_healthcare'
+  | 'xyte_industrial'
+  | 'xyte_retail';
 
 export type ViewportPreset = 'desktop' | 'mobile';
 

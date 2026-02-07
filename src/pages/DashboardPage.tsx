@@ -1,4 +1,4 @@
-import type { ThemeId, XyteWidgetMode } from '../explorer/types';
+import type { ExplorerView, ThemeId, XyteWidgetMode } from '../explorer/types';
 import { XYTE_THEMES } from '../theme/themes';
 import { DashboardContent, setWidgetRuntimeTheme } from '../widgets/library';
 
@@ -7,7 +7,7 @@ interface DashboardPageProps {
   mode: XyteWidgetMode;
   onThemeChange: (themeId: ThemeId) => void;
   onModeChange: (mode: XyteWidgetMode) => void;
-  onViewChange: (view: 'dashboard' | 'explorer') => void;
+  onViewChange: (view: ExplorerView) => void;
 }
 
 export function DashboardPage({
@@ -25,6 +25,13 @@ export function DashboardPage({
         <div className="xyte-toolbar__left">
           <button className="xyte-tab xyte-tab--active" type="button">
             Dashboard
+          </button>
+          <button
+            className="xyte-tab"
+            type="button"
+            onClick={() => onViewChange('gallery')}
+          >
+            Gallery
           </button>
           <button
             className="xyte-tab"

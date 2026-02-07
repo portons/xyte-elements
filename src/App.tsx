@@ -8,6 +8,7 @@ import type {
 } from './explorer/types';
 import { DashboardPage } from './pages/DashboardPage';
 import { ExplorerPage } from './pages/ExplorerPage';
+import { GalleryPage } from './pages/GalleryPage';
 import { XYTE_THEME_IDS } from './theme/themes';
 import { getWidgetStory } from './widgets/registry';
 
@@ -34,7 +35,8 @@ const DEFAULT_STATE: AppState = {
 function parseStateFromSearch(search: string): AppState {
   const params = new URLSearchParams(search);
 
-  const view = params.get('view') === 'explorer' ? 'explorer' : 'dashboard';
+  const viewParam = params.get('view');
+  const view: ExplorerView = viewParam === 'explorer' ? 'explorer' : viewParam === 'gallery' ? 'gallery' : 'dashboard';
   const themeCandidate = params.get('theme') as ThemeId | null;
   const themeId = XYTE_THEME_IDS.includes(themeCandidate as ThemeId)
     ? (themeCandidate as ThemeId)
@@ -83,6 +85,15 @@ export default function App() {
           onThemeChange={setThemeId}
           onModeChange={setMode}
           onViewChange={setView}
+        />
+      ) : view === 'gallery' ? (
+        <GalleryPage
+          themeId={themeId}
+          mode={mode}
+          onThemeChange={setThemeId}
+          onModeChange={setMode}
+          onViewChange={setView}
+          onWidgetSelect={setWidgetId}
         />
       ) : (
         <ExplorerPage

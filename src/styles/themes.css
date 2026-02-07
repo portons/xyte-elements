@@ -67,3 +67,123 @@
   --xyte-muted: #93b8c3;
   --xyte-accent: #00bfa5;
 }
+
+.xyte-app[data-theme='xyte_ember_warm'] {
+  --xyte-bg: #1a1210;
+  --xyte-surface: #241c18;
+  --xyte-surface-alt: #2e241e;
+  --xyte-border: #4a3828;
+  --xyte-text: #f5e8db;
+  --xyte-muted: #bfa48a;
+  --xyte-accent: #e8833a;
+}
+
+.xyte-app[data-theme='xyte_arctic_frost'] {
+  --xyte-bg: #f0f5fa;
+  --xyte-surface: #ffffff;
+  --xyte-surface-alt: #f7fbff;
+  --xyte-border: #c8d8ea;
+  --xyte-text: #1a2b3c;
+  --xyte-muted: #5a7088;
+  --xyte-accent: #4fc3f7;
+}
+
+.xyte-app[data-theme='xyte_forest_deep'] {
+  --xyte-bg: #0d1510;
+  --xyte-surface: #142018;
+  --xyte-surface-alt: #1a2a1f;
+  --xyte-border: #2d4a35;
+  --xyte-text: #e0f0e4;
+  --xyte-muted: #8cb896;
+  --xyte-accent: #4caf50;
+}
+
+.xyte-app[data-theme='xyte_sunset_blaze'] {
+  --xyte-bg: #1a1015;
+  --xyte-surface: #241820;
+  --xyte-surface-alt: #2e1e28;
+  --xyte-border: #4a2838;
+  --xyte-text: #f5e0e8;
+  --xyte-muted: #bf8a9a;
+  --xyte-accent: #ff6d00;
+}
+
+.xyte-app[data-theme='xyte_ocean_depth'] {
+  --xyte-bg: #0a1628;
+  --xyte-surface: #0f1e35;
+  --xyte-surface-alt: #142842;
+  --xyte-border: #1e3a5f;
+  --xyte-text: #e0eef8;
+  --xyte-muted: #7aa3c4;
+  --xyte-accent: #00e5ff;
+}
+
+.xyte-app[data-theme='xyte_high_contrast'] {
+  --xyte-bg: #000000;
+  --xyte-surface: #0a0a0a;
+  --xyte-surface-alt: #141414;
+  --xyte-border: #3a3a3a;
+  --xyte-text: #ffffff;
+  --xyte-muted: #c0c0c0;
+  --xyte-accent: #ffff00;
+}
+
+.xyte-app[data-theme='xyte_solarized_light'] {
+  --xyte-bg: #fdf6e3;
+  --xyte-surface: #eee8d5;
+  --xyte-surface-alt: #f5efdc;
+  --xyte-border: #d3cbb8;
+  --xyte-text: #073642;
+  --xyte-muted: #586e75;
+  --xyte-accent: #268bd2;
+}
+
+.xyte-app[data-theme='xyte_nord_frost'] {
+  --xyte-bg: #2e3440;
+  --xyte-surface: #3b4252;
+  --xyte-surface-alt: #434c5e;
+  --xyte-border: #4c566a;
+  --xyte-text: #eceff4;
+  --xyte-muted: #d8dee9;
+  --xyte-accent: #88c0d0;
+}
+
+.xyte-app[data-theme='xyte_dracula_pro'] {
+  --xyte-bg: #282a36;
+  --xyte-surface: #343746;
+  --xyte-surface-alt: #3e4154;
+  --xyte-border: #44475a;
+  --xyte-text: #f8f8f2;
+  --xyte-muted: #6272a4;
+  --xyte-accent: #bd93f9;
+}
+
+.xyte-app[data-theme='xyte_healthcare'] {
+  --xyte-bg: #f0f7f5;
+  --xyte-surface: #ffffff;
+  --xyte-surface-alt: #f5fbf9;
+  --xyte-border: #c8e0d8;
+  --xyte-text: #1a3c32;
+  --xyte-muted: #5a8a78;
+  --xyte-accent: #009688;
+}
+
+.xyte-app[data-theme='xyte_industrial'] {
+  --xyte-bg: #121416;
+  --xyte-surface: #1a1d22;
+  --xyte-surface-alt: #22262d;
+  --xyte-border: #3a3f4a;
+  --xyte-text: #e8eaed;
+  --xyte-muted: #9aa0ab;
+  --xyte-accent: #ffb300;
+}
+
+.xyte-app[data-theme='xyte_retail'] {
+  --xyte-bg: #fff5f5;
+  --xyte-surface: #ffffff;
+  --xyte-surface-alt: #fff8f6;
+  --xyte-border: #eaccc4;
+  --xyte-text: #3c1a1a;
+  --xyte-muted: #8a5a5a;
+  --xyte-accent: #e91e63;
+}

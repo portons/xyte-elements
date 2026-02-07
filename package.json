@@ -12,6 +12,7 @@
     "audit:playwright:quick": "QUICK=1 bash ./scripts/playwright/explorer-sweep.sh"
   },
   "dependencies": {
+    "html-to-image": "^1.11.13",
     "react": "18.3.1",
     "react-dom": "18.3.1"
   },
