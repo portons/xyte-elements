@@ -48,6 +48,16 @@ export { FermentationVessel, BrewTempCurve, CarbonationLevel, MashTunControl, Gr
 export { WellheadPressure, BOPStatus, MudWeight, DrillDepth, GasSeparator, RigTension } from './offshore';
 export { CrowdDensity, TicketGate, LightingRig, PASystem, ScoreBoard, TurnstileFlow } from './stadium';
 export { OrbitTracker, SatTelemetry, SolarArrayAngle, LinkBudget, ThrusterControl, GroundStation } from './space';
+export { AttitudeIndicator, Altimeter, AirspeedIndicator, HeadingCompass, VerticalSpeed, AnnunciatorPanel } from './aviation';
+export { DepthGauge, BallastTank, TorpedoStatus, SonarDisplay, HullPressure, DivePlane } from './submarine';
+export { VacuumTubeAmp, ReelToReel, VUMeter, GraphicEQ, TapeCounter, TransformerHum } from './hifi';
+export { Chronograph, MoonPhase, PowerReserve, TourbillonCage, DateWheel, BalanceWheel } from './watchmaking';
+export { Speedometer, Tachometer, BoostGauge, OilTemp, FuelGauge, EngDiagnostics } from './automotive';
+export { Oscilloscope, LabSpectrumAnalyzer, FunctionGenerator, Multimeter, Centrifuge, TitrationApparatus } from './lab';
+export { MercuryBarometer, Anemometer, RainGauge, WindVane, Hygrometer, StormGlass } from './weather';
+export { BoilerPressure, SteamValve, Flywheel, Governor, PistonIndicator, SteamWhistle } from './steam';
+export { InkDensityMeter, CMYKRegistration, PaperTension, PressCylinder, ColorSeparation, DryingOven } from './printing';
+export { NixieTubeDisplay, ToggleSwitchBank, MagTapeReel, CoreMemoryGrid, PunchCardReader, BlinkenLights } from './retro';
 
 // ── Local imports for DashboardContent ────────────────────────────────
 import { KPI, DeviceCard, Gauge, DeviceTable, UptimeTimeline } from './fleet';
@@ -89,6 +99,16 @@ import { FermentationVessel, BrewTempCurve, CarbonationLevel, MashTunControl, Gr
 import { WellheadPressure, BOPStatus, MudWeight, DrillDepth, GasSeparator, RigTension } from './offshore';
 import { CrowdDensity, TicketGate, LightingRig, PASystem, ScoreBoard, TurnstileFlow } from './stadium';
 import { OrbitTracker, SatTelemetry, SolarArrayAngle, LinkBudget, ThrusterControl, GroundStation } from './space';
+import { AttitudeIndicator, Altimeter, AirspeedIndicator, HeadingCompass, VerticalSpeed, AnnunciatorPanel } from './aviation';
+import { DepthGauge, BallastTank, TorpedoStatus, SonarDisplay, HullPressure, DivePlane } from './submarine';
+import { VacuumTubeAmp, ReelToReel, VUMeter, GraphicEQ, TapeCounter, TransformerHum } from './hifi';
+import { Chronograph, MoonPhase, PowerReserve, TourbillonCage, DateWheel, BalanceWheel } from './watchmaking';
+import { Speedometer, Tachometer, BoostGauge, OilTemp, FuelGauge, EngDiagnostics } from './automotive';
+import { Oscilloscope, LabSpectrumAnalyzer, FunctionGenerator, Multimeter, Centrifuge, TitrationApparatus } from './lab';
+import { MercuryBarometer, Anemometer, RainGauge, WindVane, Hygrometer, StormGlass } from './weather';
+import { BoilerPressure, SteamValve, Flywheel, Governor, PistonIndicator, SteamWhistle } from './steam';
+import { InkDensityMeter, CMYKRegistration, PaperTension, PressCylinder, ColorSeparation, DryingOven } from './printing';
+import { NixieTubeDisplay, ToggleSwitchBank, MagTapeReel, CoreMemoryGrid, PunchCardReader, BlinkenLights } from './retro';
 
 // ══════════════════════════════════════════════════════════════════════════
 //  DASHBOARD CONTENT — Full showcase layout
@@ -535,12 +555,102 @@ export function DashboardContent() {
           <GroundStation />
         </Section>
 
+        <Section title="Aviation Cockpit" desc="Attitude indicators, altimeters, airspeed, heading compass, vertical speed, annunciator panels.">
+          <AttitudeIndicator />
+          <Altimeter />
+          <AirspeedIndicator />
+          <HeadingCompass />
+          <VerticalSpeed />
+          <AnnunciatorPanel />
+        </Section>
+
+        <Section title="Submarine" desc="Depth gauges, ballast tanks, torpedo status, sonar displays, hull pressure, dive planes.">
+          <DepthGauge />
+          <BallastTank />
+          <TorpedoStatus />
+          <SonarDisplay />
+          <HullPressure />
+          <DivePlane />
+        </Section>
+
+        <Section title="Vintage HiFi" desc="Vacuum tube amps, reel-to-reel, VU meters, graphic EQ, tape counters, transformers.">
+          <VacuumTubeAmp />
+          <ReelToReel />
+          <VUMeter />
+          <GraphicEQ />
+          <TapeCounter />
+          <TransformerHum />
+        </Section>
+
+        <Section title="Watchmaking" desc="Chronographs, moon phase, power reserve, tourbillon, date wheels, balance wheels.">
+          <Chronograph />
+          <MoonPhase />
+          <PowerReserve />
+          <TourbillonCage />
+          <DateWheel />
+          <BalanceWheel />
+        </Section>
+
+        <Section title="Automotive" desc="Speedometers, tachometers, boost gauges, oil temp, fuel gauges, engine diagnostics.">
+          <Speedometer />
+          <Tachometer />
+          <BoostGauge />
+          <OilTemp />
+          <FuelGauge />
+          <EngDiagnostics />
+        </Section>
+
+        <Section title="Oscilloscope & Lab" desc="Oscilloscopes, spectrum analyzers, function generators, multimeters, centrifuges, titration.">
+          <Oscilloscope />
+          <LabSpectrumAnalyzer />
+          <FunctionGenerator />
+          <Multimeter />
+          <Centrifuge />
+          <TitrationApparatus />
+        </Section>
+
+        <Section title="Weather Station" desc="Barometers, anemometers, rain gauges, wind vanes, hygrometers, storm glasses.">
+          <MercuryBarometer />
+          <Anemometer />
+          <RainGauge />
+          <WindVane />
+          <Hygrometer />
+          <StormGlass />
+        </Section>
+
+        <Section title="Steam & Mechanical" desc="Boiler pressure, steam valves, flywheels, governors, pistons, steam whistles.">
+          <BoilerPressure />
+          <SteamValve />
+          <Flywheel />
+          <Governor />
+          <PistonIndicator />
+          <SteamWhistle />
+        </Section>
+
+        <Section title="Printing & Typography" desc="Ink density, CMYK registration, paper tension, press cylinders, color separation, drying ovens.">
+          <InkDensityMeter />
+          <CMYKRegistration />
+          <PaperTension />
+          <PressCylinder />
+          <ColorSeparation />
+          <DryingOven />
+        </Section>
+
+        <Section title="Vintage Computing" desc="Nixie tubes, toggle switches, mag tape reels, core memory, punch cards, blinken lights.">
+          <NixieTubeDisplay />
+          <ToggleSwitchBank />
+          <MagTapeReel />
+          <CoreMemoryGrid />
+          <PunchCardReader />
+          <BlinkenLights />
+        </Section>
+
       </main>
 
       <footer style={{ background: X.surface, borderTop: `1px solid ${X.border}`, padding: '12px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <XyteLogo s={11} />
-          <M style={{ fontSize: 8, color: X.textMut }}>Connect+ AV Dashboard · 250+ Widget Types · Dark Theme</M>
+          <M style={{ fontSize: 8, color: X.textMut }}>Connect+ AV Dashboard · 310+ Widget Types · Dark Theme</M>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <M style={{ fontSize: 8, color: X.textMut }}>XYTE Brand System</M>

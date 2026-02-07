@@ -288,6 +288,76 @@ import {
   LinkBudget,
   ThrusterControl,
   GroundStation,
+  // Aviation Cockpit
+  AttitudeIndicator,
+  Altimeter,
+  AirspeedIndicator,
+  HeadingCompass,
+  VerticalSpeed,
+  AnnunciatorPanel,
+  // Submarine
+  DepthGauge,
+  BallastTank,
+  TorpedoStatus,
+  SonarDisplay,
+  HullPressure,
+  DivePlane,
+  // Vintage HiFi
+  VacuumTubeAmp,
+  ReelToReel,
+  VUMeter,
+  GraphicEQ,
+  TapeCounter,
+  TransformerHum,
+  // Watchmaking
+  Chronograph,
+  MoonPhase,
+  PowerReserve,
+  TourbillonCage,
+  DateWheel,
+  BalanceWheel,
+  // Automotive
+  Speedometer,
+  Tachometer,
+  BoostGauge,
+  OilTemp,
+  FuelGauge,
+  EngDiagnostics,
+  // Oscilloscope & Lab
+  Oscilloscope,
+  LabSpectrumAnalyzer,
+  FunctionGenerator,
+  Multimeter,
+  Centrifuge,
+  TitrationApparatus,
+  // Weather Station
+  MercuryBarometer,
+  Anemometer,
+  RainGauge,
+  WindVane,
+  Hygrometer,
+  StormGlass,
+  // Steam & Mechanical
+  BoilerPressure,
+  SteamValve,
+  Flywheel,
+  Governor,
+  PistonIndicator,
+  SteamWhistle,
+  // Printing & Typography
+  InkDensityMeter,
+  CMYKRegistration,
+  PaperTension,
+  PressCylinder,
+  ColorSeparation,
+  DryingOven,
+  // Vintage Computing
+  NixieTubeDisplay,
+  ToggleSwitchBank,
+  MagTapeReel,
+  CoreMemoryGrid,
+  PunchCardReader,
+  BlinkenLights,
 } from './library';
 
 const story = (
@@ -1848,6 +1918,344 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
       { label: 'Ground Station', value: 'Ground Station' }, { label: 'Earth Station', value: 'Earth Station' }, { label: 'Tracking Station', value: 'Tracking Station' },
     ] },
     { key: 'antennaCount', label: 'Antennas', kind: 'number', min: 1, max: 5, step: 1 },
+  ]),
+
+  // ── Aviation Cockpit ────────────────────────────────────────────────
+  story('attitude-indicator', 'Attitude Indicator', 'Aviation Cockpit', AttitudeIndicator, { title: 'Attitude', pitch: 10, roll: 15 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Attitude', value: 'Attitude' }, { label: 'Artificial Horizon', value: 'Artificial Horizon' }, { label: 'AHRS', value: 'AHRS' },
+    ] },
+  ]),
+  story('altimeter', 'Altimeter', 'Aviation Cockpit', Altimeter, { title: 'Altimeter', maxAlt: 35000 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Altimeter', value: 'Altimeter' }, { label: 'Altitude', value: 'Altitude' }, { label: 'ALT', value: 'ALT' },
+    ] },
+    { key: 'maxAlt', label: 'Max Altitude', kind: 'number', min: 10000, max: 50000, step: 5000 },
+  ]),
+  story('airspeed-indicator', 'Airspeed Indicator', 'Aviation Cockpit', AirspeedIndicator, { title: 'Airspeed', vne: 250 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Airspeed', value: 'Airspeed' }, { label: 'ASI', value: 'ASI' }, { label: 'IAS', value: 'IAS' },
+    ] },
+    { key: 'vne', label: 'VNE (kts)', kind: 'number', min: 150, max: 400, step: 10 },
+  ]),
+  story('heading-compass', 'Heading Compass', 'Aviation Cockpit', HeadingCompass, { title: 'Heading' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Heading', value: 'Heading' }, { label: 'HSI', value: 'HSI' }, { label: 'Compass', value: 'Compass' },
+    ] },
+  ]),
+  story('vertical-speed', 'Vertical Speed', 'Aviation Cockpit', VerticalSpeed, { title: 'Vertical Speed' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Vertical Speed', value: 'Vertical Speed' }, { label: 'VSI', value: 'VSI' }, { label: 'Climb Rate', value: 'Climb Rate' },
+    ] },
+  ]),
+  story('annunciator-panel', 'Annunciator Panel', 'Aviation Cockpit', AnnunciatorPanel, { title: 'Annunciator' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Annunciator', value: 'Annunciator' }, { label: 'CAS Panel', value: 'CAS Panel' }, { label: 'Warning Panel', value: 'Warning Panel' },
+    ] },
+  ]),
+
+  // ── Submarine ──────────────────────────────────────────────────────
+  story('depth-gauge', 'Depth Gauge', 'Submarine', DepthGauge, { title: 'Depth', maxDepth: 400 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Depth', value: 'Depth' }, { label: 'Depth Gauge', value: 'Depth Gauge' }, { label: 'Fathometer', value: 'Fathometer' },
+    ] },
+    { key: 'maxDepth', label: 'Max Depth (m)', kind: 'number', min: 100, max: 1000, step: 50 },
+  ]),
+  story('ballast-tank', 'Ballast Tank', 'Submarine', BallastTank, { title: 'Ballast' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Ballast', value: 'Ballast' }, { label: 'MBT', value: 'MBT' }, { label: 'Trim Tank', value: 'Trim Tank' },
+    ] },
+  ]),
+  story('torpedo-status', 'Torpedo Status', 'Submarine', TorpedoStatus, { title: 'Torpedo Bay' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Torpedo Bay', value: 'Torpedo Bay' }, { label: 'Weapons Bay', value: 'Weapons Bay' }, { label: 'Tube Status', value: 'Tube Status' },
+    ] },
+  ]),
+  story('sonar-display', 'Sonar Display', 'Submarine', SonarDisplay, { title: 'Sonar' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Sonar', value: 'Sonar' }, { label: 'Passive Sonar', value: 'Passive Sonar' }, { label: 'Active Sonar', value: 'Active Sonar' },
+    ] },
+  ]),
+  story('hull-pressure', 'Hull Pressure', 'Submarine', HullPressure, { title: 'Hull Pressure', maxPSI: 600 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Hull Pressure', value: 'Hull Pressure' }, { label: 'Hull Integrity', value: 'Hull Integrity' }, { label: 'Pressure', value: 'Pressure' },
+    ] },
+    { key: 'maxPSI', label: 'Max PSI', kind: 'number', min: 200, max: 1000, step: 50 },
+  ]),
+  story('dive-plane', 'Dive Plane', 'Submarine', DivePlane, { title: 'Dive Planes' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Dive Planes', value: 'Dive Planes' }, { label: 'Hydroplanes', value: 'Hydroplanes' }, { label: 'Trim Control', value: 'Trim Control' },
+    ] },
+  ]),
+
+  // ── Vintage HiFi ──────────────────────────────────────────────────
+  story('vacuum-tube-amp', 'Vacuum Tube Amp', 'Vintage HiFi', VacuumTubeAmp, { title: 'Tube Amplifier', tubes: 4 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Tube Amplifier', value: 'Tube Amplifier' }, { label: 'Valve Amp', value: 'Valve Amp' }, { label: 'Power Amp', value: 'Power Amp' },
+    ] },
+    { key: 'tubes', label: 'Tubes', kind: 'number', min: 2, max: 8, step: 1 },
+  ]),
+  story('reel-to-reel', 'Reel-to-Reel', 'Vintage HiFi', ReelToReel, { title: 'Reel-to-Reel' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Reel-to-Reel', value: 'Reel-to-Reel' }, { label: 'Tape Deck', value: 'Tape Deck' }, { label: 'Master Recorder', value: 'Master Recorder' },
+    ] },
+  ]),
+  story('vu-meter', 'VU Meter', 'Vintage HiFi', VUMeter, { title: 'VU Meter' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'VU Meter', value: 'VU Meter' }, { label: 'Level Meter', value: 'Level Meter' }, { label: 'Peak Meter', value: 'Peak Meter' },
+    ] },
+  ]),
+  story('graphic-eq', 'Graphic EQ', 'Vintage HiFi', GraphicEQ, { title: 'Equalizer' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Equalizer', value: 'Equalizer' }, { label: 'Graphic EQ', value: 'Graphic EQ' }, { label: '10-Band EQ', value: '10-Band EQ' },
+    ] },
+  ]),
+  story('tape-counter', 'Tape Counter', 'Vintage HiFi', TapeCounter, { title: 'Tape Counter' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Tape Counter', value: 'Tape Counter' }, { label: 'Counter', value: 'Counter' }, { label: 'Position', value: 'Position' },
+    ] },
+  ]),
+  story('transformer-hum', 'Transformer', 'Vintage HiFi', TransformerHum, { title: 'Transformer' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Transformer', value: 'Transformer' }, { label: 'Power Supply', value: 'Power Supply' }, { label: 'PSU', value: 'PSU' },
+    ] },
+  ]),
+
+  // ── Watchmaking ───────────────────────────────────────────────────
+  story('chronograph', 'Chronograph', 'Watchmaking', Chronograph, { title: 'Chronograph' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Chronograph', value: 'Chronograph' }, { label: 'Stopwatch', value: 'Stopwatch' }, { label: 'Timer', value: 'Timer' },
+    ] },
+  ]),
+  story('moon-phase', 'Moon Phase', 'Watchmaking', MoonPhase, { title: 'Moon Phase', day: 14 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Moon Phase', value: 'Moon Phase' }, { label: 'Lunar', value: 'Lunar' }, { label: 'Phase de Lune', value: 'Phase de Lune' },
+    ] },
+    { key: 'day', label: 'Lunar Day', kind: 'number', min: 0, max: 29, step: 1 },
+  ]),
+  story('power-reserve', 'Power Reserve', 'Watchmaking', PowerReserve, { title: 'Power Reserve', hours: 72 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Power Reserve', value: 'Power Reserve' }, { label: 'Réserve de Marche', value: 'Réserve de Marche' }, { label: 'Wind Indicator', value: 'Wind Indicator' },
+    ] },
+    { key: 'hours', label: 'Max Hours', kind: 'number', min: 24, max: 120, step: 12 },
+  ]),
+  story('tourbillon-cage', 'Tourbillon Cage', 'Watchmaking', TourbillonCage, { title: 'Tourbillon' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Tourbillon', value: 'Tourbillon' }, { label: 'Flying Tourbillon', value: 'Flying Tourbillon' }, { label: 'Cage', value: 'Cage' },
+    ] },
+  ]),
+  story('date-wheel', 'Date Wheel', 'Watchmaking', DateWheel, { title: 'Date', currentDate: 15 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Date', value: 'Date' }, { label: 'Date Display', value: 'Date Display' }, { label: 'Calendar', value: 'Calendar' },
+    ] },
+    { key: 'currentDate', label: 'Date', kind: 'number', min: 1, max: 31, step: 1 },
+  ]),
+  story('balance-wheel', 'Balance Wheel', 'Watchmaking', BalanceWheel, { title: 'Balance Wheel', frequency: 28800 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Balance Wheel', value: 'Balance Wheel' }, { label: 'Oscillator', value: 'Oscillator' }, { label: 'Escapement', value: 'Escapement' },
+    ] },
+    { key: 'frequency', label: 'BPH', kind: 'number', min: 18000, max: 36000, step: 3600 },
+  ]),
+
+  // ── Automotive ────────────────────────────────────────────────────
+  story('speedometer', 'Speedometer', 'Automotive', Speedometer, { title: 'Speed', maxSpeed: 260 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Speed', value: 'Speed' }, { label: 'Speedometer', value: 'Speedometer' }, { label: 'Velocity', value: 'Velocity' },
+    ] },
+    { key: 'maxSpeed', label: 'Max Speed', kind: 'number', min: 120, max: 400, step: 20 },
+  ]),
+  story('tachometer', 'Tachometer', 'Automotive', Tachometer, { title: 'Tachometer', redline: 7000 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Tachometer', value: 'Tachometer' }, { label: 'RPM', value: 'RPM' }, { label: 'Rev Counter', value: 'Rev Counter' },
+    ] },
+    { key: 'redline', label: 'Redline RPM', kind: 'number', min: 5000, max: 10000, step: 500 },
+  ]),
+  story('boost-gauge', 'Boost Gauge', 'Automotive', BoostGauge, { title: 'Boost', maxBoost: 25 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Boost', value: 'Boost' }, { label: 'Turbo', value: 'Turbo' }, { label: 'Manifold', value: 'Manifold' },
+    ] },
+    { key: 'maxBoost', label: 'Max Boost (PSI)', kind: 'number', min: 10, max: 40, step: 5 },
+  ]),
+  story('oil-temp', 'Oil Temperature', 'Automotive', OilTemp, { title: 'Oil Temperature' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Oil Temperature', value: 'Oil Temperature' }, { label: 'Oil Temp', value: 'Oil Temp' }, { label: 'Lubricant Temp', value: 'Lubricant Temp' },
+    ] },
+  ]),
+  story('fuel-gauge', 'Fuel Gauge', 'Automotive', FuelGauge, { title: 'Fuel Level' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Fuel Level', value: 'Fuel Level' }, { label: 'Fuel', value: 'Fuel' }, { label: 'Tank Level', value: 'Tank Level' },
+    ] },
+  ]),
+  story('eng-diagnostics', 'Engine Diagnostics', 'Automotive', EngDiagnostics, { title: 'Engine Diagnostics' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Engine Diagnostics', value: 'Engine Diagnostics' }, { label: 'OBD-II', value: 'OBD-II' }, { label: 'ECU Status', value: 'ECU Status' },
+    ] },
+  ]),
+
+  // ── Oscilloscope & Lab ────────────────────────────────────────────
+  story('oscilloscope', 'Oscilloscope', 'Oscilloscope & Lab', Oscilloscope, { title: 'Oscilloscope', frequency: 2 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Oscilloscope', value: 'Oscilloscope' }, { label: 'Scope', value: 'Scope' }, { label: 'DSO', value: 'DSO' },
+    ] },
+    { key: 'frequency', label: 'Frequency', kind: 'number', min: 1, max: 10, step: 1 },
+  ]),
+  story('lab-spectrum-analyzer', 'Lab Spectrum Analyzer', 'Oscilloscope & Lab', LabSpectrumAnalyzer, { title: 'Spectrum Analyzer' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Spectrum Analyzer', value: 'Spectrum Analyzer' }, { label: 'FFT', value: 'FFT' }, { label: 'Spectrum', value: 'Spectrum' },
+    ] },
+  ]),
+  story('function-generator', 'Function Generator', 'Oscilloscope & Lab', FunctionGenerator, { title: 'Function Gen' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Function Gen', value: 'Function Gen' }, { label: 'Signal Generator', value: 'Signal Generator' }, { label: 'Waveform Gen', value: 'Waveform Gen' },
+    ] },
+  ]),
+  story('multimeter', 'Multimeter', 'Oscilloscope & Lab', Multimeter, { title: 'Multimeter' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Multimeter', value: 'Multimeter' }, { label: 'DMM', value: 'DMM' }, { label: 'Volt Meter', value: 'Volt Meter' },
+    ] },
+  ]),
+  story('centrifuge', 'Centrifuge', 'Oscilloscope & Lab', Centrifuge, { title: 'Centrifuge', rpm: 12000 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Centrifuge', value: 'Centrifuge' }, { label: 'Ultracentrifuge', value: 'Ultracentrifuge' }, { label: 'Spinner', value: 'Spinner' },
+    ] },
+    { key: 'rpm', label: 'Max RPM', kind: 'number', min: 5000, max: 20000, step: 1000 },
+  ]),
+  story('titration-apparatus', 'Titration Apparatus', 'Oscilloscope & Lab', TitrationApparatus, { title: 'Titration' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Titration', value: 'Titration' }, { label: 'pH Analysis', value: 'pH Analysis' }, { label: 'Acid-Base', value: 'Acid-Base' },
+    ] },
+  ]),
+
+  // ── Weather Station ───────────────────────────────────────────────
+  story('mercury-barometer', 'Mercury Barometer', 'Weather Station', MercuryBarometer, { title: 'Barometer', maxHPa: 1050 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Barometer', value: 'Barometer' }, { label: 'Pressure', value: 'Pressure' }, { label: 'Barograph', value: 'Barograph' },
+    ] },
+    { key: 'maxHPa', label: 'Max hPa', kind: 'number', min: 1000, max: 1100, step: 10 },
+  ]),
+  story('anemometer', 'Anemometer', 'Weather Station', Anemometer, { title: 'Wind Speed' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Wind Speed', value: 'Wind Speed' }, { label: 'Anemometer', value: 'Anemometer' }, { label: 'Wind Gauge', value: 'Wind Gauge' },
+    ] },
+  ]),
+  story('rain-gauge', 'Rain Gauge', 'Weather Station', RainGauge, { title: 'Rain Gauge' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Rain Gauge', value: 'Rain Gauge' }, { label: 'Pluviometer', value: 'Pluviometer' }, { label: 'Rainfall', value: 'Rainfall' },
+    ] },
+  ]),
+  story('wind-vane', 'Wind Vane', 'Weather Station', WindVane, { title: 'Wind Direction' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Wind Direction', value: 'Wind Direction' }, { label: 'Wind Vane', value: 'Wind Vane' }, { label: 'Weathercock', value: 'Weathercock' },
+    ] },
+  ]),
+  story('hygrometer', 'Hygrometer', 'Weather Station', Hygrometer, { title: 'Humidity' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Humidity', value: 'Humidity' }, { label: 'Hygrometer', value: 'Hygrometer' }, { label: 'Wet/Dry Bulb', value: 'Wet/Dry Bulb' },
+    ] },
+  ]),
+  story('storm-glass', 'Storm Glass', 'Weather Station', StormGlass, { title: 'Storm Glass' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Storm Glass', value: 'Storm Glass' }, { label: 'Weather Glass', value: 'Weather Glass' }, { label: 'FitzRoy', value: 'FitzRoy' },
+    ] },
+  ]),
+
+  // ── Steam & Mechanical ────────────────────────────────────────────
+  story('boiler-pressure', 'Boiler Pressure', 'Steam & Mechanical', BoilerPressure, { title: 'Boiler Pressure', maxPSI: 200 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Boiler Pressure', value: 'Boiler Pressure' }, { label: 'Steam Pressure', value: 'Steam Pressure' }, { label: 'Bourdon Gauge', value: 'Bourdon Gauge' },
+    ] },
+    { key: 'maxPSI', label: 'Max PSI', kind: 'number', min: 100, max: 500, step: 50 },
+  ]),
+  story('steam-valve', 'Steam Valve', 'Steam & Mechanical', SteamValve, { title: 'Steam Valve' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Steam Valve', value: 'Steam Valve' }, { label: 'Gate Valve', value: 'Gate Valve' }, { label: 'Throttle Valve', value: 'Throttle Valve' },
+    ] },
+  ]),
+  story('flywheel', 'Flywheel', 'Steam & Mechanical', Flywheel, { title: 'Flywheel' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Flywheel', value: 'Flywheel' }, { label: 'Inertia Wheel', value: 'Inertia Wheel' }, { label: 'Momentum Store', value: 'Momentum Store' },
+    ] },
+  ]),
+  story('governor', 'Governor', 'Steam & Mechanical', Governor, { title: 'Governor' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Governor', value: 'Governor' }, { label: 'Centrifugal Gov', value: 'Centrifugal Gov' }, { label: 'Watt Governor', value: 'Watt Governor' },
+    ] },
+  ]),
+  story('piston-indicator', 'Piston Indicator', 'Steam & Mechanical', PistonIndicator, { title: 'Piston' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Piston', value: 'Piston' }, { label: 'Cylinder', value: 'Cylinder' }, { label: 'Reciprocator', value: 'Reciprocator' },
+    ] },
+  ]),
+  story('steam-whistle', 'Steam Whistle', 'Steam & Mechanical', SteamWhistle, { title: 'Steam Whistle' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Steam Whistle', value: 'Steam Whistle' }, { label: 'Whistle', value: 'Whistle' }, { label: 'Horn', value: 'Horn' },
+    ] },
+  ]),
+
+  // ── Printing & Typography ─────────────────────────────────────────
+  story('ink-density-meter', 'Ink Density Meter', 'Printing & Typography', InkDensityMeter, { title: 'Ink Density' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Ink Density', value: 'Ink Density' }, { label: 'Densitometer', value: 'Densitometer' }, { label: 'Ink Control', value: 'Ink Control' },
+    ] },
+  ]),
+  story('cmyk-registration', 'CMYK Registration', 'Printing & Typography', CMYKRegistration, { title: 'Registration' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Registration', value: 'Registration' }, { label: 'Color Register', value: 'Color Register' }, { label: 'Alignment', value: 'Alignment' },
+    ] },
+  ]),
+  story('paper-tension', 'Paper Tension', 'Printing & Typography', PaperTension, { title: 'Paper Tension', maxTension: 100 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Paper Tension', value: 'Paper Tension' }, { label: 'Web Tension', value: 'Web Tension' }, { label: 'Tension Control', value: 'Tension Control' },
+    ] },
+    { key: 'maxTension', label: 'Max Tension', kind: 'number', min: 50, max: 200, step: 10 },
+  ]),
+  story('press-cylinder', 'Press Cylinder', 'Printing & Typography', PressCylinder, { title: 'Press Cylinder' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Press Cylinder', value: 'Press Cylinder' }, { label: 'Impression', value: 'Impression' }, { label: 'Blanket Cylinder', value: 'Blanket Cylinder' },
+    ] },
+  ]),
+  story('color-separation', 'Color Separation', 'Printing & Typography', ColorSeparation, { title: 'Color Separation' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Color Separation', value: 'Color Separation' }, { label: 'CMYK Plates', value: 'CMYK Plates' }, { label: 'Halftone', value: 'Halftone' },
+    ] },
+  ]),
+  story('drying-oven', 'Drying Oven', 'Printing & Typography', DryingOven, { title: 'Drying Oven' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Drying Oven', value: 'Drying Oven' }, { label: 'IR Dryer', value: 'IR Dryer' }, { label: 'Curing Oven', value: 'Curing Oven' },
+    ] },
+  ]),
+
+  // ── Vintage Computing ─────────────────────────────────────────────
+  story('nixie-tube-display', 'Nixie Tube Display', 'Vintage Computing', NixieTubeDisplay, { title: 'Nixie Display', digits: 6 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Nixie Display', value: 'Nixie Display' }, { label: 'Nixie Clock', value: 'Nixie Clock' }, { label: 'Tube Counter', value: 'Tube Counter' },
+    ] },
+    { key: 'digits', label: 'Digits', kind: 'number', min: 2, max: 8, step: 1 },
+  ]),
+  story('toggle-switch-bank', 'Toggle Switch Bank', 'Vintage Computing', ToggleSwitchBank, { title: 'Switch Bank' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Switch Bank', value: 'Switch Bank' }, { label: 'Console', value: 'Console' }, { label: 'Front Panel', value: 'Front Panel' },
+    ] },
+  ]),
+  story('mag-tape-reel', 'Mag Tape Reel', 'Vintage Computing', MagTapeReel, { title: 'Tape Drive' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Tape Drive', value: 'Tape Drive' }, { label: 'Mag Tape', value: 'Mag Tape' }, { label: 'Reel-to-Reel', value: 'Reel-to-Reel' },
+    ] },
+  ]),
+  story('core-memory-grid', 'Core Memory Grid', 'Vintage Computing', CoreMemoryGrid, { title: 'Core Memory' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Core Memory', value: 'Core Memory' }, { label: 'Magnetic Core', value: 'Magnetic Core' }, { label: 'Memory Plane', value: 'Memory Plane' },
+    ] },
+  ]),
+  story('punch-card-reader', 'Punch Card Reader', 'Vintage Computing', PunchCardReader, { title: 'Card Reader' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Card Reader', value: 'Card Reader' }, { label: 'Punch Card', value: 'Punch Card' }, { label: 'Hollerith', value: 'Hollerith' },
+    ] },
+  ]),
+  story('blinken-lights', 'Blinken Lights', 'Vintage Computing', BlinkenLights, { title: 'Blinken Lights' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Blinken Lights', value: 'Blinken Lights' }, { label: 'Front Panel', value: 'Front Panel' }, { label: 'Register Display', value: 'Register Display' },
+    ] },
   ]),
 ];
 
