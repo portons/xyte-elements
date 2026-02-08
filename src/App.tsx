@@ -7,14 +7,17 @@ import type {
   XyteWidgetMode,
 } from './explorer/types';
 import { DashboardPage } from './pages/DashboardPage';
+import { DocsPage } from './pages/DocsPage';
 import { ExplorerPage } from './pages/ExplorerPage';
 import { GalleryPage } from './pages/GalleryPage';
+import { LandingPage } from './pages/LandingPage';
 import { XYTE_THEME_IDS } from './theme/themes';
 import { getWidgetStory } from './widgets/registry';
 
 import './styles/base.css';
 import './styles/themes.css';
 import './styles/components.css';
+import './styles/site.css';
 
 interface AppState {
   view: ExplorerView;
@@ -25,18 +28,22 @@ interface AppState {
 }
 
 const DEFAULT_STATE: AppState = {
-  view: 'dashboard',
+  view: 'landing',
   themeId: 'xyte_classic_dark',
   mode: 'modern',
   widgetId: 'kpi',
   viewport: 'desktop',
 };
 
+const VIEW_IDS: ExplorerView[] = ['landing', 'docs', 'dashboard', 'gallery', 'explorer'];
+
 function parseStateFromSearch(search: string): AppState {
   const params = new URLSearchParams(search);
 
   const viewParam = params.get('view');
-  const view: ExplorerView = viewParam === 'explorer' ? 'explorer' : viewParam === 'gallery' ? 'gallery' : 'dashboard';
+  const view: ExplorerView = VIEW_IDS.includes(viewParam as ExplorerView)
+    ? (viewParam as ExplorerView)
+    : DEFAULT_STATE.view;
   const themeCandidate = params.get('theme') as ThemeId | null;
   const themeId = XYTE_THEME_IDS.includes(themeCandidate as ThemeId)
     ? (themeCandidate as ThemeId)
@@ -78,7 +85,26 @@ export default function App() {
 
   return (
     <div className="xyte-app" data-theme={themeId}>
-      {view === 'dashboard' ? (
+      {view === 'landing' ? (
+        <LandingPage
+          themeId={themeId}
+          mode={mode}
+          onThemeChange={setThemeId}
+          onModeChange={setMode}
+          onViewChange={setView}
+        />
+      ) : view === 'docs' ? (
+        <DocsPage
+          themeId={themeId}
+          mode={mode}
+          viewport={viewport}
+          onThemeChange={setThemeId}
+          onModeChange={setMode}
+          onViewportChange={setViewport}
+          onViewChange={setView}
+          onWidgetSelect={setWidgetId}
+        />
+      ) : view === 'dashboard' ? (
         <DashboardPage
           themeId={themeId}
           mode={mode}

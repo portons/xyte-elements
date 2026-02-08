@@ -72,6 +72,12 @@ export function GalleryPage({
       {/* Toolbar */}
       <header className="xg-toolbar">
         <div className="xg-toolbar__left">
+          <button className="xg-back-btn" type="button" onClick={() => onViewChange('landing')} title="Landing">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" /></svg>
+          </button>
+          <button className="xg-back-btn" type="button" onClick={() => onViewChange('docs')} title="Docs">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h11V2zm-2 14H8V4h9v12zM5 6H3v14c0 1.1.9 2 2 2h12v-2H5V6z" /></svg>
+          </button>
           <button className="xg-back-btn" type="button" onClick={() => onViewChange('dashboard')} title="Back to Dashboard">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" /></svg>
           </button>

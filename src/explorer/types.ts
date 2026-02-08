@@ -1,4 +1,4 @@
-export type ExplorerView = 'dashboard' | 'explorer' | 'gallery';
+export type ExplorerView = 'landing' | 'docs' | 'dashboard' | 'explorer' | 'gallery';
 export type XyteWidgetMode = 'legacy' | 'modern';
 
 export type ThemeId =

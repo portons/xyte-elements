@@ -23,6 +23,20 @@ export function DashboardPage({
     <div className="xyte-shell" data-theme={themeId} data-mode={mode}>
       <div className="xyte-toolbar xyte-toolbar--sticky">
         <div className="xyte-toolbar__left">
+          <button
+            className="xyte-tab"
+            type="button"
+            onClick={() => onViewChange('landing')}
+          >
+            Landing
+          </button>
+          <button
+            className="xyte-tab"
+            type="button"
+            onClick={() => onViewChange('docs')}
+          >
+            Docs
+          </button>
           <button className="xyte-tab xyte-tab--active" type="button">
             Dashboard
           </button>
