@@ -58,6 +58,16 @@ export { MercuryBarometer, Anemometer, RainGauge, WindVane, Hygrometer, StormGla
 export { BoilerPressure, SteamValve, Flywheel, Governor, PistonIndicator, SteamWhistle } from './steam';
 export { InkDensityMeter, CMYKRegistration, PaperTension, PressCylinder, ColorSeparation, DryingOven } from './printing';
 export { NixieTubeDisplay, ToggleSwitchBank, MagTapeReel, CoreMemoryGrid, PunchCardReader, BlinkenLights } from './retro';
+export { ChargerStation, ChargingCurve, FleetChargeSchedule, StationMap, EnergyBalance, SessionHistory } from './ev-charging';
+export { ShaftView, FloorIndicator, DoorStatus, LoadCell, MaintenanceTimer, CallQueue } from './elevator';
+export { PipeSegment, LeakDetector, PumpStation as PipelinePumpStation, ValveControl, CorrosionMonitor, PipeNetwork } from './pipeline';
+export { PrintProgress, NozzleTemp, BedLevel, FilamentTracker, GCodePreview, PrintFarm } from './3d-printing';
+export { TankEcosystem, FeedingSchedule, WaterChemistry, StockDensity, AerationStatus, HarvestPlanner } from './aquaculture';
+export { ProductGrid, CashLevel, SalesTracker, ConnectivityStatus, TempZone, ServiceAlert } from './vending';
+export { AttitudeHUD, BatteryEndurance, WaypointTracker, SignalLink, PayloadStatus, FleetOverview } from './drone';
+export { FermentationCurve, StillDiagram, BarrelAging, MashTun, SpiritSafe, BottlingLine } from './distillery';
+export { DewarVessel, TempGradient, CryoPump, SampleRack, RefillSchedule, ColdChainLog } from './cryogenics';
+export { FireRiskIndex, SmokeDetector, CanopyDensity, WeatherRisk, WatchTower, TreeInventory } from './forestry';
 
 // ── Local imports for DashboardContent ────────────────────────────────
 import { KPI, DeviceCard, Gauge, DeviceTable, UptimeTimeline } from './fleet';
@@ -109,6 +119,16 @@ import { MercuryBarometer, Anemometer, RainGauge, WindVane, Hygrometer, StormGla
 import { BoilerPressure, SteamValve, Flywheel, Governor, PistonIndicator, SteamWhistle } from './steam';
 import { InkDensityMeter, CMYKRegistration, PaperTension, PressCylinder, ColorSeparation, DryingOven } from './printing';
 import { NixieTubeDisplay, ToggleSwitchBank, MagTapeReel, CoreMemoryGrid, PunchCardReader, BlinkenLights } from './retro';
+import { ChargerStation, ChargingCurve, FleetChargeSchedule, StationMap, EnergyBalance, SessionHistory } from './ev-charging';
+import { ShaftView, FloorIndicator, DoorStatus, LoadCell, MaintenanceTimer, CallQueue } from './elevator';
+import { PipeSegment, LeakDetector, PumpStation as PipelinePumpStation, ValveControl, CorrosionMonitor, PipeNetwork } from './pipeline';
+import { PrintProgress, NozzleTemp, BedLevel, FilamentTracker, GCodePreview, PrintFarm } from './3d-printing';
+import { TankEcosystem, FeedingSchedule, WaterChemistry, StockDensity, AerationStatus, HarvestPlanner } from './aquaculture';
+import { ProductGrid, CashLevel, SalesTracker, ConnectivityStatus, TempZone, ServiceAlert } from './vending';
+import { AttitudeHUD, BatteryEndurance, WaypointTracker, SignalLink, PayloadStatus, FleetOverview } from './drone';
+import { FermentationCurve, StillDiagram, BarrelAging, MashTun, SpiritSafe, BottlingLine } from './distillery';
+import { DewarVessel, TempGradient, CryoPump, SampleRack, RefillSchedule, ColdChainLog } from './cryogenics';
+import { FireRiskIndex, SmokeDetector, CanopyDensity, WeatherRisk, WatchTower, TreeInventory } from './forestry';
 
 // ══════════════════════════════════════════════════════════════════════════
 //  DASHBOARD CONTENT — Full showcase layout
@@ -645,12 +665,103 @@ export function DashboardContent() {
           <BlinkenLights />
         </Section>
 
+
+        <Section title="EV Charging" desc="Charger stations, charging curves, fleet scheduling, station maps, energy balance, session history.">
+          <ChargerStation />
+          <ChargingCurve />
+          <FleetChargeSchedule />
+          <StationMap />
+          <EnergyBalance />
+          <SessionHistory />
+        </Section>
+
+        <Section title="Elevator & Lift" desc="Shaft views, floor indicators, door status, load cells, maintenance timers, call queues.">
+          <ShaftView />
+          <FloorIndicator />
+          <DoorStatus />
+          <LoadCell />
+          <MaintenanceTimer />
+          <CallQueue />
+        </Section>
+
+        <Section title="Pipeline & Flow" desc="Pipe segments, leak detection, pump stations, valve controls, corrosion monitoring, pipe networks.">
+          <PipeSegment />
+          <LeakDetector />
+          <PipelinePumpStation />
+          <ValveControl />
+          <CorrosionMonitor />
+          <PipeNetwork />
+        </Section>
+
+        <Section title="3D Printing" desc="Print progress, nozzle temp, bed leveling, filament tracking, GCode preview, print farms.">
+          <PrintProgress />
+          <NozzleTemp />
+          <BedLevel />
+          <FilamentTracker />
+          <GCodePreview />
+          <PrintFarm />
+        </Section>
+
+        <Section title="Aquaculture" desc="Tank ecosystems, feeding schedules, water chemistry, stock density, aeration, harvest planning.">
+          <TankEcosystem />
+          <FeedingSchedule />
+          <WaterChemistry />
+          <StockDensity />
+          <AerationStatus />
+          <HarvestPlanner />
+        </Section>
+
+        <Section title="Vending & Kiosk" desc="Product grids, cash levels, sales tracking, connectivity, temperature zones, service alerts.">
+          <ProductGrid />
+          <CashLevel />
+          <SalesTracker />
+          <ConnectivityStatus />
+          <TempZone />
+          <ServiceAlert />
+        </Section>
+
+        <Section title="Drone / UAV" desc="Attitude HUD, battery endurance, waypoint tracking, signal link, payload status, fleet overview.">
+          <AttitudeHUD />
+          <BatteryEndurance />
+          <WaypointTracker />
+          <SignalLink />
+          <PayloadStatus />
+          <FleetOverview />
+        </Section>
+
+        <Section title="Distillery" desc="Fermentation curves, still diagrams, barrel aging, mash tun, spirit safe, bottling lines.">
+          <FermentationCurve />
+          <StillDiagram />
+          <BarrelAging />
+          <MashTun />
+          <SpiritSafe />
+          <BottlingLine />
+        </Section>
+
+        <Section title="Cryogenics" desc="Dewar vessels, temperature gradients, cryo pumps, sample racks, refill schedules, cold chain logs.">
+          <DewarVessel />
+          <TempGradient />
+          <CryoPump />
+          <SampleRack />
+          <RefillSchedule />
+          <ColdChainLog />
+        </Section>
+
+        <Section title="Forestry & Wildfire" desc="Fire risk, smoke detection, canopy density, weather risk, watch towers, tree inventory.">
+          <FireRiskIndex />
+          <SmokeDetector />
+          <CanopyDensity />
+          <WeatherRisk />
+          <WatchTower />
+          <TreeInventory />
+        </Section>
+
       </main>
 
       <footer style={{ background: X.surface, borderTop: `1px solid ${X.border}`, padding: '12px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <XyteLogo s={11} />
-          <M style={{ fontSize: 8, color: X.textMut }}>Connect+ AV Dashboard · 310+ Widget Types · Dark Theme</M>
+          <M style={{ fontSize: 8, color: X.textMut }}>Connect+ AV Dashboard · 370+ Widget Types · Dark Theme</M>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <M style={{ fontSize: 8, color: X.textMut }}>XYTE Brand System</M>

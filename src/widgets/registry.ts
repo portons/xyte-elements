@@ -358,6 +358,76 @@ import {
   CoreMemoryGrid,
   PunchCardReader,
   BlinkenLights,
+  // EV Charging
+  ChargerStation,
+  ChargingCurve,
+  FleetChargeSchedule,
+  StationMap,
+  EnergyBalance,
+  SessionHistory,
+  // Elevator
+  ShaftView,
+  FloorIndicator,
+  DoorStatus,
+  LoadCell,
+  MaintenanceTimer,
+  CallQueue,
+  // Pipeline
+  PipeSegment,
+  LeakDetector,
+  PipelinePumpStation,
+  ValveControl,
+  CorrosionMonitor,
+  PipeNetwork,
+  // 3D Printing
+  PrintProgress,
+  NozzleTemp,
+  BedLevel,
+  FilamentTracker,
+  GCodePreview,
+  PrintFarm,
+  // Aquaculture
+  TankEcosystem,
+  FeedingSchedule,
+  WaterChemistry,
+  StockDensity,
+  AerationStatus,
+  HarvestPlanner,
+  // Vending
+  ProductGrid,
+  CashLevel,
+  SalesTracker,
+  ConnectivityStatus,
+  TempZone,
+  ServiceAlert,
+  // Drone
+  AttitudeHUD,
+  BatteryEndurance,
+  WaypointTracker,
+  SignalLink,
+  PayloadStatus,
+  FleetOverview,
+  // Distillery
+  FermentationCurve,
+  StillDiagram,
+  BarrelAging,
+  MashTun,
+  SpiritSafe,
+  BottlingLine,
+  // Cryogenics
+  DewarVessel,
+  TempGradient,
+  CryoPump,
+  SampleRack,
+  RefillSchedule,
+  ColdChainLog,
+  // Forestry
+  FireRiskIndex,
+  SmokeDetector,
+  CanopyDensity,
+  WeatherRisk,
+  WatchTower,
+  TreeInventory,
 } from './library';
 
 const story = (
@@ -2512,6 +2582,491 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Blinken Lights', value: 'Blinken Lights' }, { label: 'Front Panel', value: 'Front Panel' }, { label: 'Register Display', value: 'Register Display' },
     ] },
+  ]),
+
+  // ── EV Charging ────────────────────────────────────────────────────
+  story('charger-station', 'Charger Station', 'EV Charging', ChargerStation, { title: 'Charger Bay 01', status: 'charging', connectorType: 'CCS2', powerKW: 62, sessionMinutes: 34 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Charger Bay 01', value: 'Charger Bay 01' }, { label: 'Station A', value: 'Station A' }, { label: 'Fast Charger', value: 'Fast Charger' },
+    ] },
+    { key: 'status', label: 'Status', kind: 'select', options: [
+      { label: 'Charging', value: 'charging' }, { label: 'Available', value: 'available' }, { label: 'Faulted', value: 'faulted' },
+    ] },
+    { key: 'powerKW', label: 'Power (kW)', kind: 'number', min: 0, max: 350, step: 1 },
+    { key: 'sessionMinutes', label: 'Session (min)', kind: 'number', min: 0, max: 120, step: 1 },
+  ]),
+  story('charging-curve', 'Charging Curve', 'EV Charging', ChargingCurve, { title: 'Charge Profile', currentKW: 48, maxKW: 150, socPercent: 62 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Charge Profile', value: 'Charge Profile' }, { label: 'Charge Curve', value: 'Charge Curve' }, { label: 'Power Graph', value: 'Power Graph' },
+    ] },
+    { key: 'currentKW', label: 'Current kW', kind: 'number', min: 0, max: 350, step: 1 },
+    { key: 'maxKW', label: 'Max kW', kind: 'number', min: 50, max: 500, step: 10 },
+    { key: 'socPercent', label: 'SoC %', kind: 'number', min: 0, max: 100, step: 1 },
+  ]),
+  story('fleet-charge-schedule', 'Fleet Charge Schedule', 'EV Charging', FleetChargeSchedule, { title: 'Fleet Schedule', vehicleCount: 6 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Fleet Schedule', value: 'Fleet Schedule' }, { label: 'Charge Queue', value: 'Charge Queue' }, { label: 'EV Fleet', value: 'EV Fleet' },
+    ] },
+    { key: 'vehicleCount', label: 'Vehicles', kind: 'number', min: 2, max: 12, step: 1 },
+  ]),
+  story('station-map', 'Station Map', 'EV Charging', StationMap, { title: 'Station Overview', bays: 12 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Station Overview', value: 'Station Overview' }, { label: 'Bay Map', value: 'Bay Map' }, { label: 'Charger Layout', value: 'Charger Layout' },
+    ] },
+    { key: 'bays', label: 'Bays', kind: 'number', min: 4, max: 24, step: 2 },
+  ]),
+  story('energy-balance', 'Energy Balance', 'EV Charging', EnergyBalance, { title: 'Energy Balance', solarKW: 45, gridKW: 28, batteryKW: 12 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Energy Balance', value: 'Energy Balance' }, { label: 'Power Mix', value: 'Power Mix' }, { label: 'Source Split', value: 'Source Split' },
+    ] },
+    { key: 'solarKW', label: 'Solar kW', kind: 'number', min: 0, max: 200, step: 5 },
+    { key: 'gridKW', label: 'Grid kW', kind: 'number', min: 0, max: 200, step: 5 },
+    { key: 'batteryKW', label: 'Battery kW', kind: 'number', min: 0, max: 100, step: 5 },
+  ]),
+  story('session-history', 'Session History', 'EV Charging', SessionHistory, { title: 'Session History', sessionsToday: 47, kwhToday: 1284, revenueToday: 385 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Session History', value: 'Session History' }, { label: 'Today\'s Sessions', value: 'Today\'s Sessions' }, { label: 'Revenue', value: 'Revenue' },
+    ] },
+    { key: 'sessionsToday', label: 'Sessions', kind: 'number', min: 0, max: 200, step: 1 },
+    { key: 'kwhToday', label: 'kWh Today', kind: 'number', min: 0, max: 5000, step: 10 },
+    { key: 'revenueToday', label: 'Revenue', kind: 'number', min: 0, max: 2000, step: 10 },
+  ]),
+
+  // ── Elevator ────────────────────────────────────────────────────
+  story('shaft-view', 'Shaft View', 'Elevator', ShaftView, { title: 'Elevator Shaft', floors: 10, currentFloor: 4, direction: 'up' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Elevator Shaft', value: 'Elevator Shaft' }, { label: 'Lift Shaft', value: 'Lift Shaft' }, { label: 'Car Position', value: 'Car Position' },
+    ] },
+    { key: 'floors', label: 'Floors', kind: 'number', min: 3, max: 50, step: 1 },
+    { key: 'currentFloor', label: 'Current Floor', kind: 'number', min: 1, max: 50, step: 1 },
+    { key: 'direction', label: 'Direction', kind: 'select', options: [
+      { label: 'Up', value: 'up' }, { label: 'Down', value: 'down' }, { label: 'Idle', value: 'idle' },
+    ] },
+  ]),
+  story('floor-indicator', 'Floor Indicator', 'Elevator', FloorIndicator, { title: 'Floor Indicator', currentFloor: 7, direction: 'up', maxFloor: 20 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Floor Indicator', value: 'Floor Indicator' }, { label: 'Floor Display', value: 'Floor Display' }, { label: 'Position', value: 'Position' },
+    ] },
+    { key: 'currentFloor', label: 'Floor', kind: 'number', min: 1, max: 50, step: 1 },
+    { key: 'maxFloor', label: 'Max Floor', kind: 'number', min: 5, max: 100, step: 1 },
+    { key: 'direction', label: 'Direction', kind: 'select', options: [
+      { label: 'Up', value: 'up' }, { label: 'Down', value: 'down' }, { label: 'Idle', value: 'idle' },
+    ] },
+  ]),
+  story('door-status', 'Door Status', 'Elevator', DoorStatus, { title: 'Door Control', doorState: 'closed', doorPercent: 0 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Door Control', value: 'Door Control' }, { label: 'Door Status', value: 'Door Status' }, { label: 'Gate', value: 'Gate' },
+    ] },
+    { key: 'doorState', label: 'State', kind: 'select', options: [
+      { label: 'Open', value: 'open' }, { label: 'Closed', value: 'closed' }, { label: 'Opening', value: 'opening' }, { label: 'Closing', value: 'closing' },
+    ] },
+    { key: 'doorPercent', label: 'Door %', kind: 'number', min: 0, max: 100, step: 5 },
+  ]),
+  story('load-cell', 'Load Cell', 'Elevator', LoadCell, { title: 'Cabin Load', loadKg: 320, maxKg: 1000, passengers: 4 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Cabin Load', value: 'Cabin Load' }, { label: 'Weight Sensor', value: 'Weight Sensor' }, { label: 'Load Monitor', value: 'Load Monitor' },
+    ] },
+    { key: 'loadKg', label: 'Load (kg)', kind: 'number', min: 0, max: 2000, step: 10 },
+    { key: 'maxKg', label: 'Max (kg)', kind: 'number', min: 500, max: 3000, step: 100 },
+    { key: 'passengers', label: 'Passengers', kind: 'number', min: 0, max: 20, step: 1 },
+  ]),
+  story('maintenance-timer', 'Maintenance Timer', 'Elevator', MaintenanceTimer, { title: 'Maintenance', hoursUntilService: 342, tripCount: 14823, totalTrips: 50000 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Maintenance', value: 'Maintenance' }, { label: 'Service Timer', value: 'Service Timer' }, { label: 'Next Service', value: 'Next Service' },
+    ] },
+    { key: 'hoursUntilService', label: 'Hours Left', kind: 'number', min: 0, max: 2000, step: 10 },
+    { key: 'tripCount', label: 'Trip Count', kind: 'number', min: 0, max: 100000, step: 100 },
+  ]),
+  story('call-queue', 'Call Queue', 'Elevator', CallQueue, { title: 'Call Queue', maxFloors: 12 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Call Queue', value: 'Call Queue' }, { label: 'Floor Calls', value: 'Floor Calls' }, { label: 'Hall Calls', value: 'Hall Calls' },
+    ] },
+    { key: 'maxFloors', label: 'Floors', kind: 'number', min: 4, max: 30, step: 1 },
+  ]),
+
+  // ── Pipeline ────────────────────────────────────────────────────
+  story('pipe-segment', 'Pipe Segment', 'Pipeline', PipeSegment, { title: 'Pipe Segment', flowRate: 42.5, pressurePSI: 65, direction: 'right' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Pipe Segment', value: 'Pipe Segment' }, { label: 'Flow Section', value: 'Flow Section' }, { label: 'Pipeline', value: 'Pipeline' },
+    ] },
+    { key: 'flowRate', label: 'Flow Rate', kind: 'number', min: 0, max: 200, step: 0.5 },
+    { key: 'pressurePSI', label: 'Pressure (PSI)', kind: 'number', min: 0, max: 300, step: 5 },
+    { key: 'direction', label: 'Direction', kind: 'select', options: [
+      { label: 'Right', value: 'right' }, { label: 'Left', value: 'left' },
+    ] },
+  ]),
+  story('leak-detector', 'Leak Detector', 'Pipeline', LeakDetector, { title: 'Leak Detector', anomalyLevel: 0.3, threshold: 0.6, status: 'normal' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Leak Detector', value: 'Leak Detector' }, { label: 'Anomaly Sensor', value: 'Anomaly Sensor' }, { label: 'Acoustic Monitor', value: 'Acoustic Monitor' },
+    ] },
+    { key: 'anomalyLevel', label: 'Anomaly', kind: 'number', min: 0, max: 1, step: 0.05 },
+    { key: 'threshold', label: 'Threshold', kind: 'number', min: 0, max: 1, step: 0.05 },
+    { key: 'status', label: 'Status', kind: 'select', options: [
+      { label: 'Normal', value: 'normal' }, { label: 'Warning', value: 'warning' }, { label: 'Alarm', value: 'alarm' },
+    ] },
+  ]),
+  story('pipeline-pump-station', 'Pump Station', 'Pipeline', PipelinePumpStation, { title: 'Pump Station', rpmValue: 1450, flowGPM: 320, inletPSI: 15, outletPSI: 65 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Pump Station', value: 'Pump Station' }, { label: 'Booster Pump', value: 'Booster Pump' }, { label: 'Transfer Pump', value: 'Transfer Pump' },
+    ] },
+    { key: 'rpmValue', label: 'RPM', kind: 'number', min: 0, max: 3600, step: 50 },
+    { key: 'flowGPM', label: 'Flow (GPM)', kind: 'number', min: 0, max: 1000, step: 10 },
+    { key: 'inletPSI', label: 'Inlet PSI', kind: 'number', min: 0, max: 100, step: 5 },
+    { key: 'outletPSI', label: 'Outlet PSI', kind: 'number', min: 0, max: 200, step: 5 },
+  ]),
+  story('valve-control', 'Valve Control', 'Pipeline', ValveControl, { title: 'Valve Control', position: 75, state: 'partial' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Valve Control', value: 'Valve Control' }, { label: 'Gate Valve', value: 'Gate Valve' }, { label: 'Control Valve', value: 'Control Valve' },
+    ] },
+    { key: 'position', label: 'Position %', kind: 'number', min: 0, max: 100, step: 5 },
+    { key: 'state', label: 'State', kind: 'select', options: [
+      { label: 'Open', value: 'open' }, { label: 'Closed', value: 'closed' }, { label: 'Partial', value: 'partial' },
+    ] },
+  ]),
+  story('corrosion-monitor', 'Corrosion Monitor', 'Pipeline', CorrosionMonitor, { title: 'Corrosion Monitor', wallThicknessMM: 8.2, minThreshold: 5.0 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Corrosion Monitor', value: 'Corrosion Monitor' }, { label: 'Wall Thickness', value: 'Wall Thickness' }, { label: 'Integrity', value: 'Integrity' },
+    ] },
+    { key: 'wallThicknessMM', label: 'Thickness (mm)', kind: 'number', min: 1, max: 20, step: 0.1 },
+    { key: 'minThreshold', label: 'Min Threshold', kind: 'number', min: 1, max: 10, step: 0.5 },
+  ]),
+  story('pipe-network', 'Pipe Network', 'Pipeline', PipeNetwork, { title: 'Pipe Network', nodeCount: 6 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Pipe Network', value: 'Pipe Network' }, { label: 'Topology', value: 'Topology' }, { label: 'Flow Network', value: 'Flow Network' },
+    ] },
+    { key: 'nodeCount', label: 'Nodes', kind: 'number', min: 3, max: 10, step: 1 },
+  ]),
+
+  // ── 3D Printing ────────────────────────────────────────────────────
+  story('print-progress', 'Print Progress', '3D Printing', PrintProgress, { title: 'Print Progress', layerCurrent: 142, layerTotal: 380, etaMinutes: 47 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Print Progress', value: 'Print Progress' }, { label: 'Build Status', value: 'Build Status' }, { label: 'Layer Progress', value: 'Layer Progress' },
+    ] },
+    { key: 'layerCurrent', label: 'Current Layer', kind: 'number', min: 0, max: 1000, step: 1 },
+    { key: 'layerTotal', label: 'Total Layers', kind: 'number', min: 50, max: 2000, step: 10 },
+    { key: 'etaMinutes', label: 'ETA (min)', kind: 'number', min: 0, max: 600, step: 5 },
+  ]),
+  story('nozzle-temp', 'Nozzle Temp', '3D Printing', NozzleTemp, { title: 'Nozzle Temp', actualTemp: 205, targetTemp: 210, maxTemp: 280 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Nozzle Temp', value: 'Nozzle Temp' }, { label: 'Hotend', value: 'Hotend' }, { label: 'Extruder Temp', value: 'Extruder Temp' },
+    ] },
+    { key: 'actualTemp', label: 'Actual °C', kind: 'number', min: 20, max: 300, step: 1 },
+    { key: 'targetTemp', label: 'Target °C', kind: 'number', min: 150, max: 300, step: 5 },
+    { key: 'maxTemp', label: 'Max °C', kind: 'number', min: 200, max: 400, step: 10 },
+  ]),
+  story('bed-level', 'Bed Level', '3D Printing', BedLevel, { title: 'Bed Level', meshSize: 5 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Bed Level', value: 'Bed Level' }, { label: 'Mesh Level', value: 'Mesh Level' }, { label: 'Build Plate', value: 'Build Plate' },
+    ] },
+    { key: 'meshSize', label: 'Mesh Size', kind: 'number', min: 3, max: 9, step: 2 },
+  ]),
+  story('filament-tracker', 'Filament Tracker', '3D Printing', FilamentTracker, { title: 'Filament Tracker', remainingG: 480, totalG: 1000, materialType: 'PLA' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Filament Tracker', value: 'Filament Tracker' }, { label: 'Spool Status', value: 'Spool Status' }, { label: 'Material', value: 'Material' },
+    ] },
+    { key: 'remainingG', label: 'Remaining (g)', kind: 'number', min: 0, max: 1000, step: 10 },
+    { key: 'totalG', label: 'Total (g)', kind: 'number', min: 250, max: 3000, step: 250 },
+    { key: 'materialType', label: 'Material', kind: 'select', options: [
+      { label: 'PLA', value: 'PLA' }, { label: 'PETG', value: 'PETG' }, { label: 'ABS', value: 'ABS' }, { label: 'TPU', value: 'TPU' },
+    ] },
+  ]),
+  story('gcode-preview', 'GCode Preview', '3D Printing', GCodePreview, { title: 'GCode Preview', layerNumber: 42 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'GCode Preview', value: 'GCode Preview' }, { label: 'Toolpath', value: 'Toolpath' }, { label: 'Layer View', value: 'Layer View' },
+    ] },
+    { key: 'layerNumber', label: 'Layer #', kind: 'number', min: 1, max: 500, step: 1 },
+  ]),
+  story('print-farm', 'Print Farm', '3D Printing', PrintFarm, { title: 'Print Farm', printerCount: 4 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Print Farm', value: 'Print Farm' }, { label: 'Fleet Status', value: 'Fleet Status' }, { label: 'Printer Array', value: 'Printer Array' },
+    ] },
+    { key: 'printerCount', label: 'Printers', kind: 'number', min: 2, max: 8, step: 1 },
+  ]),
+
+  // ── Aquaculture ────────────────────────────────────────────────────
+  story('tank-ecosystem', 'Tank Ecosystem', 'Aquaculture', TankEcosystem, { title: 'Tank Ecosystem', waterTemp: 24.5, pH: 7.2, dissolvedO2: 6.8, ammonia: 0.02 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Tank Ecosystem', value: 'Tank Ecosystem' }, { label: 'Water Monitor', value: 'Water Monitor' }, { label: 'Tank Status', value: 'Tank Status' },
+    ] },
+    { key: 'waterTemp', label: 'Temp °C', kind: 'number', min: 10, max: 35, step: 0.5 },
+    { key: 'pH', label: 'pH', kind: 'number', min: 5, max: 9, step: 0.1 },
+    { key: 'dissolvedO2', label: 'O₂ (mg/L)', kind: 'number', min: 0, max: 15, step: 0.1 },
+    { key: 'ammonia', label: 'NH₃ (mg/L)', kind: 'number', min: 0, max: 1, step: 0.01 },
+  ]),
+  story('feeding-schedule', 'Feeding Schedule', 'Aquaculture', FeedingSchedule, { title: 'Feeding Schedule', feedsPerDay: 4 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Feeding Schedule', value: 'Feeding Schedule' }, { label: 'Auto Feeder', value: 'Auto Feeder' }, { label: 'Feed Timer', value: 'Feed Timer' },
+    ] },
+    { key: 'feedsPerDay', label: 'Feeds/Day', kind: 'number', min: 1, max: 8, step: 1 },
+  ]),
+  story('water-chemistry', 'Water Chemistry', 'Aquaculture', WaterChemistry, { title: 'Water Chemistry', pH: 7.1, ammonia: 0.03, nitrite: 0.15, nitrate: 22, oxygen: 7.2 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Water Chemistry', value: 'Water Chemistry' }, { label: 'Quality Radar', value: 'Quality Radar' }, { label: 'Parameters', value: 'Parameters' },
+    ] },
+    { key: 'pH', label: 'pH', kind: 'number', min: 5, max: 9, step: 0.1 },
+    { key: 'ammonia', label: 'NH₃', kind: 'number', min: 0, max: 1, step: 0.01 },
+    { key: 'oxygen', label: 'O₂', kind: 'number', min: 0, max: 15, step: 0.1 },
+  ]),
+  story('stock-density', 'Stock Density', 'Aquaculture', StockDensity, { title: 'Stock Density', fishCount: 2400, volumeM3: 50, mortalityPct: 1.2 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Stock Density', value: 'Stock Density' }, { label: 'Population', value: 'Population' }, { label: 'Fish Count', value: 'Fish Count' },
+    ] },
+    { key: 'fishCount', label: 'Fish Count', kind: 'number', min: 100, max: 10000, step: 100 },
+    { key: 'volumeM3', label: 'Volume (m³)', kind: 'number', min: 10, max: 200, step: 5 },
+    { key: 'mortalityPct', label: 'Mortality %', kind: 'number', min: 0, max: 10, step: 0.1 },
+  ]),
+  story('aeration-status', 'Aeration Status', 'Aquaculture', AerationStatus, { title: 'Aeration', pumpRunning: true, o2Saturation: 82 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Aeration', value: 'Aeration' }, { label: 'O₂ Pump', value: 'O₂ Pump' }, { label: 'Aerator', value: 'Aerator' },
+    ] },
+    { key: 'pumpRunning', label: 'Pump On', kind: 'boolean' },
+    { key: 'o2Saturation', label: 'O₂ Sat %', kind: 'number', min: 0, max: 100, step: 1 },
+  ]),
+  story('harvest-planner', 'Harvest Planner', 'Aquaculture', HarvestPlanner, { title: 'Harvest Planner', currentWeightG: 320, targetWeightG: 500, daysToHarvest: 45 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Harvest Planner', value: 'Harvest Planner' }, { label: 'Growth Curve', value: 'Growth Curve' }, { label: 'Harvest ETA', value: 'Harvest ETA' },
+    ] },
+    { key: 'currentWeightG', label: 'Current (g)', kind: 'number', min: 10, max: 1000, step: 10 },
+    { key: 'targetWeightG', label: 'Target (g)', kind: 'number', min: 100, max: 2000, step: 50 },
+    { key: 'daysToHarvest', label: 'Days Left', kind: 'number', min: 0, max: 365, step: 5 },
+  ]),
+
+  // ── Vending ────────────────────────────────────────────────────
+  story('product-grid', 'Product Grid', 'Vending', ProductGrid, { title: 'Planogram', rows: 4, cols: 5 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Planogram', value: 'Planogram' }, { label: 'Product Map', value: 'Product Map' }, { label: 'Stock Grid', value: 'Stock Grid' },
+    ] },
+    { key: 'rows', label: 'Rows', kind: 'number', min: 2, max: 8, step: 1 },
+    { key: 'cols', label: 'Columns', kind: 'number', min: 3, max: 8, step: 1 },
+  ]),
+  story('cash-level', 'Cash Level', 'Vending', CashLevel, { title: 'Cash Level', coinsPct: 65, billsPct: 42, changePct: 78 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Cash Level', value: 'Cash Level' }, { label: 'Money Box', value: 'Money Box' }, { label: 'Cash Status', value: 'Cash Status' },
+    ] },
+    { key: 'coinsPct', label: 'Coins %', kind: 'number', min: 0, max: 100, step: 5 },
+    { key: 'billsPct', label: 'Bills %', kind: 'number', min: 0, max: 100, step: 5 },
+    { key: 'changePct', label: 'Change %', kind: 'number', min: 0, max: 100, step: 5 },
+  ]),
+  story('sales-tracker', 'Sales Tracker', 'Vending', SalesTracker, { title: 'Sales Tracker', revenueToday: 342.5, revenueYesterday: 289, unitsToday: 87 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Sales Tracker', value: 'Sales Tracker' }, { label: 'Revenue', value: 'Revenue' }, { label: 'Daily Sales', value: 'Daily Sales' },
+    ] },
+    { key: 'revenueToday', label: 'Today ($)', kind: 'number', min: 0, max: 2000, step: 10 },
+    { key: 'unitsToday', label: 'Units Today', kind: 'number', min: 0, max: 500, step: 5 },
+  ]),
+  story('connectivity-status', 'Connectivity Status', 'Vending', ConnectivityStatus, { title: 'Connectivity', signalStrength: 72, connectionType: 'cellular', lastHeartbeat: 15 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Connectivity', value: 'Connectivity' }, { label: 'Network Status', value: 'Network Status' }, { label: 'Signal', value: 'Signal' },
+    ] },
+    { key: 'signalStrength', label: 'Signal %', kind: 'number', min: 0, max: 100, step: 5 },
+    { key: 'connectionType', label: 'Type', kind: 'select', options: [
+      { label: 'Cellular', value: 'cellular' }, { label: 'WiFi', value: 'wifi' },
+    ] },
+    { key: 'lastHeartbeat', label: 'Last Beat (s)', kind: 'number', min: 0, max: 300, step: 5 },
+  ]),
+  story('temp-zone', 'Temp Zone', 'Vending', TempZone, { title: 'Temp Zone', currentTemp: 3.2, minTemp: 1, maxTemp: 7 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Temp Zone', value: 'Temp Zone' }, { label: 'Refrigeration', value: 'Refrigeration' }, { label: 'Cold Zone', value: 'Cold Zone' },
+    ] },
+    { key: 'currentTemp', label: 'Temp °C', kind: 'number', min: -10, max: 20, step: 0.5 },
+    { key: 'minTemp', label: 'Min °C', kind: 'number', min: -10, max: 10, step: 0.5 },
+    { key: 'maxTemp', label: 'Max °C', kind: 'number', min: 0, max: 20, step: 0.5 },
+  ]),
+  story('service-alert', 'Service Alert', 'Vending', ServiceAlert, { title: 'Service Alerts', alerts: 3 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Service Alerts', value: 'Service Alerts' }, { label: 'Alerts', value: 'Alerts' }, { label: 'Maintenance', value: 'Maintenance' },
+    ] },
+    { key: 'alerts', label: 'Alert Count', kind: 'number', min: 0, max: 10, step: 1 },
+  ]),
+
+  // ── Drone ────────────────────────────────────────────────────
+  story('attitude-hud', 'Attitude HUD', 'Drone / UAV', AttitudeHUD, { title: 'Attitude HUD', pitch: 5, roll: 10, yaw: 0 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Attitude HUD', value: 'Attitude HUD' }, { label: 'Horizon', value: 'Horizon' }, { label: 'Flight Display', value: 'Flight Display' },
+    ] },
+    { key: 'pitch', label: 'Pitch °', kind: 'number', min: -90, max: 90, step: 1 },
+    { key: 'roll', label: 'Roll °', kind: 'number', min: -180, max: 180, step: 1 },
+    { key: 'yaw', label: 'Yaw °', kind: 'number', min: 0, max: 360, step: 1 },
+  ]),
+  story('battery-endurance', 'Battery Endurance', 'Drone / UAV', BatteryEndurance, { title: 'Battery', voltageV: 22.8, capacityPct: 72, timeRemainingMin: 18 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Battery', value: 'Battery' }, { label: 'Endurance', value: 'Endurance' }, { label: 'Power', value: 'Power' },
+    ] },
+    { key: 'voltageV', label: 'Voltage (V)', kind: 'number', min: 10, max: 50, step: 0.1 },
+    { key: 'capacityPct', label: 'Capacity %', kind: 'number', min: 0, max: 100, step: 1 },
+    { key: 'timeRemainingMin', label: 'Time (min)', kind: 'number', min: 0, max: 60, step: 1 },
+  ]),
+  story('waypoint-tracker', 'Waypoint Tracker', 'Drone / UAV', WaypointTracker, { title: 'Waypoints', waypointCount: 8, currentWaypoint: 3 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Waypoints', value: 'Waypoints' }, { label: 'Mission', value: 'Mission' }, { label: 'Route', value: 'Route' },
+    ] },
+    { key: 'waypointCount', label: 'Waypoints', kind: 'number', min: 3, max: 20, step: 1 },
+    { key: 'currentWaypoint', label: 'Current', kind: 'number', min: 1, max: 20, step: 1 },
+  ]),
+  story('signal-link', 'Signal Link', 'Drone / UAV', SignalLink, { title: 'Signal Link', uplinkStrength: 85, downlinkStrength: 72 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Signal Link', value: 'Signal Link' }, { label: 'Data Link', value: 'Data Link' }, { label: 'RF Link', value: 'RF Link' },
+    ] },
+    { key: 'uplinkStrength', label: 'Uplink %', kind: 'number', min: 0, max: 100, step: 5 },
+    { key: 'downlinkStrength', label: 'Downlink %', kind: 'number', min: 0, max: 100, step: 5 },
+  ]),
+  story('payload-status', 'Payload Status', 'Drone / UAV', PayloadStatus, { title: 'Payload', cameraActive: true, storageUsedGB: 28.4, storageTotalGB: 64 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Payload', value: 'Payload' }, { label: 'Camera', value: 'Camera' }, { label: 'Sensor Pod', value: 'Sensor Pod' },
+    ] },
+    { key: 'cameraActive', label: 'Camera On', kind: 'boolean' },
+    { key: 'storageUsedGB', label: 'Used (GB)', kind: 'number', min: 0, max: 128, step: 1 },
+    { key: 'storageTotalGB', label: 'Total (GB)', kind: 'number', min: 16, max: 256, step: 16 },
+  ]),
+  story('fleet-overview', 'Fleet Overview', 'Drone / UAV', FleetOverview, { title: 'Fleet Overview', droneCount: 6 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Fleet Overview', value: 'Fleet Overview' }, { label: 'Drone Fleet', value: 'Drone Fleet' }, { label: 'UAV Status', value: 'UAV Status' },
+    ] },
+    { key: 'droneCount', label: 'Drones', kind: 'number', min: 2, max: 12, step: 1 },
+  ]),
+
+  // ── Distillery ────────────────────────────────────────────────────
+  story('fermentation-curve', 'Fermentation Curve', 'Distillery', FermentationCurve, { title: 'Fermentation', currentSG: 1.032, targetSG: 1.010, startSG: 1.055 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Fermentation', value: 'Fermentation' }, { label: 'SG Curve', value: 'SG Curve' }, { label: 'Gravity', value: 'Gravity' },
+    ] },
+    { key: 'currentSG', label: 'Current SG', kind: 'number', min: 0.990, max: 1.120, step: 0.001 },
+    { key: 'targetSG', label: 'Target SG', kind: 'number', min: 0.990, max: 1.020, step: 0.001 },
+    { key: 'startSG', label: 'Start SG', kind: 'number', min: 1.020, max: 1.120, step: 0.005 },
+  ]),
+  story('still-diagram', 'Still Diagram', 'Distillery', StillDiagram, { title: 'Still', headTemp: 78.3, bodyTemp: 92.1, tailTemp: 68.5 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Still', value: 'Still' }, { label: 'Pot Still', value: 'Pot Still' }, { label: 'Column Still', value: 'Column Still' },
+    ] },
+    { key: 'headTemp', label: 'Head Temp °C', kind: 'number', min: 50, max: 100, step: 0.5 },
+    { key: 'bodyTemp', label: 'Body Temp °C', kind: 'number', min: 60, max: 110, step: 0.5 },
+    { key: 'tailTemp', label: 'Tail Temp °C', kind: 'number', min: 40, max: 90, step: 0.5 },
+  ]),
+  story('barrel-aging', 'Barrel Aging', 'Distillery', BarrelAging, { title: 'Barrel Aging', ageDays: 730, targetDays: 1095, angelSharePct: 4.2 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Barrel Aging', value: 'Barrel Aging' }, { label: 'Maturation', value: 'Maturation' }, { label: 'Cask', value: 'Cask' },
+    ] },
+    { key: 'ageDays', label: 'Age (days)', kind: 'number', min: 0, max: 7300, step: 30 },
+    { key: 'targetDays', label: 'Target (days)', kind: 'number', min: 365, max: 7300, step: 365 },
+    { key: 'angelSharePct', label: "Angel's Share %", kind: 'number', min: 0, max: 15, step: 0.5 },
+  ]),
+  story('mash-tun', 'Mash Tun', 'Distillery', MashTun, { title: 'Mash Tun', mashTemp: 65, restMinutes: 12, targetTemp: 67 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Mash Tun', value: 'Mash Tun' }, { label: 'Mashing', value: 'Mashing' }, { label: 'Mash Rest', value: 'Mash Rest' },
+    ] },
+    { key: 'mashTemp', label: 'Mash Temp °C', kind: 'number', min: 40, max: 80, step: 1 },
+    { key: 'restMinutes', label: 'Rest (min)', kind: 'number', min: 0, max: 60, step: 1 },
+    { key: 'targetTemp', label: 'Target °C', kind: 'number', min: 40, max: 80, step: 1 },
+  ]),
+  story('spirit-safe', 'Spirit Safe', 'Distillery', SpiritSafe, { title: 'Spirit Safe', abvPercent: 72, cutPoint: 'hearts' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Spirit Safe', value: 'Spirit Safe' }, { label: 'Distillate', value: 'Distillate' }, { label: 'Cut Monitor', value: 'Cut Monitor' },
+    ] },
+    { key: 'abvPercent', label: 'ABV %', kind: 'number', min: 0, max: 96, step: 1 },
+    { key: 'cutPoint', label: 'Cut', kind: 'select', options: [
+      { label: 'Heads', value: 'heads' }, { label: 'Hearts', value: 'hearts' }, { label: 'Tails', value: 'tails' },
+    ] },
+  ]),
+  story('bottling-line', 'Bottling Line', 'Distillery', BottlingLine, { title: 'Bottling Line', bottlesPerHour: 240, fillAccuracy: 98.5, targetBPH: 300 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Bottling Line', value: 'Bottling Line' }, { label: 'Bottling', value: 'Bottling' }, { label: 'Fill Line', value: 'Fill Line' },
+    ] },
+    { key: 'bottlesPerHour', label: 'BPH', kind: 'number', min: 50, max: 600, step: 10 },
+    { key: 'fillAccuracy', label: 'Accuracy %', kind: 'number', min: 90, max: 100, step: 0.1 },
+    { key: 'targetBPH', label: 'Target BPH', kind: 'number', min: 100, max: 800, step: 50 },
+  ]),
+
+  // ── Cryogenics ────────────────────────────────────────────────────
+  story('dewar-vessel', 'Dewar Vessel', 'Cryogenics', DewarVessel, { title: 'Dewar Vessel', levelPct: 72, boilOffRate: 1.2, tempK: 77 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Dewar Vessel', value: 'Dewar Vessel' }, { label: 'LN₂ Tank', value: 'LN₂ Tank' }, { label: 'Cryo Storage', value: 'Cryo Storage' },
+    ] },
+    { key: 'levelPct', label: 'Level %', kind: 'number', min: 0, max: 100, step: 5 },
+    { key: 'boilOffRate', label: 'Boil-Off (L/d)', kind: 'number', min: 0, max: 10, step: 0.1 },
+    { key: 'tempK', label: 'Temp (K)', kind: 'number', min: 4, max: 300, step: 1 },
+  ]),
+  story('temp-gradient', 'Temp Gradient', 'Cryogenics', TempGradient, { title: 'Temperature Gradient' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Temperature Gradient', value: 'Temperature Gradient' }, { label: 'Thermal Map', value: 'Thermal Map' }, { label: 'Temp Profile', value: 'Temp Profile' },
+    ] },
+  ]),
+  story('cryo-pump', 'Cryo Pump', 'Cryogenics', CryoPump, { title: 'Cryo Pump', pressureMbar: 0.003, turboRPM: 42000, status: 'running' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Cryo Pump', value: 'Cryo Pump' }, { label: 'Vacuum Pump', value: 'Vacuum Pump' }, { label: 'Turbo Pump', value: 'Turbo Pump' },
+    ] },
+    { key: 'pressureMbar', label: 'Pressure (mbar)', kind: 'number', min: 0, max: 1, step: 0.001 },
+    { key: 'turboRPM', label: 'RPM', kind: 'number', min: 0, max: 90000, step: 1000 },
+    { key: 'status', label: 'Status', kind: 'select', options: [
+      { label: 'Running', value: 'running' }, { label: 'Standby', value: 'standby' }, { label: 'Fault', value: 'fault' },
+    ] },
+  ]),
+  story('sample-rack', 'Sample Rack', 'Cryogenics', SampleRack, { title: 'Sample Rack', rows: 8, cols: 8, occupiedCount: 42 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Sample Rack', value: 'Sample Rack' }, { label: 'Cryo Box', value: 'Cryo Box' }, { label: 'Storage Grid', value: 'Storage Grid' },
+    ] },
+    { key: 'rows', label: 'Rows', kind: 'number', min: 4, max: 12, step: 1 },
+    { key: 'cols', label: 'Columns', kind: 'number', min: 4, max: 12, step: 1 },
+    { key: 'occupiedCount', label: 'Occupied', kind: 'number', min: 0, max: 144, step: 1 },
+  ]),
+  story('refill-schedule', 'Refill Schedule', 'Cryogenics', RefillSchedule, { title: 'Refill Schedule', daysUntilEmpty: 12, deliveryDays: 5 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Refill Schedule', value: 'Refill Schedule' }, { label: 'LN₂ Supply', value: 'LN₂ Supply' }, { label: 'Delivery ETA', value: 'Delivery ETA' },
+    ] },
+    { key: 'daysUntilEmpty', label: 'Days Left', kind: 'number', min: 0, max: 60, step: 1 },
+    { key: 'deliveryDays', label: 'Delivery (days)', kind: 'number', min: 1, max: 14, step: 1 },
+  ]),
+  story('cold-chain-log', 'Cold Chain Log', 'Cryogenics', ColdChainLog, { title: 'Cold Chain Log', excursionCount: 2 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Cold Chain Log', value: 'Cold Chain Log' }, { label: 'Temp Log', value: 'Temp Log' }, { label: 'Excursion Log', value: 'Excursion Log' },
+    ] },
+    { key: 'excursionCount', label: 'Excursions', kind: 'number', min: 0, max: 10, step: 1 },
+  ]),
+
+  // ── Forestry ────────────────────────────────────────────────────
+  story('fire-risk-index', 'Fire Risk Index', 'Forestry', FireRiskIndex, { title: 'Fire Risk Index', riskLevel: 42 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Fire Risk Index', value: 'Fire Risk Index' }, { label: 'Fire Danger', value: 'Fire Danger' }, { label: 'Risk Level', value: 'Risk Level' },
+    ] },
+    { key: 'riskLevel', label: 'Risk (0-100)', kind: 'number', min: 0, max: 100, step: 5 },
+  ]),
+  story('smoke-detector-forestry', 'Smoke Detector', 'Forestry', SmokeDetector, { title: 'Smoke Detector', smokeDensity: 12, threshold: 50, status: 'clear' }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Smoke Detector', value: 'Smoke Detector' }, { label: 'Smoke Sensor', value: 'Smoke Sensor' }, { label: 'Optical Sensor', value: 'Optical Sensor' },
+    ] },
+    { key: 'smokeDensity', label: 'Density', kind: 'number', min: 0, max: 100, step: 1 },
+    { key: 'threshold', label: 'Threshold', kind: 'number', min: 10, max: 100, step: 5 },
+    { key: 'status', label: 'Status', kind: 'select', options: [
+      { label: 'Clear', value: 'clear' }, { label: 'Haze', value: 'haze' }, { label: 'Smoke', value: 'smoke' },
+    ] },
+  ]),
+  story('canopy-density', 'Canopy Density', 'Forestry', CanopyDensity, { title: 'Canopy Density', ndviValue: 0.72, coverPct: 68 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Canopy Density', value: 'Canopy Density' }, { label: 'NDVI', value: 'NDVI' }, { label: 'Forest Cover', value: 'Forest Cover' },
+    ] },
+    { key: 'ndviValue', label: 'NDVI', kind: 'number', min: 0, max: 1, step: 0.01 },
+    { key: 'coverPct', label: 'Cover %', kind: 'number', min: 0, max: 100, step: 5 },
+  ]),
+  story('weather-risk', 'Weather Risk', 'Forestry', WeatherRisk, { title: 'Weather Risk', windKph: 28, humidityPct: 35, tempC: 32 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Weather Risk', value: 'Weather Risk' }, { label: 'Fire Weather', value: 'Fire Weather' }, { label: 'Conditions', value: 'Conditions' },
+    ] },
+    { key: 'windKph', label: 'Wind (kph)', kind: 'number', min: 0, max: 100, step: 1 },
+    { key: 'humidityPct', label: 'Humidity %', kind: 'number', min: 0, max: 100, step: 5 },
+    { key: 'tempC', label: 'Temp °C', kind: 'number', min: -10, max: 50, step: 1 },
+  ]),
+  story('watch-tower', 'Watch Tower', 'Forestry', WatchTower, { title: 'Watch Towers', towerCount: 9 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Watch Towers', value: 'Watch Towers' }, { label: 'Camera Network', value: 'Camera Network' }, { label: 'Tower Grid', value: 'Tower Grid' },
+    ] },
+    { key: 'towerCount', label: 'Towers', kind: 'number', min: 3, max: 16, step: 1 },
+  ]),
+  story('tree-inventory', 'Tree Inventory', 'Forestry', TreeInventory, { title: 'Tree Inventory', totalTrees: 14200, speciesCount: 8, timberVolume: 3400 }, [
+    { key: 'title', label: 'Title', kind: 'select', options: [
+      { label: 'Tree Inventory', value: 'Tree Inventory' }, { label: 'Forest Census', value: 'Forest Census' }, { label: 'Timber Stock', value: 'Timber Stock' },
+    ] },
+    { key: 'totalTrees', label: 'Total Trees', kind: 'number', min: 1000, max: 100000, step: 1000 },
+    { key: 'speciesCount', label: 'Species', kind: 'number', min: 1, max: 20, step: 1 },
+    { key: 'timberVolume', label: 'Volume (m³)', kind: 'number', min: 100, max: 50000, step: 100 },
   ]),
 ];
 
