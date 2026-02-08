@@ -15,8 +15,8 @@ function neo() {
 }
 
 // ── Robot Arm Pose ───────────────────────────────────────────────────
-export function RobotArmPose({ title = 'Robot Arm', joints = 6, angles }: {
-  title?: string; joints?: number; angles: number[];
+export function RobotArmPose({ title = 'Robot Arm', joints = 6, angles = [] }: {
+  title?: string; joints?: number; angles?: number[];
 }) {
   const X = getX();
   const n = neo();
@@ -40,42 +40,45 @@ export function RobotArmPose({ title = 'Robot Arm', joints = 6, angles }: {
         marginBottom: 12,
       }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0 }}>
-          {visibleJoints.map((name, i) => (
-            <div key={i} style={{ display: 'flex', alignItems: 'center' }}>
-              <div style={{
-                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3,
-              }}>
+          {visibleJoints.map((name, i) => {
+            const angle = Number.isFinite(angles[i]) ? (angles[i] as number) : 0;
+            return (
+              <div key={i} style={{ display: 'flex', alignItems: 'center' }}>
                 <div style={{
-                  width: 28, height: 28, borderRadius: '50%',
-                  background: n.metal,
-                  boxShadow: n.raised,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  border: `1px solid ${X.border}`,
-                  position: 'relative',
+                  display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3,
                 }}>
-                  <Dot c={statusColor(statuses[i])} pulse={statuses[i] === 'warn'} s={8} />
                   <div style={{
-                    position: 'absolute', top: -2, right: -2, width: 6, height: 6,
-                    borderRadius: '50%', background: statusColor(statuses[i]),
-                    boxShadow: `0 0 4px ${statusColor(statuses[i])}60`,
-                  }} />
+                    width: 28, height: 28, borderRadius: '50%',
+                    background: n.metal,
+                    boxShadow: n.raised,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    border: `1px solid ${X.border}`,
+                    position: 'relative',
+                  }}>
+                    <Dot c={statusColor(statuses[i])} pulse={statuses[i] === 'warn'} s={8} />
+                    <div style={{
+                      position: 'absolute', top: -2, right: -2, width: 6, height: 6,
+                      borderRadius: '50%', background: statusColor(statuses[i]),
+                      boxShadow: `0 0 4px ${statusColor(statuses[i])}60`,
+                    }} />
+                  </div>
+                  <M style={{ fontSize: 7, fontWeight: 600, color: X.textMut }}>{name}</M>
+                  <M style={{
+                    fontSize: 9, fontWeight: 700,
+                    color: Math.abs(angle) > 150 ? X.amber : X.text,
+                  }}>{angle.toFixed(1)}&deg;</M>
                 </div>
-                <M style={{ fontSize: 7, fontWeight: 600, color: X.textMut }}>{name}</M>
-                <M style={{
-                  fontSize: 9, fontWeight: 700,
-                  color: Math.abs(angles[i]) > 150 ? X.amber : X.text,
-                }}>{angles[i].toFixed(1)}&deg;</M>
+                {i < visibleJoints.length - 1 && (
+                  <div style={{
+                    width: 16, height: 2, background: X.border,
+                    margin: '0 3px', marginBottom: 24,
+                    borderRadius: 1,
+                    boxShadow: `0 1px 2px ${X.bg}40`,
+                  }} />
+                )}
               </div>
-              {i < visibleJoints.length - 1 && (
-                <div style={{
-                  width: 16, height: 2, background: X.border,
-                  margin: '0 3px', marginBottom: 24,
-                  borderRadius: 1,
-                  boxShadow: `0 1px 2px ${X.bg}40`,
-                }} />
-              )}
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -88,8 +91,8 @@ export function RobotArmPose({ title = 'Robot Arm', joints = 6, angles }: {
 }
 
 // ── Joint Torque ────────────────────────────────────────────────────
-export function JointTorque({ title = 'Joint Torque', torqueLimit = 100, torques }: {
-  title?: string; torqueLimit?: number; torques: number[];
+export function JointTorque({ title = 'Joint Torque', torqueLimit = 100, torques = [] }: {
+  title?: string; torqueLimit?: number; torques?: number[];
 }) {
   const X = getX();
   const n = neo();
@@ -100,6 +103,14 @@ export function JointTorque({ title = 'Joint Torque', torqueLimit = 100, torques
     { name: 'J3', base: 45 },
     { name: 'J4', base: 91 },
   ];
+  const safeTorques = jointData.map((joint, i) => {
+    const torque = torques[i];
+    return Number.isFinite(torque) ? (torque as number) : joint.base;
+  });
+  const maxTorque = safeTorques.length > 0 ? Math.max(...safeTorques) : 0;
+  const avgTorque = safeTorques.length > 0
+    ? safeTorques.reduce((a, t) => a + t, 0) / safeTorques.length
+    : 0;
 
   const torqueColor = (pct: number) => pct > 90 ? X.red : pct > 70 ? X.amber : X.teal;
 
@@ -155,18 +166,16 @@ export function JointTorque({ title = 'Joint Torque', torqueLimit = 100, torques
     );
   };
 
-  const avgTorque = torques.reduce((a, t) => a + t, 0) / torques.length;
-
   return (
     <Card style={{ width: 350 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
         <div style={{ fontSize: 13, fontWeight: 700, color: X.text }}>{title}</div>
-        <Badge color={torqueColor(Math.max(...torques))} solid>
-          Max {Math.round(Math.max(...torques))}%
+        <Badge color={torqueColor(maxTorque)} solid>
+          Max {Math.round(maxTorque)}%
         </Badge>
       </div>
       <div style={{ display: 'flex', gap: 6, marginBottom: 10 }}>
-        {torques.map((t, i) => renderArc(t, torqueColor(t), i))}
+        {safeTorques.map((t, i) => renderArc(t, torqueColor(t), i))}
       </div>
       <Prog value={avgTorque} color={torqueColor(avgTorque)} h={3} style={{ marginBottom: 4 }} />
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -180,14 +189,18 @@ export function JointTorque({ title = 'Joint Torque', torqueLimit = 100, torques
 }
 
 // ── Vision Feed ─────────────────────────────────────────────────────
-export function VisionFeed({ title = 'Vision Feed', conf, fps, detections }: {
-  title?: string; conf: number; fps: number; detections: number;
+export function VisionFeed({ title = 'Vision Feed', confidence, conf, fps = 30, detections = 0 }: {
+  title?: string; confidence?: number; conf?: number; fps?: number; detections?: number;
 }) {
   const X = getX();
   const n = neo();
   const tick = useTick(2000);
+  const resolvedConfidenceRaw = confidence ?? conf ?? 85;
+  const resolvedConfidence = Number.isFinite(resolvedConfidenceRaw) ? resolvedConfidenceRaw : 85;
+  const resolvedFps = Number.isFinite(fps) ? fps : 0;
+  const resolvedDetections = Number.isFinite(detections) ? detections : 0;
 
-  const confColor = conf > 80 ? X.teal : conf > 60 ? X.amber : X.red;
+  const confColor = resolvedConfidence > 80 ? X.teal : resolvedConfidence > 60 ? X.amber : X.red;
 
   return (
     <Card style={{ width: 350 }}>
@@ -272,7 +285,7 @@ export function VisionFeed({ title = 'Vision Feed', conf, fps, detections }: {
             fontSize: 7, fontFamily: X.m, fontWeight: 600,
             color: X.text + '80',
           }}>
-            CAM-01 {fps.toFixed(1)} FPS
+            CAM-01 {resolvedFps.toFixed(1)} FPS
           </div>
           <div style={{
             position: 'absolute', top: 4, left: 6,
@@ -286,15 +299,15 @@ export function VisionFeed({ title = 'Vision Feed', conf, fps, detections }: {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
           <Lbl style={{ marginBottom: 2 }}>Confidence</Lbl>
-          <M style={{ fontSize: 14, fontWeight: 800, color: confColor }}>{conf.toFixed(1)}%</M>
+          <M style={{ fontSize: 14, fontWeight: 800, color: confColor }}>{resolvedConfidence.toFixed(1)}%</M>
         </div>
         <div style={{ textAlign: 'center' }}>
           <Lbl style={{ marginBottom: 2 }}>Detections</Lbl>
-          <M style={{ fontSize: 14, fontWeight: 800, color: X.purple }}>{Math.max(0, Math.round(detections))}</M>
+          <M style={{ fontSize: 14, fontWeight: 800, color: X.purple }}>{Math.max(0, Math.round(resolvedDetections))}</M>
         </div>
         <div style={{ textAlign: 'right' }}>
           <Lbl style={{ marginBottom: 2 }}>FPS</Lbl>
-          <M style={{ fontSize: 14, fontWeight: 800, color: fps > 25 ? X.teal : X.amber }}>{fps.toFixed(1)}</M>
+          <M style={{ fontSize: 14, fontWeight: 800, color: resolvedFps > 25 ? X.teal : X.amber }}>{resolvedFps.toFixed(1)}</M>
         </div>
       </div>
     </Card>

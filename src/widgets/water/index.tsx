@@ -234,7 +234,7 @@ export function ChemicalDosing({ title = 'Chemical Dosing', phTarget = 7.0, phAc
 }
 
 // ── Filtration Bank ───────────────────────────────────────────────
-export function FiltrationBank({ title = 'Filtration Bank', stageCount = 4, pressures }: { title?: string; stageCount?: number; pressures: number[] }) {
+export function FiltrationBank({ title = 'Filtration Bank', stageCount = 4, pressures = [] }: { title?: string; stageCount?: number; pressures?: number[] }) {
   const X = getX();
   const n = neo();
 
@@ -259,7 +259,8 @@ export function FiltrationBank({ title = 'Filtration Bank', stageCount = 4, pres
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
         {stageData.map((stage, i) => {
-          const psi = pressures[i];
+          const psiValue = pressures[i];
+          const psi = Number.isFinite(psiValue) ? (psiValue as number) : stage.pressureBase;
           const pColor = psi > 28 ? X.red : psi > 20 ? X.amber : X.teal;
           return (
             <div key={i} style={{
@@ -298,7 +299,7 @@ export function FiltrationBank({ title = 'Filtration Bank', stageCount = 4, pres
 }
 
 // ── Water Tank Level ──────────────────────────────────────────────
-export function WaterTankLevel({ title = 'Tank Level', tankCount = 3, levels }: { title?: string; tankCount?: number; levels: number[] }) {
+export function WaterTankLevel({ title = 'Tank Level', tankCount = 3, levels = [] }: { title?: string; tankCount?: number; levels?: number[] }) {
   const X = getX();
   const n = neo();
 
@@ -308,6 +309,14 @@ export function WaterTankLevel({ title = 'Tank Level', tankCount = 3, levels }: 
     { name: 'Process', capacityL: 20000, levelBase: 88 },
     { name: 'Effluent', capacityL: 15000, levelBase: 34 },
   ].slice(0, tankCount);
+  const visibleLevels = tankData.map((tank, i) => {
+    const level = levels[i];
+    const safeLevel = Number.isFinite(level) ? (level as number) : tank.levelBase;
+    return Math.max(0, Math.min(100, safeLevel));
+  });
+  const avgLevel = visibleLevels.length > 0
+    ? Math.round(visibleLevels.reduce((a, v) => a + v, 0) / visibleLevels.length)
+    : 0;
 
   const levelColor = (v: number) => v > 85 ? X.amber : v < 20 ? X.red : X.teal;
 
@@ -320,7 +329,7 @@ export function WaterTankLevel({ title = 'Tank Level', tankCount = 3, levels }: 
 
       <div style={{ display: 'flex', gap: 10, justifyContent: 'center', marginBottom: 12 }}>
         {tankData.map((tank, i) => {
-          const lv = Math.max(0, Math.min(100, levels[i]));
+          const lv = visibleLevels[i] ?? tank.levelBase;
           const c = levelColor(lv);
           const fillH = (lv / 100) * 90;
           return (
@@ -379,7 +388,7 @@ export function WaterTankLevel({ title = 'Tank Level', tankCount = 3, levels }: 
       {/* Bottom summary */}
       <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: `1px solid ${X.borderLight}`, paddingTop: 8 }}>
         <div><Lbl style={{ marginBottom: 1 }}>Total Capacity</Lbl><M style={{ fontSize: 10, fontWeight: 700, color: X.indigo }}>{(tankData.reduce((a, t) => a + t.capacityL, 0) / 1000).toFixed(0)} kL</M></div>
-        <div style={{ textAlign: 'right' }}><Lbl style={{ marginBottom: 1 }}>Avg Level</Lbl><M style={{ fontSize: 10, fontWeight: 700, color: X.teal }}>{Math.round(levels.slice(0, tankCount).reduce((a, v) => a + v, 0) / tankCount)}%</M></div>
+        <div style={{ textAlign: 'right' }}><Lbl style={{ marginBottom: 1 }}>Avg Level</Lbl><M style={{ fontSize: 10, fontWeight: 700, color: X.teal }}>{avgLevel}%</M></div>
       </div>
     </Card>
   );
@@ -495,7 +504,7 @@ export function TurbidityMeter({ title = 'Turbidity', ntuLimit = 4, ntu }: { tit
 }
 
 // ── Pump Station ──────────────────────────────────────────────────
-export function PumpStation({ title = 'Pump Station', pressureUnit = 'PSI', pressures, flows, rpms }: { title?: string; pressureUnit?: string; pressures: number[]; flows: number[]; rpms: number[] }) {
+export function PumpStation({ title = 'Pump Station', pressureUnit = 'PSI', pressures = [], flows = [], rpms = [] }: { title?: string; pressureUnit?: string; pressures?: number[]; flows?: number[]; rpms?: number[] }) {
   const X = getX();
   const n = neo();
 
@@ -506,6 +515,13 @@ export function PumpStation({ title = 'Pump Station', pressureUnit = 'PSI', pres
     { id: 'P-02', name: 'Booster' },
     { id: 'P-03', name: 'Distribution' },
   ];
+  const fallbackPressure = [48, 42, 55];
+  const fallbackFlow = [115, 72, 96];
+  const fallbackRpm = [1480, 1220, 1380];
+  const readValue = (values: number[], i: number, fallback: number) => {
+    const value = values[i];
+    return Number.isFinite(value) ? (value as number) : fallback;
+  };
 
   const togglePump = (i: number) => {
     setPumpStates(prev => {
@@ -527,9 +543,9 @@ export function PumpStation({ title = 'Pump Station', pressureUnit = 'PSI', pres
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         {pumps.map((pump, i) => {
           const on = pumpStates[i];
-          const psi = on ? pressures[i] : 0;
-          const flowVal = on ? flows[i] : 0;
-          const rpm = on ? rpms[i] : 0;
+          const psi = on ? readValue(pressures, i, fallbackPressure[i] ?? 0) : 0;
+          const flowVal = on ? readValue(flows, i, fallbackFlow[i] ?? 0) : 0;
+          const rpm = on ? readValue(rpms, i, fallbackRpm[i] ?? 0) : 0;
           const pColor = psi > 55 ? X.amber : X.teal;
 
           return (
@@ -599,8 +615,8 @@ export function PumpStation({ title = 'Pump Station', pressureUnit = 'PSI', pres
 
       {/* Summary bar */}
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 10, paddingTop: 8, borderTop: `1px solid ${X.borderLight}` }}>
-        <div><Lbl style={{ marginBottom: 1 }}>Total Flow</Lbl><M style={{ fontSize: 10, fontWeight: 700, color: X.indigo }}>{pumpStates.reduce((a, on, i) => a + (on ? Math.max(0, flows[i]) : 0), 0).toFixed(1)} L/min</M></div>
-        <div style={{ textAlign: 'right' }}><Lbl style={{ marginBottom: 1 }}>Avg Pressure</Lbl><M style={{ fontSize: 10, fontWeight: 700, color: X.teal }}>{activeCount > 0 ? (pumpStates.reduce((a, on, i) => a + (on ? Math.max(0, pressures[i]) : 0), 0) / activeCount).toFixed(1) : '0.0'} {pressureUnit}</M></div>
+        <div><Lbl style={{ marginBottom: 1 }}>Total Flow</Lbl><M style={{ fontSize: 10, fontWeight: 700, color: X.indigo }}>{pumpStates.reduce((a, on, i) => a + (on ? Math.max(0, readValue(flows, i, fallbackFlow[i] ?? 0)) : 0), 0).toFixed(1)} L/min</M></div>
+        <div style={{ textAlign: 'right' }}><Lbl style={{ marginBottom: 1 }}>Avg Pressure</Lbl><M style={{ fontSize: 10, fontWeight: 700, color: X.teal }}>{activeCount > 0 ? (pumpStates.reduce((a, on, i) => a + (on ? Math.max(0, readValue(pressures, i, fallbackPressure[i] ?? 0)) : 0), 0) / activeCount).toFixed(1) : '0.0'} {pressureUnit}</M></div>
       </div>
     </Card>
   );

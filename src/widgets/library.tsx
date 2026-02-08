@@ -486,7 +486,7 @@ export function DashboardContent() {
         <Section title="Robotics" desc="Arm poses, joint torque, vision feeds, task queues, grippers, cycle counters.">
           <RobotArmPose angles={[45, -30, 60, 15, -45, 30, 0, 90]} />
           <JointTorque torques={[24, 18, 32, 15]} />
-          <VisionFeed fps={29.8} detections={3} conf={85} />
+          <VisionFeed fps={29.8} detections={3} confidence={85} />
           <TaskQueue />
           <GripperStatus force={24.6} />
           <CycleCounter cycleRate={12.4} uptime={98.7} />

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getX, ease, Card, Badge, Btn, Prog, Lbl, M, Dot } from '../primitives';
 import { useAnim, useTick } from '../hooks';
 
@@ -18,9 +18,8 @@ function neo() {
 export function Chronograph({ title = 'Chronograph' }: { title?: string } = {}) {
   const X = getX();
   const n = neo();
-  const tick = useTick(1000);
   const [running, setRunning] = useState(false);
-  const [elapsed, setElapsed] = useState(0);
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
 
   const now = new Date();
   const hours = now.getHours() % 12;
@@ -31,36 +30,17 @@ export function Chronograph({ title = 'Chronograph' }: { title?: string } = {}) 
   const minuteAngle = (minutes + seconds / 60) * 6;
   const secondAngle = seconds * 6;
 
-  // Chrono subdial values
-  const chronoSec = elapsed % 60;
-  const chronoMin = Math.floor(elapsed / 60) % 30;
-  const chronoHr = Math.floor(elapsed / 3600) % 12;
+  useEffect(() => {
+    if (!running) return;
+    const timer = window.setInterval(() => {
+      setElapsedSeconds((value) => value + 1);
+    }, 1000);
+    return () => window.clearInterval(timer);
+  }, [running]);
 
-  if (running && tick > 0) {
-    // We use a side effect guard via key to advance elapsed
-  }
-
-  const handleStartStop = () => {
-    if (!running) {
-      setRunning(true);
-      setElapsed(prev => prev);
-    } else {
-      setRunning(false);
-    }
-    if (running) {
-      // stop
-    } else {
-      setElapsed(prev => prev + 1);
-    }
-  };
-
-  // Advance elapsed when running
-  const displayElapsed = running ? elapsed + tick : elapsed;
-  const dSec = displayElapsed % 60;
-  const dMin = Math.floor(displayElapsed / 60) % 30;
-  const dHr = Math.floor(displayElapsed / 3600) % 12;
-
-  const lumGlow = '0 0 4px ' + X.teal + '60';
+  const dSec = elapsedSeconds % 60;
+  const dMin = Math.floor(elapsedSeconds / 60) % 30;
+  const dHr = Math.floor(elapsedSeconds / 3600) % 12;
 
   // Helper to draw a hand
   const hand = (cx: number, cy: number, angle: number, len: number, w: number, color: string) => {
@@ -169,14 +149,14 @@ export function Chronograph({ title = 'Chronograph' }: { title?: string } = {}) 
 
         {/* Pusher buttons on right side */}
         <div style={{ position: 'absolute', right: 30, top: '50%', transform: 'translateY(-50%)', display: 'flex', flexDirection: 'column', gap: 40 }}>
-          <div onClick={() => { if (running) { setRunning(false); } else { setRunning(true); setElapsed(running ? elapsed : elapsed); } }}
+          <div onClick={() => { setRunning((value) => !value); }}
             style={{
               width: 14, height: 28, borderRadius: '0 4px 4px 0', background: n.metal, boxShadow: n.raised,
               cursor: 'pointer', border: '1px solid ' + X.borderLight, display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
             <div style={{ width: 3, height: 10, borderRadius: 1, background: running ? X.teal : X.textMut }} />
           </div>
-          <div onClick={() => { setRunning(false); setElapsed(0); }}
+          <div onClick={() => { setRunning(false); setElapsedSeconds(0); }}
             style={{
               width: 14, height: 28, borderRadius: '0 4px 4px 0', background: n.metal, boxShadow: n.raised,
               cursor: 'pointer', border: '1px solid ' + X.borderLight, display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -205,8 +185,8 @@ export function Chronograph({ title = 'Chronograph' }: { title?: string } = {}) 
       </div>
 
       <div style={{ display: 'flex', justifyContent: 'center', gap: 8 }}>
-        <Btn onClick={() => { setRunning(!running); }} color={running ? X.amber : X.teal} small>{running ? 'Stop' : 'Start'}</Btn>
-        <Btn onClick={() => { setRunning(false); setElapsed(0); }} color={X.textMut} small ghost>Reset</Btn>
+        <Btn onClick={() => { setRunning((value) => !value); }} color={running ? X.amber : X.teal} small>{running ? 'Stop' : 'Start'}</Btn>
+        <Btn onClick={() => { setRunning(false); setElapsedSeconds(0); }} color={X.textMut} small ghost>Reset</Btn>
       </div>
     </Card>
   );

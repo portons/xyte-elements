@@ -1696,13 +1696,13 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
     { key: 'chlorine', label: 'Chlorine (ppm)', kind: 'number' as const, min: 0, max: 3, step: 0.1 },
     { key: 'fluoride', label: 'Fluoride (ppm)', kind: 'number' as const, min: 0, max: 2, step: 0.05 },
   ]),
-  story('filtration-bank', 'Filtration Bank', 'Water Treatment', FiltrationBank, { title: 'Filtration Bank', stageCount: 4 }, [
+  story('filtration-bank', 'Filtration Bank', 'Water Treatment', FiltrationBank, { title: 'Filtration Bank', stageCount: 4, pressures: [12.4, 18.7, 24.1, 31.5] }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Filtration Bank', value: 'Filtration Bank' }, { label: 'Filter Status', value: 'Filter Status' }, { label: 'Multi-Stage Filter', value: 'Multi-Stage Filter' },
     ] },
     { key: 'stageCount', label: 'Stages', kind: 'number', min: 2, max: 6, step: 1 },
   ]),
-  story('water-tank-level', 'Water Tank Level', 'Water Treatment', WaterTankLevel, { title: 'Tank Level', tankCount: 3 }, [
+  story('water-tank-level', 'Water Tank Level', 'Water Treatment', WaterTankLevel, { title: 'Tank Level', tankCount: 3, levels: [72, 45, 88] }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Tank Level', value: 'Tank Level' }, { label: 'Water Storage', value: 'Water Storage' }, { label: 'Reservoir', value: 'Reservoir' },
     ] },
@@ -1715,7 +1715,7 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
     { key: 'ntuLimit', label: 'NTU Limit', kind: 'number' as const, min: 1, max: 10, step: 1 },
     { key: 'ntu', label: 'NTU Reading', kind: 'number' as const, min: 0, max: 10, step: 0.1 },
   ]),
-  story('pump-station', 'Pump Station', 'Water Treatment', PumpStation, { title: 'Pump Station', pressureUnit: 'PSI' }, [
+  story('pump-station', 'Pump Station', 'Water Treatment', PumpStation, { title: 'Pump Station', pressureUnit: 'PSI', pressures: [48, 42, 55], flows: [115, 72, 96], rpms: [1480, 1220, 1380] }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Pump Station', value: 'Pump Station' }, { label: 'Pump House', value: 'Pump House' }, { label: 'Booster Station', value: 'Booster Station' },
     ] },
@@ -1725,13 +1725,13 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
   ]),
 
   // ── Robotics ────────────────────────────────────────────────────────
-  story('robot-arm-pose', 'Robot Arm Pose', 'Robotics', RobotArmPose, { title: 'Robot Arm', joints: 6 }, [
+  story('robot-arm-pose', 'Robot Arm Pose', 'Robotics', RobotArmPose, { title: 'Robot Arm', joints: 6, angles: [12.5, -8.3, 64.1, 22.7, -15.4, 40.2] }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Robot Arm', value: 'Robot Arm' }, { label: 'Arm Status', value: 'Arm Status' }, { label: 'Manipulator', value: 'Manipulator' },
     ] },
     { key: 'joints', label: 'Joints', kind: 'number', min: 3, max: 8, step: 1 },
   ]),
-  story('joint-torque', 'Joint Torque', 'Robotics', JointTorque, { title: 'Joint Torque', torqueLimit: 100 }, [
+  story('joint-torque', 'Joint Torque', 'Robotics', JointTorque, { title: 'Joint Torque', torqueLimit: 100, torques: [62, 78, 45, 91] }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Joint Torque', value: 'Joint Torque' }, { label: 'Torque Monitor', value: 'Torque Monitor' }, { label: 'Load Analysis', value: 'Load Analysis' },
     ] },
