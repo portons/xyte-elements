@@ -12,3 +12,6 @@ dist/
 *.p12
 *.pfx
 .npmrc
+
+# Local plans
+plans/
