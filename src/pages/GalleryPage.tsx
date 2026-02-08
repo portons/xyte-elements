@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react';
 import type { ExplorerView, ThemeId, XyteWidgetMode } from '../explorer/types';
 import { XYTE_THEMES } from '../theme/themes';
 import { setWidgetRuntimeTheme } from '../widgets/library';
+import { WidgetErrorBoundary } from '../widgets/WidgetErrorBoundary';
 import { WIDGET_CATEGORIES, WIDGET_STORIES } from '../widgets/registry';
 
 const ZOOM_OPTIONS = [0.6, 0.8, 1, 1.25, 1.5];
@@ -169,7 +170,9 @@ export function GalleryPage({
                         className="xg-cell__widget"
                         style={{ transform: `scale(${zoom})`, transformOrigin: 'top left' }}
                       >
-                        {story.render(story.defaultProps)}
+                        <WidgetErrorBoundary widgetId={story.id}>
+                          {story.render(story.defaultProps)}
+                        </WidgetErrorBoundary>
                       </div>
                     </div>
                   ))}

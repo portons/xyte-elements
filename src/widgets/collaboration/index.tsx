@@ -47,7 +47,7 @@ export function MeetingStatus({ title = 'Meeting Status', meetingName = 'Q1 AV R
         </div>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: -4, marginBottom: 10 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 0, marginBottom: 10 }}>
         {participants.map((p, i) => (
           <div key={i} style={{
             width: 26, height: 26, borderRadius: '50%', background: p.color,

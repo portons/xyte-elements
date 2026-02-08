@@ -9,6 +9,7 @@ import type {
 } from '../explorer/types';
 import { XYTE_THEMES } from '../theme/themes';
 import { setWidgetRuntimeTheme } from '../widgets/library';
+import { WidgetErrorBoundary } from '../widgets/WidgetErrorBoundary';
 import {
   getWidgetStory,
   WIDGET_CATEGORIES,
@@ -89,7 +90,7 @@ function PropControl({
     const max = control.max ?? 100;
     const step = control.step ?? 1;
     const num = typeof value === 'number' && Number.isFinite(value) ? value : min;
-    const pct = ((num - min) / (max - min)) * 100;
+    const pct = max === min ? 0 : ((num - min) / (max - min)) * 100;
 
     return (
       <div className="xe-prop">
@@ -580,7 +581,9 @@ export function ExplorerPage({
                 data-theme={themeId}
                 className={`xe-widget-wrap ${viewport === 'mobile' ? 'xe-widget-wrap--mobile' : ''}`}
               >
-                {selectedStory.render(storyProps)}
+                <WidgetErrorBoundary widgetId={selectedStory.id} resetKeys={[selectedStory.id]}>
+                  {selectedStory.render(storyProps)}
+                </WidgetErrorBoundary>
               </div>
             </div>
           </div>

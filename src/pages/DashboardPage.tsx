@@ -1,6 +1,7 @@
 import type { ExplorerView, ThemeId, XyteWidgetMode } from '../explorer/types';
 import { XYTE_THEMES } from '../theme/themes';
 import { DashboardContent, setWidgetRuntimeTheme } from '../widgets/library';
+import { WidgetErrorBoundary } from '../widgets/WidgetErrorBoundary';
 
 interface DashboardPageProps {
   themeId: ThemeId;
@@ -86,7 +87,9 @@ export function DashboardPage({
         </div>
       </div>
 
-      <DashboardContent />
+      <WidgetErrorBoundary widgetId="dashboard">
+        <DashboardContent />
+      </WidgetErrorBoundary>
     </div>
   );
 }

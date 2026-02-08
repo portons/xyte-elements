@@ -6,7 +6,13 @@ import type { XyteWidgetMode } from "../explorer/types";
 
 let X = buildRuntimeX("xyte_classic_dark", "modern");
 
+let currentThemeId: ThemeId = "xyte_classic_dark";
+let currentMode: XyteWidgetMode = "modern";
+
 export function setWidgetRuntimeTheme(themeId: ThemeId, mode: XyteWidgetMode = "modern") {
+  if (themeId === currentThemeId && mode === currentMode) return;
+  currentThemeId = themeId;
+  currentMode = mode;
   X = buildRuntimeX(themeId, mode);
 }
 
@@ -95,7 +101,7 @@ export function Slider({ value, onChange, min = 0, max = 100, color, label, unit
   value: number; onChange: (v: number) => void; min?: number; max?: number; color?: string; label?: string; unit?: string;
 }) {
   const c = color || X.purple;
-  const pct = ((value - min) / (max - min)) * 100;
+  const pct = max === min ? 0 : ((value - min) / (max - min)) * 100;
   const ref = useRef<HTMLDivElement>(null);
   const handle = (e: React.MouseEvent | MouseEvent) => {
     if (!ref.current) return;

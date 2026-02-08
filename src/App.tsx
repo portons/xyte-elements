@@ -1,3 +1,4 @@
+import React from 'react';
 import { useEffect, useMemo, useState } from 'react';
 
 import type {
@@ -51,7 +52,12 @@ function parseStateFromSearch(search: string): AppState {
   const mode = params.get('mode') === 'legacy' ? 'legacy' : 'modern';
   const viewport = params.get('viewport') === 'mobile' ? 'mobile' : 'desktop';
   const widgetCandidate = params.get('widget') ?? DEFAULT_STATE.widgetId;
-  const widgetId = getWidgetStory(widgetCandidate).id;
+  let widgetId: string;
+  try {
+    widgetId = getWidgetStory(widgetCandidate).id;
+  } catch {
+    widgetId = DEFAULT_STATE.widgetId;
+  }
 
   return { view, themeId, mode, widgetId, viewport };
 }
@@ -65,6 +71,29 @@ function writeStateToUrl(state: AppState) {
   params.set('viewport', state.viewport);
   const next = `${window.location.pathname}?${params.toString()}`;
   window.history.replaceState({}, '', next);
+}
+
+class AppErrorBoundary extends React.Component<
+  { children: React.ReactNode },
+  { hasError: boolean; error: Error | null }
+> {
+  state = { hasError: false, error: null as Error | null };
+  static getDerivedStateFromError(error: Error) { return { hasError: true, error }; }
+  componentDidCatch(error: Error, info: React.ErrorInfo) { console.error('[App] crash:', error, info.componentStack); }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh', background: '#0f0f14', color: '#ccc', fontFamily: 'system-ui', gap: 12 }}>
+          <span style={{ fontSize: 18, fontWeight: 700, color: '#dc2626' }}>Something went wrong</span>
+          <code style={{ fontSize: 12, color: '#888', maxWidth: 500, textAlign: 'center' }}>{this.state.error?.message}</code>
+          <button type="button" onClick={() => { this.setState({ hasError: false, error: null }); }} style={{ marginTop: 8, padding: '6px 16px', borderRadius: 6, border: '1px solid #444', background: '#1a1a24', color: '#ccc', cursor: 'pointer', fontSize: 13 }}>
+            Try again
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
 }
 
 export default function App() {
@@ -84,6 +113,7 @@ export default function App() {
   }, [view, themeId, mode, widgetId, viewport]);
 
   return (
+    <AppErrorBoundary>
     <div className="xyte-app" data-theme={themeId}>
       {view === 'landing' ? (
         <LandingPage
@@ -135,5 +165,6 @@ export default function App() {
         />
       )}
     </div>
+    </AppErrorBoundary>
   );
 }
