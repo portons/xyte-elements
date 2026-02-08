@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { getX, ease, Card, Badge, Btn, Prog, Lbl, M, Dot } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useTick } from '../hooks';
 
 function neo() { const X = getX(); const dark = X.bg + '40'; const light = '#ffffff12'; return { raised: '4px 4px 10px ' + dark + ', -2px -2px 6px ' + light, concave: 'inset 3px 3px 8px ' + dark + ', inset -2px -2px 5px ' + light, bezel: 'inset 0 1px 0 ' + light + ', inset 0 -1px 0 rgba(0,0,0,0.3), 0 2px 8px ' + dark, metal: 'linear-gradient(135deg, ' + X.surface + ', ' + X.bgAlt + ' 40%, ' + X.surface + ' 60%, ' + X.bgAlt + ')' }; }
 

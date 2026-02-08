@@ -1,15 +1,15 @@
 import { useState, useMemo } from 'react';
 import { getX, ease, Card, Badge, Lbl, M, Dot, Prog } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useAnim, useTick } from '../hooks';
 
 // ── Patient Monitor ─────────────────────────────────────────────────
 export function PatientMonitor({ title = 'Patient Monitor', hr = 72, spo2 = 98, bpSys = 120, bpDia = 80, resp = 16, delay = 0 }: {
   title?: string; hr?: number; spo2?: number; bpSys?: number; bpDia?: number; resp?: number; delay?: number;
 }) {
   const X = getX();
-  const liveHr = useLive(hr, 4, 1000);
-  const liveSpo2 = useLive(spo2, 1, 1500);
-  const liveResp = useLive(resp, 2, 2000);
+  const liveHr = hr;
+  const liveSpo2 = spo2;
+  const liveResp = resp;
   const animHr = useAnim(hr, 800);
 
   const hrColor = liveHr > 100 || liveHr < 50 ? X.red : liveHr > 90 ? X.amber : X.teal;

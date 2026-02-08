@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect, useRef } from "react";
-import { buildRuntimeX, type ThemeId } from "../theme/themes";
+import { buildRuntimeX } from "../theme/themes";
+import type { ThemeId } from "../explorer/types";
 import type { XyteWidgetMode } from "../explorer/types";
 
 let X = buildRuntimeX("xyte_classic_dark", "modern");

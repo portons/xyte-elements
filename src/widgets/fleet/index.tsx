@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
-import { getX, ease, Card, Badge, Lbl, M, Dot, Prog, Gauge as GaugePrimitive } from '../primitives';
-import { useAnim, useLive } from '../hooks';
+import { getX, ease, Card, Badge, Lbl, M, Dot, Prog } from '../primitives';
+import { useAnim } from '../hooks';
 
 // ── KPI Card ──────────────────────────────────────────────────────────
 export function KPI({ value = 1247, prev = 1180, label = 'Devices Online', color, delay = 0 }: {

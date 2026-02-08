@@ -1,23 +1,18 @@
 import { useState, useMemo } from 'react';
 import { getX, ease, Card, Badge, Lbl, M, Dot, Prog } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useAnim, useTick } from '../hooks';
 
 // ── Clean Room ─────────────────────────────────────────────────────
-export function CleanRoom({ title = 'Clean Room Monitor', particleLimit = 100 }: {
-  title?: string; particleLimit?: number;
+export function CleanRoom({ title = 'Clean Room Monitor', particleLimit = 100, particleCount, diffPressure, temperature, humidity, prevParticle }: {
+  title?: string; particleLimit?: number; particleCount: number; diffPressure: number; temperature: number; humidity: number; prevParticle: number;
 }) {
   const X = getX();
-  const particleCount = useLive(85, 25, 1500);
-  const diffPressure = useLive(12.5, 1.8, 2000);
-  const temperature = useLive(21.0, 0.5, 2500);
-  const humidity = useLive(45, 3, 3000);
   const tick = useTick(2000);
 
   const isoClass = particleCount < particleLimit ? 'ISO 5' : particleCount < 1000 ? 'ISO 6' : 'ISO 7';
   const classLabel = particleCount < particleLimit ? `Class ${particleLimit}` : particleCount < 1000 ? 'Class 1,000' : 'Class 10,000';
   const compliant = particleCount < particleLimit;
   const particleColor = particleCount < particleLimit * 0.8 ? X.teal : particleCount < particleLimit ? X.amber : X.red;
-  const prevParticle = useLive(90, 20, 2800);
   const trending = particleCount < prevParticle ? 'down' : 'up';
 
   return (
@@ -87,10 +82,10 @@ export function BatchReactor({ title = 'Batch Reactors', tempWarning = 60 }: {
     useAnim(reactors[3].baseProgress, 800),
   ];
   const temps = [
-    useLive(reactors[0].baseTemp, 3, 2500),
-    useLive(reactors[1].baseTemp, 2, 2800),
-    useLive(reactors[2].baseTemp, 1, 3000),
-    useLive(reactors[3].baseTemp, 1.5, 2600),
+    reactors[0].baseTemp,
+    reactors[1].baseTemp,
+    reactors[2].baseTemp,
+    reactors[3].baseTemp,
   ];
 
   const phaseColor: Record<string, string> = { charging: X.indigo, reacting: X.amber, cooling: X.teal, discharging: X.purple };
@@ -141,11 +136,10 @@ export function BatchReactor({ title = 'Batch Reactors', tempWarning = 60 }: {
 }
 
 // ── Chromatograph ──────────────────────────────────────────────────
-export function Chromatograph({ title = 'HPLC Chromatogram', method = 'USP-42' }: {
-  title?: string; method?: string;
+export function Chromatograph({ title = 'HPLC Chromatogram', method = 'USP-42', runTime }: {
+  title?: string; method?: string; runTime: number;
 }) {
   const X = getX();
-  const runTime = useLive(18.4, 0.2, 5000);
 
   const peaks = useMemo(() => [
     { name: 'Impurity A', rt: 3.2, purity: 99.1, area: 12.4 },
@@ -259,11 +253,11 @@ export function ColdChain({ title = 'Cold Chain Monitor', tempUnit = 'C' }: {
   ], []);
 
   const temps = [
-    useLive(-20, 1.5, 2000),
-    useLive(-79, 2, 2500),
-    useLive(6.2, 0.8, 1800),
-    useLive(-195, 1, 3000),
-    useLive(8.5, 1.2, 2200),
+    -20,
+    -79,
+    6.2,
+    -195,
+    8.5,
   ];
 
   const getStatusFromDelta = (temp: number, setpoint: number): { status: string; color: string } => {

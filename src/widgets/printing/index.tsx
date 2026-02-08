@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { getX, ease, Card, Badge, Btn, Prog, Lbl, M, Dot } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useTick } from '../hooks';
 
 function neo() { const X = getX(); const dark = X.bg + '40'; const light = '#ffffff12'; return { raised: '4px 4px 10px ' + dark + ', -2px -2px 6px ' + light, concave: 'inset 3px 3px 8px ' + dark + ', inset -2px -2px 5px ' + light, bezel: 'inset 0 1px 0 ' + light + ', inset 0 -1px 0 rgba(0,0,0,0.3), 0 2px 8px ' + dark, metal: 'linear-gradient(135deg, ' + X.surface + ', ' + X.bgAlt + ' 40%, ' + X.surface + ' 60%, ' + X.bgAlt + ')' }; }
 
 // ── Ink Density Meter ────────────────────────────────────────────────
-export function InkDensityMeter({ title = 'Ink Density' } = {}) {
+export function InkDensityMeter({ title = 'Ink Density', densityC, densityM, densityY, densityK }: { title?: string; densityC: number; densityM: number; densityY: number; densityK: number }) {
   const X = getX();
   const n = neo();
   const colors = [
@@ -14,12 +14,7 @@ export function InkDensityMeter({ title = 'Ink Density' } = {}) {
     { name: 'Y', fill: '#ffc107', base: 1.08 },
     { name: 'K', fill: '#424242', base: 1.78 },
   ];
-  const densities = [
-    useLive(1.45, 0.06, 1800),
-    useLive(1.52, 0.05, 2000),
-    useLive(1.08, 0.04, 2200),
-    useLive(1.78, 0.07, 1600),
-  ];
+  const densities = [densityC, densityM, densityY, densityK];
   const tick = useTick(80);
   const dripWell = 2;
   const dripY = (tick * 1.5) % 40;
@@ -104,10 +99,9 @@ export function InkDensityMeter({ title = 'Ink Density' } = {}) {
 }
 
 // ── CMYK Registration ────────────────────────────────────────────────
-export function CMYKRegistration({ title = 'Registration' } = {}) {
+export function CMYKRegistration({ title = 'Registration', offset }: { title?: string; offset: number }) {
   const X = getX();
   const n = neo();
-  const offset = useLive(0.3, 0.2, 3000);
   const quality = Math.max(0, 100 - offset * 200);
   const qualityLabel = quality > 90 ? 'Excellent' : quality > 70 ? 'Good' : 'Poor';
   const qualityColor = quality > 90 ? X.teal : quality > 70 ? X.amber : X.red;
@@ -190,10 +184,9 @@ export function CMYKRegistration({ title = 'Registration' } = {}) {
 }
 
 // ── Paper Tension ────────────────────────────────────────────────────
-export function PaperTension({ title = 'Paper Tension', maxTension = 100 } = {}) {
+export function PaperTension({ title = 'Paper Tension', maxTension = 100, tension }: { title?: string; maxTension?: number; tension: number }) {
   const X = getX();
   const n = neo();
-  const tension = useLive(65, 8, 2000);
   const tensionPct = Math.min(100, Math.max(0, (tension / maxTension) * 100));
   const sagAmount = Math.max(2, 30 - (tension / maxTension) * 28);
   const isLow = tension < maxTension * 0.3;
@@ -269,12 +262,10 @@ export function PaperTension({ title = 'Paper Tension', maxTension = 100 } = {})
 }
 
 // ── Press Cylinder ───────────────────────────────────────────────────
-export function PressCylinder({ title = 'Press Cylinder' } = {}) {
+export function PressCylinder({ title = 'Press Cylinder', speed, pressure }: { title?: string; speed: number; pressure: number }) {
   const X = getX();
   const n = neo();
   const tick = useTick(40);
-  const speed = useLive(8500, 200, 2500);
-  const pressure = useLive(4.2, 0.3, 3000);
   const sheetCount = Math.floor(tick * (speed / 3600));
   const digits = String(Math.min(sheetCount, 999999)).padStart(6, '0').split('');
 
@@ -461,11 +452,9 @@ export function ColorSeparation({ title = 'Color Separation' } = {}) {
 }
 
 // ── Drying Oven ──────────────────────────────────────────────────────
-export function DryingOven({ title = 'Drying Oven' } = {}) {
+export function DryingOven({ title = 'Drying Oven', temp, feedSpeed }: { title?: string; temp: number; feedSpeed: number }) {
   const X = getX();
   const n = neo();
-  const temp = useLive(185, 5, 3000);
-  const feedSpeed = useLive(12.5, 0.8, 2000);
   const [power, setPower] = useState(true);
   const tick = useTick(50);
   const fanAngle = power ? (tick * 15) % 360 : 0;

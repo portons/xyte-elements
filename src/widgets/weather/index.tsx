@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { getX, ease, Card, Badge, Btn, Prog, Lbl, M, Dot } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useAnim, useTick } from '../hooks';
 
 function neo() {
   const X = getX();
@@ -15,11 +15,9 @@ function neo() {
 }
 
 // ── Mercury Barometer ──────────────────────────────────────────────
-export function MercuryBarometer({ title = 'Barometer', maxHPa = 1050 }: { title?: string; maxHPa?: number } = {}) {
+export function MercuryBarometer({ title = 'Barometer', maxHPa = 1050, pressure, prevPressure }: { title?: string; maxHPa?: number; pressure: number; prevPressure: number }) {
   const X = getX();
   const n = neo();
-  const pressure = useLive(1013, 5, 4000);
-  const prevPressure = useLive(1013, 3, 6000);
   const trend = pressure > prevPressure + 1 ? 'rising' : pressure < prevPressure - 1 ? 'falling' : 'steady';
   const trendArrow = trend === 'rising' ? '\u2191' : trend === 'falling' ? '\u2193' : '\u2192';
   const trendColor = trend === 'rising' ? X.teal : trend === 'falling' ? X.red : X.amber;
@@ -146,11 +144,10 @@ export function MercuryBarometer({ title = 'Barometer', maxHPa = 1050 }: { title
 }
 
 // ── Anemometer ─────────────────────────────────────────────────────
-export function Anemometer({ title = 'Wind Speed' }: { title?: string } = {}) {
+export function Anemometer({ title = 'Wind Speed', windSpeed }: { title?: string; windSpeed: number }) {
   const X = getX();
   const n = neo();
   const tick = useTick(40);
-  const windSpeed = useLive(24, 8, 2000);
   const safeWind = Math.max(0, windSpeed);
 
   // Rotation: speed proportional to wind speed
@@ -263,13 +260,11 @@ export function Anemometer({ title = 'Wind Speed' }: { title?: string } = {}) {
 }
 
 // ── Rain Gauge ─────────────────────────────────────────────────────
-export function RainGauge({ title = 'Rain Gauge' }: { title?: string } = {}) {
+export function RainGauge({ title = 'Rain Gauge', rainfall, rate }: { title?: string; rainfall: number; rate: number }) {
   const X = getX();
   const n = neo();
   const tick = useTick(60);
-  const rainfall = useLive(12.4, 1, 5000);
   const safeRain = Math.max(0, rainfall);
-  const rate = useLive(2.1, 0.8, 3000);
   const safeRate = Math.max(0, rate);
 
   const vesselTop = 20;
@@ -394,10 +389,9 @@ export function RainGauge({ title = 'Rain Gauge' }: { title?: string } = {}) {
 }
 
 // ── Wind Vane ──────────────────────────────────────────────────────
-export function WindVane({ title = 'Wind Direction' }: { title?: string } = {}) {
+export function WindVane({ title = 'Wind Direction', direction }: { title?: string; direction: number }) {
   const X = getX();
   const n = neo();
-  const direction = useLive(225, 30, 3000);
   const safeDir = ((direction % 360) + 360) % 360;
 
   const cardinals16 = [
@@ -529,11 +523,9 @@ export function WindVane({ title = 'Wind Direction' }: { title?: string } = {}) 
 }
 
 // ── Hygrometer ─────────────────────────────────────────────────────
-export function Hygrometer({ title = 'Humidity' }: { title?: string } = {}) {
+export function Hygrometer({ title = 'Humidity', dryTemp, wetTemp }: { title?: string; dryTemp: number; wetTemp: number }) {
   const X = getX();
   const n = neo();
-  const dryTemp = useLive(24, 2, 3500);
-  const wetTemp = useLive(20, 1.5, 4000);
   const safeDry = Math.max(0, dryTemp);
   const safeWet = Math.min(safeDry, Math.max(0, wetTemp));
 
@@ -675,11 +667,10 @@ export function Hygrometer({ title = 'Humidity' }: { title?: string } = {}) {
 }
 
 // ── Storm Glass ────────────────────────────────────────────────────
-export function StormGlass({ title = 'Storm Glass' }: { title?: string } = {}) {
+export function StormGlass({ title = 'Storm Glass', temp }: { title?: string; temp: number }) {
   const X = getX();
   const n = neo();
   const [mode, setMode] = useState<'Clear' | 'Cloudy' | 'Storm' | 'Snow'>('Clear');
-  const temp = useLive(18, 3, 4000);
   const tick = useTick(200);
 
   const modes: Array<'Clear' | 'Cloudy' | 'Storm' | 'Snow'> = ['Clear', 'Cloudy', 'Storm', 'Snow'];

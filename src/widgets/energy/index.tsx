@@ -1,13 +1,10 @@
 import { useState, useEffect } from 'react';
 import { getX, ease, Card, Badge, Btn, Prog, Lbl, M, Dot } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useAnim, useTick } from '../hooks';
 
 // ── Solar Panel ──────────────────────────────────────────────────────
-export function SolarPanel({ title = 'Solar Production', panelCount = 24 }: { title?: string; panelCount?: number }) {
+export function SolarPanel({ title = 'Solar Production', panelCount = 24, output, daily, efficiency }: { title?: string; panelCount?: number; output: number; daily: number; efficiency: number }) {
   const X = getX();
-  const output = useLive(4.8, 1.2, 2000);
-  const daily = useLive(28.4, 3, 5000);
-  const efficiency = useLive(21.3, 1.5, 3000);
   const [curve, setCurve] = useState(() =>
     Array.from({ length: 24 }, (_, i) => {
       const h = i;
@@ -58,10 +55,8 @@ export function SolarPanel({ title = 'Solar Production', panelCount = 24 }: { ti
 }
 
 // ── Battery Bank ─────────────────────────────────────────────────────
-export function BatteryBank({ title = 'Battery', capacity = 100 }: { title?: string; capacity?: number }) {
+export function BatteryBank({ title = 'Battery', capacity = 100, charge, rate }: { title?: string; capacity?: number; charge: number; rate: number }) {
   const X = getX();
-  const charge = useLive(72, 3, 4000);
-  const rate = useLive(1.4, 0.8, 2500);
   const pct = Math.max(0, Math.min(100, Math.round(charge)));
   const c = pct > 60 ? X.teal : pct > 25 ? X.amber : X.red;
   const animPct = useAnim(pct);
@@ -94,11 +89,8 @@ export function BatteryBank({ title = 'Battery', capacity = 100 }: { title?: str
 }
 
 // ── Grid Status ──────────────────────────────────────────────────────
-export function GridStatus({ title = 'Grid Status', nominalVoltage = 230 }: { title?: string; nominalVoltage?: number }) {
+export function GridStatus({ title = 'Grid Status', nominalVoltage = 230, importW, freq, voltage }: { title?: string; nominalVoltage?: number; importW: number; freq: number; voltage: number }) {
   const X = getX();
-  const importW = useLive(320, 150, 2000);
-  const freq = useLive(50.0, 0.05, 1500);
-  const voltage = useLive(230, 3, 3000);
   const [mode, setMode] = useState<'grid' | 'island'>('grid');
   const isExporting = importW < 0;
 
@@ -131,11 +123,8 @@ export function GridStatus({ title = 'Grid Status', nominalVoltage = 230 }: { ti
 }
 
 // ── Carbon Tracker ───────────────────────────────────────────────────
-export function CarbonTracker({ title = 'CO\u2082 Tracker', unit = 'kg' }: { title?: string; unit?: string }) {
+export function CarbonTracker({ title = 'CO\u2082 Tracker', unit = 'kg', dailyCO2, monthlyCO2, reduction }: { title?: string; unit?: string; dailyCO2: number; monthlyCO2: number; reduction: number }) {
   const X = getX();
-  const dailyCO2 = useLive(12.4, 2, 4000);
-  const monthlyCO2 = useLive(348, 15, 6000);
-  const reduction = useLive(23, 3, 5000);
   const [bars] = useState(() => Array.from({ length: 7 }, () => 8 + Math.random() * 18));
   const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   const mx = Math.max(...bars, 1);
@@ -168,12 +157,8 @@ export function CarbonTracker({ title = 'CO\u2082 Tracker', unit = 'kg' }: { tit
 }
 
 // ── Energy Flow ──────────────────────────────────────────────────────
-export function EnergyFlow({ title = 'Energy Flow', showBattery = true }: { title?: string; showBattery?: boolean }) {
+export function EnergyFlow({ title = 'Energy Flow', showBattery = true, solarW, gridW, battW, loadW }: { title?: string; showBattery?: boolean; solarW: number; gridW: number; battW: number; loadW: number }) {
   const X = getX();
-  const solarW = useLive(4200, 600, 2500);
-  const gridW = useLive(800, 400, 3000);
-  const battW = useLive(1200, 500, 2800);
-  const loadW = useLive(5800, 400, 2000);
   const tick = useTick(100);
 
   const flowStyle = (color: string): React.CSSProperties => ({
@@ -227,11 +212,8 @@ export function EnergyFlow({ title = 'Energy Flow', showBattery = true }: { titl
 }
 
 // ── Cost Monitor ─────────────────────────────────────────────────────
-export function CostMonitor({ title = 'Energy Cost', currency = '$' }: { title?: string; currency?: string }) {
+export function CostMonitor({ title = 'Energy Cost', currency = '$', rate, dailyCost, monthlyCost }: { title?: string; currency?: string; rate: number; dailyCost: number; monthlyCost: number }) {
   const X = getX();
-  const rate = useLive(0.14, 0.03, 3000);
-  const dailyCost = useLive(8.42, 1.5, 5000);
-  const monthlyCost = useLive(247, 20, 8000);
   const [period, setPeriod] = useState<'peak' | 'off-peak' | 'shoulder'>('peak');
 
   const periods: { name: string; hours: string; rate: string; color: string; id: 'peak' | 'off-peak' | 'shoulder' }[] = [

@@ -203,15 +203,15 @@ export function DashboardContent() {
           <ScenePresets />
           <PowerSequencer />
           <MacroBuilder />
-          <ThermostatControl />
-          <Climate />
-          <Occupancy />
+          <ThermostatControl ambientC={22.4} />
+          <Climate temp={22.4} hum={45} />
+          <Occupancy occ={12} />
         </Section>
 
         <Section title="Network & Transport" desc="Network stack, bandwidth monitoring, AV-over-IP stats, latency graph.">
-          <NetworkInfo />
+          <NetworkInfo j={1.2} lat={2.1} />
           <BandwidthMonitor />
-          <AVoIPStats />
+          <AVoIPStats bitrate={42} latency={1.8} drops={0.2} />
           <LatencyGraph />
           <UptimeTimeline />
         </Section>
@@ -268,10 +268,10 @@ export function DashboardContent() {
         </Section>
 
         <Section title="AI & Analytics" desc="Anomaly detection, predictive maintenance, NLP command parsing.">
-          <AnomalyDetector />
+          <AnomalyDetector confidence={94} />
           <PredictiveMaintenance />
           <AIInsights />
-          <SentimentGauge />
+          <SentimentGauge score={78} />
           <UsageForecaster />
           <ModelPerformance />
           <NLPCommandParser />
@@ -279,7 +279,7 @@ export function DashboardContent() {
 
         <Section title="Collaboration" desc="Meeting status, screen sharing, chat, whiteboard, polls.">
           <MeetingStatus />
-          <ScreenShare />
+          <ScreenShare fps={30} />
           <ChatFeed />
           <WhiteboardMini />
           <PollWidget />
@@ -287,16 +287,16 @@ export function DashboardContent() {
         </Section>
 
         <Section title="Energy Management" desc="Solar, battery, grid status, carbon tracking, cost monitoring.">
-          <SolarPanel />
-          <BatteryBank />
-          <GridStatus />
-          <CarbonTracker />
-          <EnergyFlow />
-          <CostMonitor />
+          <SolarPanel output={4.8} daily={28.4} efficiency={21.3} />
+          <BatteryBank charge={72} rate={1.4} />
+          <GridStatus importW={320} freq={50.0} voltage={230} />
+          <CarbonTracker dailyCO2={12.4} monthlyCO2={348} reduction={23} />
+          <EnergyFlow solarW={4200} gridW={800} battW={1200} loadW={5800} />
+          <CostMonitor rate={0.14} dailyCost={8.42} monthlyCost={247} />
         </Section>
 
         <Section title="Security" desc="Threat map, access log, vulnerability scanning, firewall, encryption, compliance.">
-          <ThreatMap />
+          <ThreatMap liveThreats={57} />
           <AccessLog />
           <VulnerabilityScanner />
           <FirewallRules />
@@ -310,36 +310,36 @@ export function DashboardContent() {
           <ContentPreview />
           <ScreenZoning />
           <ScheduleCalendar />
-          <ProofOfPlay />
-          <BrightnessSchedule />
+          <ProofOfPlay plays={1842} impressions={24300} completion={94.2} />
+          <BrightnessSchedule currentBrightness={75} />
         </Section>
 
         <Section title="Spatial & Location" desc="Floor plans, zone heatmaps, wayfinding, beacons, asset tracking.">
           <FloorPlan />
           <ZoneHeatmap />
-          <WayfindingStatus />
+          <WayfindingStatus activeRoutes={12} />
           <BeaconManager />
           <AssetTracker />
-          <EnvironmentalSensor />
+          <EnvironmentalSensor temp={22.4} humidity={45} co2={420} noise={38} light={450} />
         </Section>
 
         <Section title="Agriculture" desc="Soil moisture, irrigation, weather, crop health, drones, harvest.">
           <SoilMoisture />
           <IrrigationControl />
-          <WeatherStation />
+          <WeatherStation temp={24.6} humidity={62} windSpeed={12.3} rainfall={2.4} uvIndex={6.2} pressure={1013.2} />
           <CropHealth />
           <DroneView />
           <HarvestTracker />
         </Section>
 
         <Section title="Broadcast" desc="Stream health, encoders, multiviewer, tally lights, playout, audio loudness, captions.">
-          <StreamHealth />
+          <StreamHealth bitrate={8500} viewers={12400} frameDrops={0.12} />
           <EncoderStatus />
           <Multiviewer />
           <TallyLight />
           <PlayoutSchedule />
-          <AudioLoudness />
-          <CaptionMonitor />
+          <AudioLoudness intLufs={-23} />
+          <CaptionMonitor wpm={160} delay={1.2} accuracy={97.5} />
         </Section>
 
         <Section title="Datacenter" desc="Rack thermal, server health, VM density, bandwidth, UPS, cooling, patch panel.">
@@ -347,17 +347,17 @@ export function DashboardContent() {
           <ServerHealth />
           <VMDensity />
           <BandwidthPipe />
-          <UPSStatus />
-          <CoolingEfficiency />
+          <UPSStatus load={62} runtime={24} inputV={230} outputV={230} />
+          <CoolingEfficiency supplyTemp={12.4} returnTemp={22.6} />
           <PatchPanel />
         </Section>
 
         <Section title="Education" desc="Classroom AV, attendance, bulletin board, bell schedule, library, exam timer.">
-          <ClassroomAV />
+          <ClassroomAV audioLevel={72} />
           <AttendanceBoard />
           <DigitalBulletin />
           <BellSchedule />
-          <LibraryOccupancy />
+          <LibraryOccupancy currentOcc={78} noiseLevel={38} />
           <ExamTimer />
         </Section>
 
@@ -376,8 +376,8 @@ export function DashboardContent() {
           <MinibarTracker />
           <GuestServices />
           <HousekeepingBoard />
-          <CheckInKiosk />
-          <PoolSensors />
+          <CheckInKiosk queueLen={5} avgTime={4.2} />
+          <PoolSensors waterTemp={28.2} pH={7.3} chlorine={1.4} filterPressure={12} />
         </Section>
 
         <Section title="Logistics" desc="Fleet GPS, route optimizer, warehouse zones, delivery tracker, dock schedule, fuel.">
@@ -390,31 +390,31 @@ export function DashboardContent() {
         </Section>
 
         <Section title="Manufacturing" desc="Assembly line, OEE, quality gate, PLC, tank levels, conveyor, shift schedule.">
-          <AssemblyLine />
-          <OEEGauge />
-          <QualityGate />
-          <PLCStatus />
+          <AssemblyLine throughput={142} />
+          <OEEGauge availability={91.2} performance={84.7} quality={97.3} />
+          <QualityGate defectRate={2.48} />
+          <PLCStatus cycleTime={24.6} scanRate={4.2} />
           <TankLevel />
-          <ConveyorSpeed />
+          <ConveyorSpeed speed={1.82} tension={342} itemsMin={48} />
           <ShiftSchedule />
         </Section>
 
         <Section title="Retail" desc="POS analytics, inventory, foot traffic, queue monitor, pricing, shrinkage, loyalty.">
-          <POSAnalytics />
+          <POSAnalytics revenue={24380} avgTx={28.8} />
           <InventoryLevel />
-          <FootTraffic />
-          <QueueMonitor />
+          <FootTraffic occupancy={186} />
+          <QueueMonitor r1={3} r2={5} r3={1} r4={0} />
           <PriceTag />
           <ShrinkageAlert />
-          <LoyaltyDash />
+          <LoyaltyDash pointsDist={284000} />
         </Section>
 
         <Section title="Smart Building" desc="HVAC zones, elevators, parking, water, lighting, access doors, fire panel.">
-          <HVACZone />
+          <HVACZone temp={22.6} humidity={44} fanSpeed={65} />
           <ElevatorStatus />
           <ParkingOccupancy />
-          <WaterMeter />
-          <LightingScene />
+          <WaterMeter flowRate={3.8} dailyUsage={2840} monthlyUsage={68400} pressure={4.2} />
+          <LightingScene totalPower={4.2} />
           <AccessDoor />
           <FirePanel />
         </Section>
@@ -422,16 +422,16 @@ export function DashboardContent() {
         <Section title="Aerospace" desc="Flight board, runway status, baggage flow, fuel farm, aircraft maintenance, gate assignment.">
           <FlightBoard />
           <RunwayStatus />
-          <BaggageFlow />
-          <FuelFarm />
+          <BaggageFlow currentRate={142} />
+          <FuelFarm dailyConsumption={42.5} />
           <AircraftMaintenance />
           <GateAssignment />
         </Section>
 
         <Section title="Pharmaceutical" desc="Clean room monitoring, batch reactors, HPLC chromatography, cold chain, quality lab, GxP compliance.">
-          <CleanRoom />
+          <CleanRoom particleCount={85} diffPressure={12.5} temperature={21.0} humidity={45} prevParticle={90} />
           <BatchReactor />
-          <Chromatograph />
+          <Chromatograph runTime={18.4} />
           <ColdChain />
           <QualityLab />
           <ComplianceTracker />
@@ -440,16 +440,16 @@ export function DashboardContent() {
         <Section title="Telecom" desc="Cell towers, spectrum analysis, subscribers, 5G network slicing, SIM management, call quality.">
           <CellTower />
           <SpectrumAnalyzer />
-          <SubscriberMetrics />
+          <SubscriberMetrics activeSessions={184200} />
           <NetworkSlicing />
           <SIMInventory />
-          <CallQuality />
+          <CallQuality mos={4.2} jitter={12} latency={28} packetLoss={0.3} />
         </Section>
 
         <Section title="Maritime" desc="Vessel tracking, container yards, tides, crane operations, berth scheduling, cargo manifests.">
           <VesselTracker />
           <ContainerYard />
-          <TideMonitor />
+          <TideMonitor tideLevel={3.8} />
           <CraneOps />
           <BerthSchedule />
           <CargoManifest />
@@ -459,62 +459,62 @@ export function DashboardContent() {
           <SiteProgress />
           <CraneMonitor />
           <MaterialsTracker />
-          <WeatherSite />
-          <SafetyBoard />
-          <ConcreteMonitor />
+          <WeatherSite temp={82} wind={18} gusts={26} humidity={54} precip={12} />
+          <SafetyBoard workersOnSite={84} />
+          <ConcreteMonitor slump={4.2} airContent={5.8} concreteTemp={72} />
           <EquipmentFleet />
         </Section>
 
         <Section title="Mining" desc="Shaft depth, ore grade, ventilation, conveyor loads, blast sequencing, cage winders.">
-          <MineShaftDepth />
-          <OreGradeAnalyzer />
-          <VentilationFan />
-          <ConveyorLoad />
+          <MineShaftDepth currentDepth={520} temperature={34} humidity={78} />
+          <OreGradeAnalyzer goldGrade={72} copperGrade={58} ironGrade={81} lithiumGrade={44} />
+          <VentilationFan airflow={42} power={18.5} rpm={1200} />
+          <ConveyorLoad loadPct={68} speed={2.4} throughput={340} motorTemp={62} />
           <BlastSequencer />
-          <CageWinder />
+          <CageWinder speed={8.2} depth={420} loadWeight={12.4} ropeStress={62} />
         </Section>
 
         <Section title="Water Treatment" desc="Flow rates, chemical dosing, filtration banks, tank levels, turbidity, pump stations.">
-          <WaterFlowRate />
-          <ChemicalDosing />
-          <FiltrationBank />
-          <WaterTankLevel />
-          <TurbidityMeter />
-          <PumpStation />
+          <WaterFlowRate flow={42.5} />
+          <ChemicalDosing chlorine={1.2} fluoride={0.7} phActual={7.0} />
+          <FiltrationBank pressures={[32, 28, 35, 30, 26, 33]} />
+          <WaterTankLevel levels={[72, 58, 85, 44]} />
+          <TurbidityMeter ntu={2.1} />
+          <PumpStation pressures={[42, 38, 45]} flows={[120, 95, 135]} rpms={[1450, 1380, 1520]} />
         </Section>
 
         <Section title="Robotics" desc="Arm poses, joint torque, vision feeds, task queues, grippers, cycle counters.">
-          <RobotArmPose />
-          <JointTorque />
-          <VisionFeed />
+          <RobotArmPose angles={[45, -30, 60, 15, -45, 30, 0, 90]} />
+          <JointTorque torques={[24, 18, 32, 15]} />
+          <VisionFeed fps={29.8} detections={3} conf={85} />
           <TaskQueue />
-          <GripperStatus />
-          <CycleCounter />
+          <GripperStatus force={24.6} />
+          <CycleCounter cycleRate={12.4} uptime={98.7} />
         </Section>
 
         <Section title="Nuclear" desc="Reactor status, cooling loops, radiation levels, containment, fuel rods, emergency panels.">
-          <ReactorStatus />
-          <CoolingLoop />
-          <RadiationLevel />
-          <ContainmentStatus />
+          <ReactorStatus temp={315} />
+          <CoolingLoop flowRate={92} inletTemp={285} outletTemp={320} pressure={155} />
+          <RadiationLevel level={42} dose={0.12} />
+          <ContainmentStatus pressure={1.02} />
           <FuelRodPosition />
-          <EmergencyPanel />
+          <EmergencyPanel elapsed={0} />
         </Section>
 
         <Section title="Semiconductor" desc="Clean rooms, wafer yield, lithography, defect maps, etch chambers, wafer transport.">
-          <FabCleanRoom />
-          <WaferYield />
-          <LithographyStep />
+          <FabCleanRoom temp={21.5} humidity={43} pressure={1.2} />
+          <WaferYield waferTemp={22.3} />
+          <LithographyStep exposureDose={245} alignOffset={0.8} focusDepth={42} />
           <DefectMap />
-          <EtchChamber />
-          <WaferTransport />
+          <EtchChamber chamberPressure={85} gasFlow={120} rfPower={750} etchRate={2.4} />
+          <WaferTransport speed={1.8} />
         </Section>
 
         <Section title="Railway" desc="Track occupancy, signals, schedules, pantograph, points switches, platform displays.">
           <TrackOccupancy />
           <SignalHead />
           <TrainSchedule />
-          <PantographMonitor />
+          <PantographMonitor voltage={25.0} currentDraw={420} contactForce={78} temperature={52} />
           <PointsSwitch />
           <PlatformDisplay />
         </Section>
@@ -522,19 +522,19 @@ export function DashboardContent() {
         <Section title="Brewing" desc="Fermentation vessels, temp curves, carbonation, mash tun, gravity readings, batch tracking.">
           <FermentationVessel />
           <BrewTempCurve />
-          <CarbonationLevel />
-          <MashTunControl />
-          <GravityReading />
+          <CarbonationLevel pressure={12.5} volumes={2.4} temp={4.2} />
+          <MashTunControl temp={65} />
+          <GravityReading sg={1.042} />
           <BatchTracker />
         </Section>
 
         <Section title="Offshore Oil" desc="Wellhead pressure, BOP status, mud weight, drill depth, gas separators, rig tension.">
-          <WellheadPressure />
-          <BOPStatus />
-          <MudWeight />
-          <DrillDepth />
-          <GasSeparator />
-          <RigTension />
+          <WellheadPressure psi={3200} temp={185} flowRate={1240} />
+          <BOPStatus testPressure={4800} annularPressure={1200} />
+          <MudWeight weight={12.4} viscosity={48} pH={9.8} chlorides={18000} />
+          <DrillDepth currentDepth={8400} rop={42} wob={28} torque={14200} />
+          <GasSeparator gasFlow={320} liquidFlow={180} pressure={85} efficiency={94} />
+          <RigTension hookLoad={320} torque={18500} rpm={120} standpipe={3200} />
         </Section>
 
         <Section title="Stadium & Events" desc="Crowd density, ticket gates, lighting rigs, PA systems, scoreboards, turnstile flow.">
@@ -542,98 +542,98 @@ export function DashboardContent() {
           <TicketGate />
           <LightingRig />
           <PASystem />
-          <ScoreBoard />
+          <ScoreBoard homeScore={2} awayScore={1} />
           <TurnstileFlow />
         </Section>
 
         <Section title="Space & Satellite" desc="Orbit tracking, telemetry, solar arrays, link budgets, thruster control, ground stations.">
-          <OrbitTracker />
-          <SatTelemetry />
-          <SolarArrayAngle />
-          <LinkBudget />
-          <ThrusterControl />
-          <GroundStation />
+          <OrbitTracker altitude={408} velocity={7.66} period={92.4} inclination={51.6} />
+          <SatTelemetry battery={78} signal={62} temp={22} attitude={0.4} />
+          <SolarArrayAngle sunAngle={45} panelAngle={42} power={4.2} efficiency={88} />
+          <LinkBudget signalStrength={72} linkMargin={6.2} ber={1e-9} cnr={12.5} dataRate={150} />
+          <ThrusterControl fuelLevel={64} pressure={220} totalImpulse={12.4} />
+          <GroundStation elevation={42} azimuth={185} snr={18.5} tracking={true} />
         </Section>
 
         <Section title="Aviation Cockpit" desc="Attitude indicators, altimeters, airspeed, heading compass, vertical speed, annunciator panels.">
           <AttitudeIndicator />
-          <Altimeter />
-          <AirspeedIndicator />
-          <HeadingCompass />
-          <VerticalSpeed />
+          <Altimeter altitude={24500} />
+          <AirspeedIndicator airspeed={165} />
+          <HeadingCompass heading={270} wobble={0} />
+          <VerticalSpeed vsi={500} />
           <AnnunciatorPanel />
         </Section>
 
         <Section title="Submarine" desc="Depth gauges, ballast tanks, torpedo status, sonar displays, hull pressure, dive planes.">
-          <DepthGauge />
-          <BallastTank />
+          <DepthGauge depth={185} />
+          <BallastTank fillPct={65} />
           <TorpedoStatus />
           <SonarDisplay />
-          <HullPressure />
-          <DivePlane />
+          <HullPressure psi={380} />
+          <DivePlane planeAngle={12} />
         </Section>
 
         <Section title="Vintage HiFi" desc="Vacuum tube amps, reel-to-reel, VU meters, graphic EQ, tape counters, transformers.">
-          <VacuumTubeAmp />
+          <VacuumTubeAmp powerOut={42} warmup={96} />
           <ReelToReel />
-          <VUMeter />
+          <VUMeter levelL={-8} levelR={-6} />
           <GraphicEQ />
           <TapeCounter />
-          <TransformerHum />
+          <TransformerHum voltage={240} current={2.4} temp={62} />
         </Section>
 
         <Section title="Watchmaking" desc="Chronographs, moon phase, power reserve, tourbillon, date wheels, balance wheels.">
           <Chronograph />
           <MoonPhase />
-          <PowerReserve />
-          <TourbillonCage />
+          <PowerReserve liveHours={48} />
+          <TourbillonCage oscillationRate={28800} />
           <DateWheel />
-          <BalanceWheel />
+          <BalanceWheel amplitude={300} />
         </Section>
 
         <Section title="Automotive" desc="Speedometers, tachometers, boost gauges, oil temp, fuel gauges, engine diagnostics.">
-          <Speedometer />
-          <Tachometer />
-          <BoostGauge />
-          <OilTemp />
-          <FuelGauge />
-          <EngDiagnostics />
+          <Speedometer speed={95} />
+          <Tachometer rpm={3200} />
+          <BoostGauge boost={8} />
+          <OilTemp temp={92} />
+          <FuelGauge fuel={62} />
+          <EngDiagnostics rpmVal={2800} coolantVal={92} intakeVal={38} batteryVal={13.8} />
         </Section>
 
         <Section title="Oscilloscope & Lab" desc="Oscilloscopes, spectrum analyzers, function generators, multimeters, centrifuges, titration.">
           <Oscilloscope />
           <LabSpectrumAnalyzer />
-          <FunctionGenerator />
-          <Multimeter />
-          <Centrifuge />
-          <TitrationApparatus />
+          <FunctionGenerator freq={1000} />
+          <Multimeter voltage={12.47} />
+          <Centrifuge temperature={4.0} />
+          <TitrationApparatus pH={6.8} volume={25.4} />
         </Section>
 
         <Section title="Weather Station" desc="Barometers, anemometers, rain gauges, wind vanes, hygrometers, storm glasses.">
-          <MercuryBarometer />
-          <Anemometer />
-          <RainGauge />
-          <WindVane />
-          <Hygrometer />
-          <StormGlass />
+          <MercuryBarometer pressure={1013} prevPressure={1013} />
+          <Anemometer windSpeed={24} />
+          <RainGauge rainfall={12.4} rate={2.1} />
+          <WindVane direction={225} />
+          <Hygrometer dryTemp={24} wetTemp={20} />
+          <StormGlass temp={18} />
         </Section>
 
         <Section title="Steam & Mechanical" desc="Boiler pressure, steam valves, flywheels, governors, pistons, steam whistles.">
-          <BoilerPressure />
-          <SteamValve />
+          <BoilerPressure psi={145} />
+          <SteamValve flow={340} />
           <Flywheel />
-          <Governor />
+          <Governor speed={60} />
           <PistonIndicator />
           <SteamWhistle />
         </Section>
 
         <Section title="Printing & Typography" desc="Ink density, CMYK registration, paper tension, press cylinders, color separation, drying ovens.">
-          <InkDensityMeter />
-          <CMYKRegistration />
-          <PaperTension />
-          <PressCylinder />
+          <InkDensityMeter densityC={1.42} densityM={1.35} densityY={0.98} densityK={1.78} />
+          <CMYKRegistration offset={0.3} />
+          <PaperTension tension={65} />
+          <PressCylinder speed={8500} pressure={4.2} />
           <ColorSeparation />
-          <DryingOven />
+          <DryingOven temp={185} feedSpeed={12.5} />
         </Section>
 
         <Section title="Vintage Computing" desc="Nixie tubes, toggle switches, mag tape reels, core memory, punch cards, blinken lights.">

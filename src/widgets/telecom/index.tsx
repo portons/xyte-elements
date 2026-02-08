@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { getX, ease, Card, Badge, Lbl, M, Dot, Prog } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useAnim, useTick } from '../hooks';
 
 // ── Cell Tower ──────────────────────────────────────────────────────
 export function CellTower({ title = 'Cell Towers', signalWarning = -85 }: { title?: string; signalWarning?: number }) {
@@ -16,12 +16,12 @@ export function CellTower({ title = 'Cell Towers', signalWarning = -85 }: { titl
   ], []);
 
   const signals = [
-    useLive(towers[0].dbm, 4, 2000),
-    useLive(towers[1].dbm, 3, 2200),
-    useLive(towers[2].dbm, 6, 1800),
-    useLive(towers[3].dbm, 3, 2500),
-    useLive(towers[4].dbm, 2, 3000),
-    useLive(towers[5].dbm, 4, 2100),
+    towers[0].dbm,
+    towers[1].dbm,
+    towers[2].dbm,
+    towers[3].dbm,
+    towers[4].dbm,
+    towers[5].dbm,
   ];
 
   const sc: Record<string, string> = { active: X.teal, degraded: X.amber, offline: X.red };
@@ -128,12 +128,11 @@ export function SpectrumAnalyzer({ title = 'Spectrum Analyzer', binCount = 32 }:
 }
 
 // ── Subscriber Metrics ──────────────────────────────────────────────
-export function SubscriberMetrics({ title = 'Subscribers', arpu = 42.50 }: { title?: string; arpu?: number }) {
+export function SubscriberMetrics({ title = 'Subscribers', arpu = 42.50, activeSessions }: { title?: string; arpu?: number; activeSessions: number }) {
   const X = getX();
 
   const totalSubs = 2847530;
   const animSubs = useAnim(totalSubs, 1400);
-  const activeSessions = useLive(184200, 8000, 2000);
   const churnRate = 1.8;
 
   const trendData = useMemo(() =>
@@ -214,10 +213,10 @@ export function NetworkSlicing({ title = '5G Network Slices', slaTarget = 99 }: 
   ], []);
 
   const latencies = [
-    useLive(slices[0].latBase, 2, 1500),
-    useLive(slices[1].latBase, 0.3, 1200),
-    useLive(slices[2].latBase, 5, 2000),
-    useLive(slices[3].latBase, 0.8, 1800),
+    slices[0].latBase,
+    slices[1].latBase,
+    slices[2].latBase,
+    slices[3].latBase,
   ];
 
   const slaColor = (v: number) => v >= slaTarget + 0.5 ? X.teal : v >= slaTarget - 1 ? X.amber : X.red;
@@ -299,13 +298,8 @@ export function SIMInventory({ title = 'SIM Inventory', dataWarning = 80 }: { ti
 }
 
 // ── Call Quality ────────────────────────────────────────────────────
-export function CallQuality({ title = 'Call Quality', mosTarget = 4 }: { title?: string; mosTarget?: number }) {
+export function CallQuality({ title = 'Call Quality', mosTarget = 4, mos, jitter, latency, packetLoss }: { title?: string; mosTarget?: number; mos: number; jitter: number; latency: number; packetLoss: number }) {
   const X = getX();
-
-  const mos = useLive(4.2, 0.4, 1500);
-  const jitter = useLive(12, 5, 1200);
-  const latency = useLive(28, 8, 1800);
-  const packetLoss = useLive(0.3, 0.25, 2000);
 
   const mosColor = mos >= mosTarget ? X.teal : mos >= mosTarget - 1 ? X.amber : X.red;
   const mosLabel = mos >= mosTarget ? 'Excellent' : mos >= mosTarget - 1 ? 'Fair' : 'Poor';

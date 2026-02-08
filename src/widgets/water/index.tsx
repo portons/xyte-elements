@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { getX, ease, Card, Badge, Prog, Lbl, M, Dot } from '../primitives';
-import { useAnim, useLive } from '../hooks';
+import { useAnim } from '../hooks';
 
 function neo() {
   const X = getX();
@@ -15,13 +15,11 @@ function neo() {
 }
 
 // ── Water Flow Rate ───────────────────────────────────────────────
-export function WaterFlowRate({ title = 'Flow Rate', flowUnit = 'L/min' }: { title?: string; flowUnit?: string } = {}) {
+export function WaterFlowRate({ title = 'Flow Rate', flowUnit = 'L/min', flow }: { title?: string; flowUnit?: string; flow: number }) {
   const X = getX();
   const n = neo();
 
-  const flowBase = 42.5;
   const flowMax = 80;
-  const flow = useLive(flowBase, 6, 1400);
   const needleAngle = useAnim(Math.min(Math.max(flow / flowMax, 0), 1) * 240 - 120, 900);
 
   const ticks = Array.from({ length: 9 }, (_, i) => i);
@@ -138,13 +136,9 @@ function polarToCartesian(cx: number, cy: number, r: number, angleDeg: number) {
 }
 
 // ── Chemical Dosing ───────────────────────────────────────────────
-export function ChemicalDosing({ title = 'Chemical Dosing', phTarget = 7.0 }: { title?: string; phTarget?: number } = {}) {
+export function ChemicalDosing({ title = 'Chemical Dosing', phTarget = 7.0, phActual, chlorine, fluoride }: { title?: string; phTarget?: number; phActual: number; chlorine: number; fluoride: number }) {
   const X = getX();
   const n = neo();
-
-  const phActual = useLive(phTarget, 0.4, 2000);
-  const chlorine = useLive(1.2, 0.15, 2500);
-  const fluoride = useLive(0.7, 0.08, 3000);
 
   const phDelta = Math.abs(phActual - phTarget);
   const phColor = phDelta > 0.5 ? X.red : phDelta > 0.25 ? X.amber : X.teal;
@@ -240,7 +234,7 @@ export function ChemicalDosing({ title = 'Chemical Dosing', phTarget = 7.0 }: { 
 }
 
 // ── Filtration Bank ───────────────────────────────────────────────
-export function FiltrationBank({ title = 'Filtration Bank', stageCount = 4 }: { title?: string; stageCount?: number } = {}) {
+export function FiltrationBank({ title = 'Filtration Bank', stageCount = 4, pressures }: { title?: string; stageCount?: number; pressures: number[] }) {
   const X = getX();
   const n = neo();
 
@@ -252,15 +246,6 @@ export function FiltrationBank({ title = 'Filtration Bank', stageCount = 4 }: { 
     { name: 'UV Reactor', pressureBase: 8.2, status: 'Clean' as const },
     { name: 'Polish Filter', pressureBase: 15.9, status: 'Dirty' as const },
   ].slice(0, stageCount);
-
-  const pressures = [
-    useLive(stageData[0]?.pressureBase ?? 0, 1.5, 2000),
-    useLive(stageData[1]?.pressureBase ?? 0, 2.0, 2200),
-    useLive(stageData[2]?.pressureBase ?? 0, 2.5, 1800),
-    useLive(stageData[3]?.pressureBase ?? 0, 1.8, 2400),
-    useLive(stageData[4]?.pressureBase ?? 0, 1.2, 2600),
-    useLive(stageData[5]?.pressureBase ?? 0, 1.6, 2100),
-  ];
 
   const cleanCount = stageData.filter(s => s.status === 'Clean').length;
   const sc: Record<string, string> = { Clean: X.teal, Dirty: X.amber };
@@ -313,7 +298,7 @@ export function FiltrationBank({ title = 'Filtration Bank', stageCount = 4 }: { 
 }
 
 // ── Water Tank Level ──────────────────────────────────────────────
-export function WaterTankLevel({ title = 'Tank Level', tankCount = 3 }: { title?: string; tankCount?: number } = {}) {
+export function WaterTankLevel({ title = 'Tank Level', tankCount = 3, levels }: { title?: string; tankCount?: number; levels: number[] }) {
   const X = getX();
   const n = neo();
 
@@ -323,13 +308,6 @@ export function WaterTankLevel({ title = 'Tank Level', tankCount = 3 }: { title?
     { name: 'Process', capacityL: 20000, levelBase: 88 },
     { name: 'Effluent', capacityL: 15000, levelBase: 34 },
   ].slice(0, tankCount);
-
-  const levels = [
-    useLive(tankData[0]?.levelBase ?? 0, 3, 2500),
-    useLive(tankData[1]?.levelBase ?? 0, 4, 2800),
-    useLive(tankData[2]?.levelBase ?? 0, 2, 3200),
-    useLive(tankData[3]?.levelBase ?? 0, 5, 2200),
-  ];
 
   const levelColor = (v: number) => v > 85 ? X.amber : v < 20 ? X.red : X.teal;
 
@@ -408,11 +386,9 @@ export function WaterTankLevel({ title = 'Tank Level', tankCount = 3 }: { title?
 }
 
 // ── Turbidity Meter ───────────────────────────────────────────────
-export function TurbidityMeter({ title = 'Turbidity', ntuLimit = 4 }: { title?: string; ntuLimit?: number } = {}) {
+export function TurbidityMeter({ title = 'Turbidity', ntuLimit = 4, ntu }: { title?: string; ntuLimit?: number; ntu: number }) {
   const X = getX();
   const n = neo();
-
-  const ntu = useLive(2.1, 0.8, 1800);
   const ntuAnim = useAnim(Math.max(0, ntu), 700);
   const maxNTU = 10;
   const pct = Math.min(ntuAnim / maxNTU, 1);
@@ -519,29 +495,11 @@ export function TurbidityMeter({ title = 'Turbidity', ntuLimit = 4 }: { title?: 
 }
 
 // ── Pump Station ──────────────────────────────────────────────────
-export function PumpStation({ title = 'Pump Station', pressureUnit = 'PSI' }: { title?: string; pressureUnit?: string } = {}) {
+export function PumpStation({ title = 'Pump Station', pressureUnit = 'PSI', pressures, flows, rpms }: { title?: string; pressureUnit?: string; pressures: number[]; flows: number[]; rpms: number[] }) {
   const X = getX();
   const n = neo();
 
   const [pumpStates, setPumpStates] = useState([true, false, true]);
-
-  const pressures = [
-    useLive(45.2, 4, 1600),
-    useLive(0, 0, 3000),
-    useLive(38.7, 3.5, 1800),
-  ];
-
-  const flows = [
-    useLive(28.4, 2.5, 1400),
-    useLive(0, 0, 3000),
-    useLive(22.1, 2.0, 1600),
-  ];
-
-  const rpms = [
-    useLive(1750, 30, 2000),
-    useLive(0, 0, 3000),
-    useLive(1480, 25, 2200),
-  ];
 
   const pumps = [
     { id: 'P-01', name: 'Main Intake' },

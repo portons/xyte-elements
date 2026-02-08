@@ -1,15 +1,12 @@
 import { useState, useMemo } from 'react';
 import { getX, ease, Card, Badge, Lbl, M, Dot, Prog } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useAnim, useTick } from '../hooks';
 
 // ── HVAC Zone ───────────────────────────────────────────────────────
-export function HVACZone({ title = 'HVAC Zone', zone = 'Zone A — Lobby', setpoint = 22, mode = 'auto' }: {
-  title?: string; zone?: string; setpoint?: number; mode?: string;
+export function HVACZone({ title = 'HVAC Zone', zone = 'Zone A — Lobby', setpoint = 22, mode = 'auto', temp, humidity, fanSpeed }: {
+  title?: string; zone?: string; setpoint?: number; mode?: string; temp: number; humidity: number; fanSpeed: number;
 }) {
   const X = getX();
-  const temp = useLive(setpoint + 0.6, 1.2, 2800);
-  const humidity = useLive(44, 4, 3500);
-  const fanSpeed = useLive(65, 8, 2200);
   const [activeMode, setActiveMode] = useState(mode);
 
   const modeColor: Record<string, string> = { heat: X.amber, cool: X.indigo, auto: X.teal, off: X.textMut };
@@ -76,16 +73,16 @@ export function ElevatorStatus({ title = 'Elevator Status', totalFloors = 15 }: 
     { id: 'D', target: 3, dir: 'idle', load: 0 },
   ], []);
 
-  const floorA = useLive(elevators[0].target, 3, 1800);
-  const floorB = useLive(elevators[1].target, 2.5, 2200);
-  const floorC = useLive(elevators[2].target, 4, 1600);
-  const floorD = useLive(elevators[3].target, 1, 3000);
+  const floorA = elevators[0].target;
+  const floorB = elevators[1].target;
+  const floorC = elevators[2].target;
+  const floorD = elevators[3].target;
   const floors = [floorA, floorB, floorC, floorD];
 
-  const loadA = useLive(elevators[0].load, 10, 3200);
-  const loadB = useLive(elevators[1].load, 8, 2800);
-  const loadC = useLive(elevators[2].load, 12, 2600);
-  const loadD = useLive(elevators[3].load, 5, 4000);
+  const loadA = elevators[0].load;
+  const loadB = elevators[1].load;
+  const loadC = elevators[2].load;
+  const loadD = elevators[3].load;
   const loads = [loadA, loadB, loadC, loadD];
 
   const dirArrow: Record<string, string> = { up: '\u25B2', down: '\u25BC', idle: '\u25CF' };
@@ -199,14 +196,10 @@ export function ParkingOccupancy({ title = 'Parking Occupancy', warningThreshold
 }
 
 // ── Water Meter ─────────────────────────────────────────────────────
-export function WaterMeter({ title = 'Water Consumption', flowUnit = 'L/min' }: {
-  title?: string; flowUnit?: string;
+export function WaterMeter({ title = 'Water Consumption', flowUnit = 'L/min', flowRate, dailyUsage, monthlyUsage, pressure }: {
+  title?: string; flowUnit?: string; flowRate: number; dailyUsage: number; monthlyUsage: number; pressure: number;
 }) {
   const X = getX();
-  const flowRate = useLive(3.8, 1.5, 1600);
-  const dailyUsage = useLive(2840, 200, 5000);
-  const monthlyUsage = useLive(68400, 3000, 8000);
-  const pressure = useLive(4.2, 0.3, 2400);
   const leakDetected = false;
 
   const dailyBars = useMemo(() => Array.from({ length: 7 }, () => 2200 + Math.random() * 1400), []);
@@ -251,8 +244,8 @@ export function WaterMeter({ title = 'Water Consumption', flowUnit = 'L/min' }: 
 }
 
 // ── Lighting Scene ──────────────────────────────────────────────────
-export function LightingScene({ title = 'Lighting Control', defaultScene = 'Meeting' }: {
-  title?: string; defaultScene?: string;
+export function LightingScene({ title = 'Lighting Control', defaultScene = 'Meeting', totalPower }: {
+  title?: string; defaultScene?: string; totalPower: number;
 }) {
   const X = getX();
   const zones = useMemo(() => [
@@ -267,8 +260,6 @@ export function LightingScene({ title = 'Lighting Control', defaultScene = 'Meet
   const [scene, setScene] = useState(defaultScene);
   const scenes = ['Meeting', 'Presentation', 'Off'];
   const sceneColor: Record<string, string> = { Meeting: X.amber, Presentation: X.purple, Off: X.textMut };
-
-  const totalPower = useLive(4.2, 0.6, 3000);
   const activeLights = zones.filter(z => z.brightness > 0).length;
 
   return (

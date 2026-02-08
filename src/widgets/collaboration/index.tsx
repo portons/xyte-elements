@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getX, ease, Card, Badge, Btn, Prog, Lbl, M, Dot } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useTick } from '../hooks';
 
 // ── Meeting Status ───────────────────────────────────────────────────
 export function MeetingStatus({ title = 'Meeting Status', meetingName = 'Q1 AV Review' }: { title?: string; meetingName?: string }) {
@@ -73,11 +73,10 @@ export function MeetingStatus({ title = 'Meeting Status', meetingName = 'Q1 AV R
 }
 
 // ── Screen Share ─────────────────────────────────────────────────────
-export function ScreenShare({ title = 'Screen Share', resolution = '1920x1080' }: { title?: string; resolution?: string }) {
+export function ScreenShare({ title = 'Screen Share', resolution = '1920x1080', fps }: { title?: string; resolution?: string; fps: number }) {
   const X = getX();
   const [sharing, setSharing] = useState(false);
   const [source, setSource] = useState<'desktop' | 'window' | 'tab'>('desktop');
-  const fps = useLive(30, 4, 800);
 
   return (
     <Card style={{ width: 350 }}>

@@ -1,6 +1,5 @@
 import { useState, useCallback } from 'react';
 import { getX, ease, Card, Badge, Btn, Slider, Lbl, M, Dot } from '../primitives';
-import { useLive } from '../hooks';
 
 // ── Scene Presets ─────────────────────────────────────────────────────
 export function ScenePresets({ title = 'Room Presets', switchDelay = 600 }: { title?: string; switchDelay?: number }) {
@@ -102,13 +101,12 @@ export function MacroBuilder({ title = 'Macro: Startup', stepCount = 4 }: { titl
 }
 
 // ── Thermostat Control ────────────────────────────────────────────────
-export function ThermostatControl({ form = 'hybrid', unit = 'celsius' }: { form?: string; unit?: string }) {
+export function ThermostatControl({ form = 'hybrid', unit = 'celsius', ambientC }: { form?: string; unit?: string; ambientC: number }) {
   const X = getX();
   const [activeForm, setActiveForm] = useState(form);
   const [activeUnit, setActiveUnit] = useState(unit);
   const [hvacMode, setHvacMode] = useState('auto');
   const [setpointC, setSetpointC] = useState(22);
-  const ambientC = useLive(22.4, 1, 2600);
 
   const toDisplay = useCallback((valueC: number) => (activeUnit === 'fahrenheit' ? valueC * 9 / 5 + 32 : valueC), [activeUnit]);
   const fromDisplay = useCallback((value: number) => (activeUnit === 'fahrenheit' ? (value - 32) * 5 / 9 : value), [activeUnit]);
@@ -166,10 +164,8 @@ export function ThermostatControl({ form = 'hybrid', unit = 'celsius' }: { form?
 }
 
 // ── Climate Card ──────────────────────────────────────────────────────
-export function Climate({ title = 'Climate', defaultTarget = 22 }: { title?: string; defaultTarget?: number }) {
+export function Climate({ title = 'Climate', defaultTarget = 22, temp, hum }: { title?: string; defaultTarget?: number; temp: number; hum: number }) {
   const X = getX();
-  const temp = useLive(22.4, 1, 3000);
-  const hum = useLive(45, 5, 4000);
   const [target, setTarget] = useState(defaultTarget);
   return (
     <Card style={{ width: 190 }}>
@@ -191,9 +187,8 @@ export function Climate({ title = 'Climate', defaultTarget = 22 }: { title?: str
 }
 
 // ── Occupancy ─────────────────────────────────────────────────────────
-export function Occupancy({ title = 'Occupancy', capacity = 30 }: { title?: string; capacity?: number }) {
+export function Occupancy({ title = 'Occupancy', capacity = 30, occ }: { title?: string; capacity?: number; occ: number }) {
   const X = getX();
-  const occ = useLive(12, 5, 4000);
   const max = capacity;
   const pct = (Math.round(occ) / max) * 100;
   return (

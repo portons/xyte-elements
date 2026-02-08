@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { getX, ease, Card, Badge, Btn, Prog, Lbl, M, Dot } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useAnim, useTick } from '../hooks';
 
 function neo() {
   const X = getX();
@@ -15,12 +15,10 @@ function neo() {
 }
 
 // ── Vacuum Tube Amplifier ────────────────────────────────────────────
-export function VacuumTubeAmp({ title = 'Tube Amplifier', tubes = 4 }: { title?: string; tubes?: number } = {}) {
+export function VacuumTubeAmp({ title = 'Tube Amplifier', tubes = 4, powerOut, warmup }: { title?: string; tubes?: number; powerOut: number; warmup: number } = {} as any) {
   const X = getX();
   const n = neo();
-  const tubeTemps = Array.from({ length: tubes }, (_, i) => useLive(320 + i * 15, 20, 1800 + i * 200));
-  const powerOut = useLive(42, 3, 2000);
-  const warmup = useLive(96, 2, 3000);
+  const tubeTemps = Array.from({ length: tubes }, (_, i) => 320 + i * 15);
 
   const warmupPct = Math.min(100, Math.max(0, warmup));
   const status = warmupPct > 90 ? 'Operating' : warmupPct > 50 ? 'Warming Up' : 'Cold';
@@ -244,11 +242,9 @@ export function ReelToReel({ title = 'Reel-to-Reel' }: { title?: string } = {}) 
 }
 
 // ── VU Meter ──────────────────────────────────────────────────────────
-export function VUMeter({ title = 'VU Meter' }: { title?: string } = {}) {
+export function VUMeter({ title = 'VU Meter', levelL, levelR }: { title?: string; levelL: number; levelR: number } = {} as any) {
   const X = getX();
   const n = neo();
-  const levelL = useLive(-8, 6, 300);
-  const levelR = useLive(-6, 7, 350);
   const [peakL, setPeakL] = useState(-20);
   const [peakR, setPeakR] = useState(-20);
 
@@ -538,13 +534,10 @@ export function TapeCounter({ title = 'Tape Counter' }: { title?: string } = {})
 }
 
 // ── Transformer ───────────────────────────────────────────────────────
-export function TransformerHum({ title = 'Transformer' }: { title?: string } = {}) {
+export function TransformerHum({ title = 'Transformer', voltage, current, temp }: { title?: string; voltage: number; current: number; temp: number } = {} as any) {
   const X = getX();
   const n = neo();
   const tick = useTick(50);
-  const voltage = useLive(240, 5);
-  const current = useLive(2.4, 0.3);
-  const temp = useLive(62, 3, 3000);
 
   const vibX = Math.sin(tick * 0.8) * 0.4;
   const status = temp > 75 ? 'Hot' : temp > 60 ? 'Nominal' : 'Cool';

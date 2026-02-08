@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { getX, ease, Card, Badge, Lbl, M, Dot, Prog, Btn } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useAnim, useTick } from '../hooks';
 
 function neo() {
   const X = getX();
@@ -15,14 +15,10 @@ function neo() {
 }
 
 // ── Orbit Tracker ────────────────────────────────────────────────────
-export function OrbitTracker({ title = 'Orbit Tracker', orbitType = 'LEO' }: { title?: string; orbitType?: string } = {}) {
+export function OrbitTracker({ title = 'Orbit Tracker', orbitType = 'LEO', altitude, velocity, period, inclination }: { title?: string; orbitType?: string; altitude: number; velocity: number; period: number; inclination: number }) {
   const X = getX();
   const n = neo();
   const tick = useTick(80);
-  const altitude = useLive(orbitType === 'GEO' ? 35786 : orbitType === 'MEO' ? 20200 : 408, 12, 2500);
-  const velocity = useLive(orbitType === 'GEO' ? 3.07 : orbitType === 'MEO' ? 3.89 : 7.66, 0.05, 3000);
-  const period = useLive(orbitType === 'GEO' ? 1436 : orbitType === 'MEO' ? 720 : 92.7, 0.3, 4000);
-  const inclination = useLive(orbitType === 'GEO' ? 0.05 : orbitType === 'MEO' ? 55 : 51.6, 0.02, 5000);
 
   const satAngle = (tick * 3) % 360;
   const orbitColor = orbitType === 'GEO' ? X.amber : orbitType === 'MEO' ? X.indigo : X.teal;
@@ -100,14 +96,9 @@ export function OrbitTracker({ title = 'Orbit Tracker', orbitType = 'LEO' }: { t
 }
 
 // ── Sat Telemetry ────────────────────────────────────────────────────
-export function SatTelemetry({ title = 'Sat Telemetry', channelCount = 4 }: { title?: string; channelCount?: number } = {}) {
+export function SatTelemetry({ title = 'Sat Telemetry', channelCount = 4, battery, signal, temp, attitude }: { title?: string; channelCount?: number; battery: number; signal: number; temp: number; attitude: number }) {
   const X = getX();
   const n = neo();
-
-  const battery = useLive(78, 5, 2800);
-  const signal = useLive(62, 8, 2200);
-  const temp = useLive(22, 4, 3200);
-  const attitude = useLive(0.4, 0.15, 2600);
 
   const animBatt = useAnim(battery, 1200);
   const animSig = useAnim(signal, 1100);
@@ -195,13 +186,9 @@ export function SatTelemetry({ title = 'Sat Telemetry', channelCount = 4 }: { ti
 }
 
 // ── Solar Array Angle ────────────────────────────────────────────────
-export function SolarArrayAngle({ title = 'Solar Array', panelCount = 2 }: { title?: string; panelCount?: number } = {}) {
+export function SolarArrayAngle({ title = 'Solar Array', panelCount = 2, sunAngle, panelAngle, power, efficiency }: { title?: string; panelCount?: number; sunAngle: number; panelAngle: number; power: number; efficiency: number }) {
   const X = getX();
   const n = neo();
-  const sunAngle = useLive(45, 8, 3000);
-  const panelAngle = useLive(42, 6, 2800);
-  const power = useLive(4.2, 0.5, 2500);
-  const efficiency = useLive(88, 3, 3200);
 
   const animSun = useAnim(sunAngle, 1200);
   const animPanel = useAnim(panelAngle, 1400);
@@ -335,18 +322,13 @@ export function SolarArrayAngle({ title = 'Solar Array', panelCount = 2 }: { tit
 }
 
 // ── Link Budget ──────────────────────────────────────────────────────
-export function LinkBudget({ title = 'Link Budget', frequencyBand = 'Ka' }: { title?: string; frequencyBand?: string } = {}) {
+export function LinkBudget({ title = 'Link Budget', frequencyBand = 'Ka', signalStrength, linkMargin, ber, dataRate, cnr }: { title?: string; frequencyBand?: string; signalStrength: number; linkMargin: number; ber: number; dataRate: number; cnr: number }) {
   const X = getX();
   const n = neo();
-  const signalStrength = useLive(72, 6, 2400);
-  const linkMargin = useLive(6.2, 1.5, 3000);
-  const ber = useLive(1e-9, 5e-10, 3500);
-  const dataRate = useLive(frequencyBand === 'Ka' ? 150 : frequencyBand === 'Ku' ? 75 : 25, 5, 2800);
-  const cnr = useLive(12.5, 1.2, 3200);
 
   const barCount = 8;
   const barValues = Array.from({ length: barCount }, (_, i) =>
-    Math.min(100, Math.max(5, signalStrength - (barCount - 1 - i) * 6 + useLive(0, 3, 2000 + i * 200)))
+    Math.min(100, Math.max(5, signalStrength - (barCount - 1 - i) * 6 + 0))
   );
 
   const sigColor = signalStrength > 60 ? X.teal : signalStrength > 35 ? X.amber : X.red;
@@ -441,14 +423,11 @@ export function LinkBudget({ title = 'Link Budget', frequencyBand = 'Ka' }: { ti
 }
 
 // ── Thruster Control ─────────────────────────────────────────────────
-export function ThrusterControl({ title = 'Thruster Control', thrusterCount = 8 }: { title?: string; thrusterCount?: number } = {}) {
+export function ThrusterControl({ title = 'Thruster Control', thrusterCount = 8, fuelLevel, pressure, totalImpulse }: { title?: string; thrusterCount?: number; fuelLevel: number; pressure: number; totalImpulse: number }) {
   const X = getX();
   const n = neo();
   const [firing, setFiring] = useState<Set<number>>(new Set());
   const [armed, setArmed] = useState(false);
-  const fuelLevel = useLive(64, 2, 3000);
-  const pressure = useLive(220, 8, 2800);
-  const totalImpulse = useLive(12.4, 0.3, 4000);
 
   const fuelColor = fuelLevel > 50 ? X.teal : fuelLevel > 25 ? X.amber : X.red;
   const count = Math.min(thrusterCount, 12);
@@ -559,15 +538,10 @@ export function ThrusterControl({ title = 'Thruster Control', thrusterCount = 8 
 }
 
 // ── Ground Station ───────────────────────────────────────────────────
-export function GroundStation({ title = 'Ground Station', antennaCount = 3 }: { title?: string; antennaCount?: number } = {}) {
+export function GroundStation({ title = 'Ground Station', antennaCount = 3, elevation, azimuth, snr, tracking }: { title?: string; antennaCount?: number; elevation: number; azimuth: number; snr: number; tracking: boolean }) {
   const X = getX();
   const n = neo();
   const tick = useTick(60);
-
-  const elevation = useLive(42, 5, 2600);
-  const azimuth = useLive(185, 12, 2200);
-  const snr = useLive(18.5, 2, 3000);
-  const tracking = useLive(1, 0.3, 8000) > 0.5;
 
   const animEl = useAnim(elevation, 1200);
   const animAz = useAnim((azimuth / 360) * 100, 1400);
@@ -578,9 +552,9 @@ export function GroundStation({ title = 'Ground Station', antennaCount = 3 }: { 
 
   const antennas = Array.from({ length: count }, (_, i) => ({
     name: `ANT-${i + 1}`,
-    el: useLive(30 + i * 10, 4, 2400 + i * 300),
-    az: useLive(120 + i * 50, 8, 2000 + i * 400),
-    linked: useLive(1, 0.2, 6000 + i * 1000) > 0.4,
+    el: 30 + i * 10,
+    az: 120 + i * 50,
+    linked: 1 > 0.4,
   }));
 
   return (

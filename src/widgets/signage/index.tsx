@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getX, ease, Card, Badge, Btn, Prog, Lbl, M, Dot } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useAnim, useTick } from '../hooks';
 
 // ── Playlist Manager ─────────────────────────────────────────────────
 export function PlaylistManager({ title = 'Playlist', maxItems = 5 }: { title?: string; maxItems?: number }) {
@@ -193,11 +193,8 @@ export function ScheduleCalendar({ title = 'Weekly Schedule', view = 'week' }: {
 }
 
 // ── Proof of Play ────────────────────────────────────────────────────
-export function ProofOfPlay({ title = 'Proof of Play', period = 'Today' }: { title?: string; period?: string }) {
+export function ProofOfPlay({ title = 'Proof of Play', period = 'Today', plays, impressions, completion }: { title?: string; period?: string; plays: number; impressions: number; completion: number }) {
   const X = getX();
-  const plays = useLive(1842, 50, 5000);
-  const impressions = useLive(24300, 800, 6000);
-  const completion = useLive(94.2, 2, 4000);
   const [hourly] = useState(() => Array.from({ length: 12 }, () => 40 + Math.random() * 120));
   const mx = Math.max(...hourly, 1);
   const labels = ['6a', '8a', '10a', '12p', '2p', '4p', '6p', '8p', '10p', '12a', '2a', '4a'];
@@ -227,10 +224,9 @@ export function ProofOfPlay({ title = 'Proof of Play', period = 'Today' }: { tit
 }
 
 // ── Brightness Schedule ──────────────────────────────────────────────
-export function BrightnessSchedule({ title = 'Brightness', maxBrightness = 100 }: { title?: string; maxBrightness?: number }) {
+export function BrightnessSchedule({ title = 'Brightness', maxBrightness = 100, currentBrightness }: { title?: string; maxBrightness?: number; currentBrightness: number }) {
   const X = getX();
   const [mode, setMode] = useState<'day' | 'night' | 'custom'>('custom');
-  const currentBrightness = useLive(75, 5, 3000);
 
   // Brightness curve: 24 points, 0-100%
   const curve = Array.from({ length: 24 }, (_, h) => {

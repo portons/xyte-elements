@@ -1,13 +1,10 @@
 import { useState, useMemo } from 'react';
 import { getX, ease, Card, Badge, Lbl, M, Dot, Prog } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useAnim, useTick } from '../hooks';
 
 // ── Stream Health ────────────────────────────────────────────────────
-export function StreamHealth({ title = 'Stream Health', bitrateTarget = 8000 }: { title?: string; bitrateTarget?: number }) {
+export function StreamHealth({ title = 'Stream Health', bitrateTarget = 8000, bitrate, viewers, frameDrops }: { title?: string; bitrateTarget?: number; bitrate: number; viewers: number; frameDrops: number }) {
   const X = getX();
-  const bitrate = useLive(8500, 400, 1200);
-  const viewers = useLive(12400, 800, 3000);
-  const frameDrops = useLive(0.12, 0.15, 2500);
   const tick = useTick(1000);
   const upH = Math.floor(tick / 3600);
   const upM = Math.floor((tick % 3600) / 60);
@@ -59,10 +56,10 @@ export function EncoderStatus({ title = 'Encoder Status', cpuWarningThreshold = 
     { name: 'ENC-04 Record', input: '1920×1080p60', bitrate: '15 Mbps', status: 'error' },
   ], []);
   const cpuLoads = [
-    useLive(72, 8, 1500),
-    useLive(45, 6, 1800),
-    useLive(12, 4, 2000),
-    useLive(0, 0, 2000),
+    72,
+    45,
+    12,
+    0,
   ];
   const sc: Record<string, string> = { encoding: X.teal, idle: X.amber, error: X.red };
   return (
@@ -236,7 +233,7 @@ export function PlayoutSchedule({ title = 'Playout Schedule', maxItems = 6 }: { 
 }
 
 // ── Audio Loudness ───────────────────────────────────────────────────
-export function AudioLoudness({ title = 'Audio Loudness', standard = 'EBU R128' }: { title?: string; standard?: string }) {
+export function AudioLoudness({ title = 'Audio Loudness', standard = 'EBU R128', intLufs }: { title?: string; standard?: string; intLufs: number }) {
   const X = getX();
   const channels = useMemo(() => [
     { name: 'L', base: -18 },
@@ -245,13 +242,12 @@ export function AudioLoudness({ title = 'Audio Loudness', standard = 'EBU R128' 
     { name: 'LFE', base: -24 },
   ], []);
   const levels = [
-    useLive(-18, 4, 100),
-    useLive(-17, 4, 100),
-    useLive(-20, 3, 100),
-    useLive(-24, 5, 120),
+    -18,
+    -17,
+    -20,
+    -24,
   ];
   const peaks = useMemo(() => [-1.2, -0.8, -2.4, -3.1], []);
-  const intLufs = useLive(-23, 0.5, 2000);
   const meterMin = -48;
   const meterMax = 0;
   const toPercent = (v: number) => Math.max(0, Math.min(100, ((v - meterMin) / (meterMax - meterMin)) * 100));
@@ -298,7 +294,7 @@ export function AudioLoudness({ title = 'Audio Loudness', standard = 'EBU R128' 
 }
 
 // ── Caption Monitor ──────────────────────────────────────────────────
-export function CaptionMonitor({ title = 'Caption Monitor', language = 'EN-US' }: { title?: string; language?: string }) {
+export function CaptionMonitor({ title = 'Caption Monitor', language = 'EN-US', wpm, delay, accuracy }: { title?: string; language?: string; wpm: number; delay: number; accuracy: number }) {
   const X = getX();
   const tick = useTick(3000);
   const captions = useMemo(() => [
@@ -309,9 +305,6 @@ export function CaptionMonitor({ title = 'Caption Monitor', language = 'EN-US' }
     'Breaking news — a major infrastructure bill has just been signed into law.',
   ], []);
   const currentCaption = captions[tick % captions.length];
-  const wpm = useLive(160, 12, 2000);
-  const delay = useLive(1.2, 0.4, 2500);
-  const accuracy = useLive(97.5, 1.2, 3000);
   const animatedAcc = useAnim(accuracy, 800);
   return (
     <Card style={{ width: 420 }}>

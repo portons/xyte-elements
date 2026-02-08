@@ -1,16 +1,15 @@
 import { useState } from 'react';
 import { getX, ease, Card, Badge, Btn, Prog, Lbl, M, Dot } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useTick } from '../hooks';
 
 function neo() { const X = getX(); const dark = X.bg + '40'; const light = '#ffffff12'; return { raised: '4px 4px 10px ' + dark + ', -2px -2px 6px ' + light, concave: 'inset 3px 3px 8px ' + dark + ', inset -2px -2px 5px ' + light, bezel: 'inset 0 1px 0 ' + light + ', inset 0 -1px 0 rgba(0,0,0,0.3), 0 2px 8px ' + dark, metal: 'linear-gradient(135deg, ' + X.surface + ', ' + X.bgAlt + ' 40%, ' + X.surface + ' 60%, ' + X.bgAlt + ')' }; }
 
 // ── Boiler Pressure ─────────────────────────────────────────────────
-export function BoilerPressure({ title = 'Boiler Pressure', maxPSI = 200 }: {
-  title?: string; maxPSI?: number;
-} = {}) {
+export function BoilerPressure({ title = 'Boiler Pressure', maxPSI = 200, psi }: {
+  title?: string; maxPSI?: number; psi: number;
+}) {
   const X = getX();
   const n = neo();
-  const psi = useLive(145, 10, 2000);
   const tick = useTick(80);
   const psiPct = Math.min(psi / maxPSI, 1);
   const highPressure = psiPct > 0.8;
@@ -122,13 +121,12 @@ export function BoilerPressure({ title = 'Boiler Pressure', maxPSI = 200 }: {
 }
 
 // ── Steam Valve ─────────────────────────────────────────────────────
-export function SteamValve({ title = 'Steam Valve' }: {
-  title?: string;
-} = {}) {
+export function SteamValve({ title = 'Steam Valve', flow }: {
+  title?: string; flow: number;
+}) {
   const X = getX();
   const n = neo();
   const [angle, setAngle] = useState(0);
-  const flow = useLive(340, 30, 2000);
   const tick = useTick(60);
   const valveOpen = Math.min(100, (angle % 360) / 3.6);
   const dashOffset = -(tick * 2);
@@ -290,12 +288,11 @@ export function Flywheel({ title = 'Flywheel' }: {
 }
 
 // ── Governor ────────────────────────────────────────────────────────
-export function Governor({ title = 'Governor' }: {
-  title?: string;
-} = {}) {
+export function Governor({ title = 'Governor', speed }: {
+  title?: string; speed: number;
+}) {
   const X = getX();
   const n = neo();
-  const speed = useLive(60, 10, 2000);
   const tick = useTick(60);
 
   const armAngle = 15 + (speed / 100) * 60; // degrees from vertical

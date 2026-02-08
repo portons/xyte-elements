@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getX, ease, Card, Badge, Btn, Prog, Lbl, M, Dot } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useAnim, useTick } from '../hooks';
 
 // ── Floor Plan ───────────────────────────────────────────────────────
 export function FloorPlan({ title = 'Floor Plan', floorNumber = 1 }: { title?: string; floorNumber?: number }) {
@@ -148,9 +148,8 @@ export function ZoneHeatmap({ title = 'Activity Heatmap', highThreshold = 75 }: 
 }
 
 // ── Wayfinding Status ────────────────────────────────────────────────
-export function WayfindingStatus({ title = 'Wayfinding', floor = '3F' }: { title?: string; floor?: string }) {
+export function WayfindingStatus({ title = 'Wayfinding', floor = '3F', activeRoutes }: { title?: string; floor?: string; activeRoutes: number }) {
   const X = getX();
-  const activeRoutes = useLive(12, 3, 4000);
   const tick = useTick(60000);
 
   const rows: [string, string, string][] = [
@@ -275,13 +274,8 @@ export function AssetTracker({ title = 'Asset Tracker', showStatus = 'all' }: { 
 }
 
 // ── Environmental Sensor ─────────────────────────────────────────────
-export function EnvironmentalSensor({ title = 'Environment', tempUnit = 'C' }: { title?: string; tempUnit?: 'C' | 'F' }) {
+export function EnvironmentalSensor({ title = 'Environment', tempUnit = 'C', temp, humidity, co2, noise, light }: { title?: string; tempUnit?: 'C' | 'F'; temp: number; humidity: number; co2: number; noise: number; light: number }) {
   const X = getX();
-  const temp = useLive(22.4, 1, 3000);
-  const humidity = useLive(45, 5, 4000);
-  const co2 = useLive(420, 30, 2500);
-  const noise = useLive(38, 8, 2000);
-  const light = useLive(450, 50, 3500);
 
   // Generate mini sparkline data for each sensor
   const [sparklines] = useState(() => ({

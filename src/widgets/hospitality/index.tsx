@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { getX, ease, Card, Badge, Lbl, M, Dot, Prog } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useAnim, useTick } from '../hooks';
 
 // ── Room Status ─────────────────────────────────────────────────────
 export function RoomStatus({ title = 'Room Status', floorFilter = 'all' }: {
@@ -237,14 +237,12 @@ export function HousekeepingBoard({ title = 'Housekeeping', targetMinutes = 30 }
 }
 
 // ── Check-In Kiosk ──────────────────────────────────────────────────
-export function CheckInKiosk({ title = 'Check-In / Out', vipCount = 6 }: {
-  title?: string; vipCount?: number;
+export function CheckInKiosk({ title = 'Check-In / Out', vipCount = 6, queueLen, avgTime }: {
+  title?: string; vipCount?: number; queueLen: number; avgTime: number;
 }) {
   const X = getX();
   const arrivals = useAnim(34, 1200);
   const departures = useAnim(28, 1200);
-  const queueLen = useLive(5, 2, 3000);
-  const avgTime = useLive(4.2, 1, 4000);
 
   const metrics: { label: string; value: string; color: string; sub?: string }[] = useMemo(() => [
     { label: 'Arrivals Today', value: '34', color: X.teal, sub: '18 checked in' },
@@ -295,14 +293,10 @@ export function CheckInKiosk({ title = 'Check-In / Out', vipCount = 6 }: {
 }
 
 // ── Pool Sensors ────────────────────────────────────────────────────
-export function PoolSensors({ title = 'Pool & Spa', targetTemp = 28 }: {
-  title?: string; targetTemp?: number;
+export function PoolSensors({ title = 'Pool & Spa', targetTemp = 28, waterTemp, pH, chlorine, filterPressure }: {
+  title?: string; targetTemp?: number; waterTemp: number; pH: number; chlorine: number; filterPressure: number;
 }) {
   const X = getX();
-  const waterTemp = useLive(28.2, 0.8, 2000);
-  const pH = useLive(7.3, 0.15, 3000);
-  const chlorine = useLive(1.4, 0.3, 2500);
-  const filterPressure = useLive(12, 2, 4000);
 
   const tempColor = waterTemp < 25 ? X.indigo : waterTemp > 31 ? X.red : X.teal;
   const phColor = pH < 7.0 ? X.amber : pH > 7.6 ? X.amber : X.teal;

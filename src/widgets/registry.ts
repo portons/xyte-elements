@@ -554,7 +554,7 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
     ] },
     { key: 'stepCount', label: 'Steps', kind: 'number', min: 2, max: 6, step: 1 },
   ]),
-  story('thermostat', 'Thermostat Control', 'Room & Climate', ThermostatControl, { form: 'hybrid', unit: 'celsius' }, [
+  story('thermostat', 'Thermostat Control', 'Room & Climate', ThermostatControl, { form: 'hybrid', unit: 'celsius', ambientC: 22.4 }, [
     { key: 'form', label: 'Form', kind: 'select', options: [
       { label: 'Rotary', value: 'rotary' },
       { label: 'Digital', value: 'digital' },
@@ -564,18 +564,22 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
       { label: 'Celsius', value: 'celsius' },
       { label: 'Fahrenheit', value: 'fahrenheit' },
     ] },
+    { key: 'ambientC', label: 'Ambient Temp (°C)', kind: 'number' as const, min: 15, max: 35, step: 0.5 },
   ]),
-  story('climate', 'Climate Card', 'Room & Climate', Climate, { title: 'Climate', defaultTarget: 22 }, [
+  story('climate', 'Climate Card', 'Room & Climate', Climate, { title: 'Climate', defaultTarget: 22, temp: 22.4, hum: 45 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Climate', value: 'Climate' }, { label: 'Room Climate', value: 'Room Climate' }, { label: 'Temperature', value: 'Temperature' },
     ] },
     { key: 'defaultTarget', label: 'Target Temp (\u00B0C)', kind: 'number', min: 16, max: 28, step: 1 },
+    { key: 'temp', label: 'Temperature (\u00B0C)', kind: 'number' as const, min: 10, max: 40, step: 0.5 },
+    { key: 'hum', label: 'Humidity (%)', kind: 'number' as const, min: 10, max: 95, step: 1 },
   ]),
-  story('occupancy', 'Occupancy', 'Room & Climate', Occupancy, { title: 'Occupancy', capacity: 30 }, [
+  story('occupancy', 'Occupancy', 'Room & Climate', Occupancy, { title: 'Occupancy', capacity: 30, occ: 12 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Occupancy', value: 'Occupancy' }, { label: 'Room Occupancy', value: 'Room Occupancy' }, { label: 'People Count', value: 'People Count' },
     ] },
     { key: 'capacity', label: 'Max Capacity', kind: 'number', min: 10, max: 100, step: 5 },
+    { key: 'occ', label: 'Occupancy Count', kind: 'number' as const, min: 0, max: 100, step: 1 },
   ]),
   story('schedule', 'Schedule', 'Room & Climate', Schedule, { title: 'Room Schedule', maxEvents: 4 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
@@ -584,11 +588,13 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
     { key: 'maxEvents', label: 'Max Events', kind: 'number', min: 2, max: 6, step: 1 },
   ]),
 
-  story('network-info', 'Network Info', 'Network & Infrastructure', NetworkInfo, { title: 'Network', vlan: 10 }, [
+  story('network-info', 'Network Info', 'Network & Infrastructure', NetworkInfo, { title: 'Network', vlan: 10, j: 1.2, lat: 2.1 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Network', value: 'Network' }, { label: 'Network Info', value: 'Network Info' }, { label: 'Connection Details', value: 'Connection Details' },
     ] },
     { key: 'vlan', label: 'VLAN ID', kind: 'number', min: 1, max: 4094, step: 1 },
+    { key: 'j', label: 'Jitter (ms)', kind: 'number' as const, min: 0, max: 10, step: 0.1 },
+    { key: 'lat', label: 'Latency (ms)', kind: 'number' as const, min: 0, max: 10, step: 0.1 },
   ]),
   story('bandwidth-monitor', 'Bandwidth Monitor', 'Network & Infrastructure', BandwidthMonitor, { title: 'Bandwidth', sampleCount: 30 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
@@ -596,13 +602,16 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
     ] },
     { key: 'sampleCount', label: 'Samples', kind: 'number', min: 10, max: 60, step: 5 },
   ]),
-  story('avoip-stats', 'AVoIP Stats', 'Network & Infrastructure', AVoIPStats, { title: 'AV-over-IP', codec: 'H.265' }, [
+  story('avoip-stats', 'AVoIP Stats', 'Network & Infrastructure', AVoIPStats, { title: 'AV-over-IP', codec: 'H.265', bitrate: 42, latency: 1.8, drops: 0.2 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'AV-over-IP', value: 'AV-over-IP' }, { label: 'AVoIP Stats', value: 'AVoIP Stats' }, { label: 'Stream Stats', value: 'Stream Stats' },
     ] },
     { key: 'codec', label: 'Codec', kind: 'select', options: [
       { label: 'H.265', value: 'H.265' }, { label: 'H.264', value: 'H.264' }, { label: 'JPEG 2000', value: 'JPEG 2000' },
     ] },
+    { key: 'bitrate', label: 'Bitrate (Mbps)', kind: 'number' as const, min: 1, max: 100, step: 1 },
+    { key: 'latency', label: 'Latency (ms)', kind: 'number' as const, min: 0, max: 10, step: 0.1 },
+    { key: 'drops', label: 'Packet Loss (%)', kind: 'number' as const, min: 0, max: 5, step: 0.05 },
   ]),
   story('latency-graph', 'Latency Graph', 'Network & Infrastructure', LatencyGraph, { title: 'Latency', warningMs: 3 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
@@ -743,8 +752,9 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
   ]),
 
   // AI & Analytics
-  story('anomaly-detector', 'Anomaly Detector', 'AI & Analytics', AnomalyDetector, { title: 'Anomaly Detection', threshold: 70 }, [
-    { key: 'threshold', label: 'Threshold %', kind: 'number', min: 10, max: 95, step: 5 },
+  story('anomaly-detector', 'Anomaly Detector', 'AI & Analytics', AnomalyDetector, { title: 'Anomaly Detection', threshold: 70, confidence: 94 }, [
+    { key: 'threshold', label: 'Threshold %', kind: 'number' as const, min: 10, max: 95, step: 5 },
+    { key: 'confidence', label: 'Confidence %', kind: 'number' as const, min: 50, max: 100, step: 1 },
   ]),
   story('predictive-maintenance', 'Predictive Maintenance', 'AI & Analytics', PredictiveMaintenance, { title: 'Predictive Maintenance', criticalThreshold: 30 }, [
     { key: 'criticalThreshold', label: 'Critical Below %', kind: 'number', min: 5, max: 50, step: 5 },
@@ -752,10 +762,11 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
   story('ai-insights', 'AI Insights', 'AI & Analytics', AIInsights, { title: 'AI Insights', maxVisible: 5 }, [
     { key: 'maxVisible', label: 'Max Visible', kind: 'number', min: 2, max: 10, step: 1 },
   ]),
-  story('sentiment-gauge', 'Sentiment Gauge', 'AI & Analytics', SentimentGauge, { title: 'Satisfaction', layout: 'gauge' }, [
+  story('sentiment-gauge', 'Sentiment Gauge', 'AI & Analytics', SentimentGauge, { title: 'Satisfaction', layout: 'gauge', score: 78 }, [
     { key: 'layout', label: 'Layout', kind: 'select', options: [
       { label: 'Gauge', value: 'gauge' }, { label: 'Compact', value: 'compact' },
     ] },
+    { key: 'score', label: 'Score', kind: 'number' as const, min: 0, max: 100, step: 1 },
   ]),
   story('usage-forecaster', 'Usage Forecaster', 'AI & Analytics', UsageForecaster, { title: 'Usage Forecast', dataPoints: 30 }, [
     { key: 'dataPoints', label: 'Data Points', kind: 'number', min: 10, max: 60, step: 5 },
@@ -775,10 +786,11 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
       { label: 'Q1 AV Review', value: 'Q1 AV Review' }, { label: 'Team Standup', value: 'Team Standup' }, { label: 'Board Meeting', value: 'Board Meeting' },
     ] },
   ]),
-  story('screen-share', 'Screen Share', 'Collaboration', ScreenShare, { title: 'Screen Share', resolution: '1920x1080' }, [
+  story('screen-share', 'Screen Share', 'Collaboration', ScreenShare, { title: 'Screen Share', resolution: '1920x1080', fps: 30 }, [
     { key: 'resolution', label: 'Resolution', kind: 'select', options: [
       { label: '1920x1080', value: '1920x1080' }, { label: '3840x2160', value: '3840x2160' }, { label: '1280x720', value: '1280x720' },
     ] },
+    { key: 'fps', label: 'FPS', kind: 'number' as const, min: 10, max: 60, step: 5 },
   ]),
   story('chat-feed', 'Chat Feed', 'Collaboration', ChatFeed, { title: 'Chat', maxMessages: 5 }, [
     { key: 'maxMessages', label: 'Max Messages', kind: 'number', min: 3, max: 20, step: 1 },
@@ -798,37 +810,56 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
   ]),
 
   // Energy
-  story('solar-panel', 'Solar Panel', 'Energy', SolarPanel, { title: 'Solar Production', panelCount: 24 }, [
+  story('solar-panel', 'Solar Panel', 'Energy', SolarPanel, { title: 'Solar Production', panelCount: 24, output: 4.8, daily: 28.4, efficiency: 21.3 }, [
     { key: 'panelCount', label: 'Panel Count', kind: 'number', min: 1, max: 100, step: 1 },
+    { key: 'output', label: 'Output (kW)', kind: 'number', min: 0, max: 15, step: 0.1 },
+    { key: 'daily', label: 'Daily Yield (kWh)', kind: 'number', min: 0, max: 85, step: 0.1 },
+    { key: 'efficiency', label: 'Efficiency (%)', kind: 'number', min: 0, max: 100, step: 0.1 },
   ]),
-  story('battery-bank', 'Battery Bank', 'Energy', BatteryBank, { title: 'Battery', capacity: 100 }, [
+  story('battery-bank', 'Battery Bank', 'Energy', BatteryBank, { title: 'Battery', capacity: 100, charge: 72, rate: 1.4 }, [
     { key: 'capacity', label: 'Capacity (kWh)', kind: 'number', min: 10, max: 500, step: 10 },
+    { key: 'charge', label: 'Charge (%)', kind: 'number', min: 0, max: 100, step: 1 },
+    { key: 'rate', label: 'Rate (kW)', kind: 'number', min: -5, max: 5, step: 0.1 },
   ]),
-  story('grid-status', 'Grid Status', 'Energy', GridStatus, { title: 'Grid Status', nominalVoltage: 230 }, [
+  story('grid-status', 'Grid Status', 'Energy', GridStatus, { title: 'Grid Status', nominalVoltage: 230, importW: 320, freq: 50.0, voltage: 230 }, [
     { key: 'nominalVoltage', label: 'Nominal Voltage', kind: 'select', options: [
       { label: '230V', value: '230' }, { label: '120V', value: '120' }, { label: '480V', value: '480' },
     ] },
+    { key: 'importW', label: 'Import (W)', kind: 'number', min: -1000, max: 1000, step: 1 },
+    { key: 'freq', label: 'Frequency (Hz)', kind: 'number', min: 49, max: 51, step: 0.01 },
+    { key: 'voltage', label: 'Voltage (V)', kind: 'number', min: 200, max: 260, step: 1 },
   ]),
-  story('carbon-tracker', 'Carbon Tracker', 'Energy', CarbonTracker, { title: 'CO\u2082 Tracker', unit: 'kg' }, [
+  story('carbon-tracker', 'Carbon Tracker', 'Energy', CarbonTracker, { title: 'CO\u2082 Tracker', unit: 'kg', dailyCO2: 12.4, monthlyCO2: 348, reduction: 23 }, [
     { key: 'unit', label: 'Unit', kind: 'select', options: [
       { label: 'kg', value: 'kg' }, { label: 'lbs', value: 'lbs' }, { label: 'tonnes', value: 'tonnes' },
     ] },
+    { key: 'dailyCO2', label: 'Daily CO\u2082', kind: 'number', min: 0, max: 35, step: 0.1 },
+    { key: 'monthlyCO2', label: 'Monthly CO\u2082', kind: 'number', min: 0, max: 1000, step: 1 },
+    { key: 'reduction', label: 'Reduction (%)', kind: 'number', min: 0, max: 100, step: 1 },
   ]),
-  story('energy-flow', 'Energy Flow', 'Energy', EnergyFlow, { title: 'Energy Flow', showBattery: true }, [
+  story('energy-flow', 'Energy Flow', 'Energy', EnergyFlow, { title: 'Energy Flow', showBattery: true, solarW: 4200, gridW: 800, battW: 1200, loadW: 5800 }, [
     { key: 'showBattery', label: 'Show Battery', kind: 'boolean' },
+    { key: 'solarW', label: 'Solar (W)', kind: 'number', min: 0, max: 12000, step: 100 },
+    { key: 'gridW', label: 'Grid (W)', kind: 'number', min: 0, max: 2400, step: 10 },
+    { key: 'battW', label: 'Battery (W)', kind: 'number', min: 0, max: 3600, step: 10 },
+    { key: 'loadW', label: 'Load (W)', kind: 'number', min: 0, max: 15000, step: 100 },
   ]),
-  story('cost-monitor', 'Cost Monitor', 'Energy', CostMonitor, { title: 'Energy Cost', currency: '$' }, [
+  story('cost-monitor', 'Cost Monitor', 'Energy', CostMonitor, { title: 'Energy Cost', currency: '$', rate: 0.14, dailyCost: 8.42, monthlyCost: 247 }, [
     { key: 'currency', label: 'Currency', kind: 'select', options: [
       { label: 'USD ($)', value: '$' }, { label: 'EUR (\u20AC)', value: '\u20AC' }, { label: 'GBP (\u00A3)', value: '\u00A3' },
     ] },
+    { key: 'rate', label: 'Rate ($/kWh)', kind: 'number', min: 0, max: 0.5, step: 0.01 },
+    { key: 'dailyCost', label: 'Daily Cost ($)', kind: 'number', min: 0, max: 25, step: 0.01 },
+    { key: 'monthlyCost', label: 'Monthly Cost ($)', kind: 'number', min: 0, max: 750, step: 1 },
   ]),
 
   // Security
-  story('threat-map', 'Threat Map', 'Security', ThreatMap, { title: 'Threat Map', refreshInterval: 3000 }, [
+  story('threat-map', 'Threat Map', 'Security', ThreatMap, { title: 'Threat Map', refreshInterval: 3000, liveThreats: 57 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Threat Map', value: 'Threat Map' }, { label: 'Global Threats', value: 'Global Threats' }, { label: 'Threat Overview', value: 'Threat Overview' },
     ] },
     { key: 'refreshInterval', label: 'Refresh (ms)', kind: 'number', min: 1000, max: 10000, step: 500 },
+    { key: 'liveThreats', label: 'Live Threats', kind: 'number' as const, min: 0, max: 200, step: 5 },
   ]),
   story('access-log', 'Access Log', 'Security', AccessLog, { title: 'Access Log', maxEntries: 8 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
@@ -900,19 +931,23 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
       { label: 'Week', value: 'week' }, { label: 'Day', value: 'day' }, { label: 'Month', value: 'month' },
     ] },
   ]),
-  story('proof-of-play', 'Proof of Play', 'Signage', ProofOfPlay, { title: 'Proof of Play', period: 'Today' }, [
+  story('proof-of-play', 'Proof of Play', 'Signage', ProofOfPlay, { title: 'Proof of Play', period: 'Today', plays: 1842, impressions: 24300, completion: 94.2 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Proof of Play', value: 'Proof of Play' }, { label: 'Play Report', value: 'Play Report' }, { label: 'Ad Verification', value: 'Ad Verification' },
     ] },
     { key: 'period', label: 'Period', kind: 'select', options: [
       { label: 'Today', value: 'Today' }, { label: 'This Week', value: 'This Week' }, { label: 'This Month', value: 'This Month' },
     ] },
+    { key: 'plays', label: 'Plays', kind: 'number' as const, min: 0, max: 5000, step: 50 },
+    { key: 'impressions', label: 'Impressions', kind: 'number' as const, min: 0, max: 100000, step: 500 },
+    { key: 'completion', label: 'Completion %', kind: 'number' as const, min: 0, max: 100, step: 1 },
   ]),
-  story('brightness-schedule', 'Brightness Schedule', 'Signage', BrightnessSchedule, { title: 'Brightness', maxBrightness: 100 }, [
+  story('brightness-schedule', 'Brightness Schedule', 'Signage', BrightnessSchedule, { title: 'Brightness', maxBrightness: 100, currentBrightness: 75 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Brightness', value: 'Brightness' }, { label: 'Display Brightness', value: 'Display Brightness' }, { label: 'Backlight', value: 'Backlight' },
     ] },
     { key: 'maxBrightness', label: 'Max Brightness', kind: 'number', min: 50, max: 100, step: 5 },
+    { key: 'currentBrightness', label: 'Current Brightness', kind: 'number' as const, min: 0, max: 100, step: 5 },
   ]),
 
   // Spatial
@@ -928,13 +963,14 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
     ] },
     { key: 'highThreshold', label: 'High Threshold', kind: 'number', min: 50, max: 100, step: 5 },
   ]),
-  story('wayfinding-status', 'Wayfinding Status', 'Spatial', WayfindingStatus, { title: 'Wayfinding', floor: '3F' }, [
+  story('wayfinding-status', 'Wayfinding Status', 'Spatial', WayfindingStatus, { title: 'Wayfinding', floor: '3F', activeRoutes: 12 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Wayfinding', value: 'Wayfinding' }, { label: 'Navigation', value: 'Navigation' }, { label: 'Kiosk Status', value: 'Kiosk Status' },
     ] },
     { key: 'floor', label: 'Floor', kind: 'select', options: [
       { label: '1F', value: '1F' }, { label: '2F', value: '2F' }, { label: '3F', value: '3F' },
     ] },
+    { key: 'activeRoutes', label: 'Active Routes', kind: 'number' as const, min: 0, max: 50, step: 1 },
   ]),
   story('beacon-manager', 'Beacon Manager', 'Spatial', BeaconManager, { title: 'BLE Beacons', lowBatteryThreshold: 20 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
@@ -950,13 +986,18 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
       { label: 'All', value: 'all' }, { label: 'Stationary', value: 'stationary' }, { label: 'Moving', value: 'moving' },
     ] },
   ]),
-  story('environmental-sensor', 'Environmental Sensor', 'Spatial', EnvironmentalSensor, { title: 'Environment', tempUnit: 'C' }, [
+  story('environmental-sensor', 'Environmental Sensor', 'Spatial', EnvironmentalSensor, { title: 'Environment', tempUnit: 'C', temp: 22.4, humidity: 45, co2: 420, noise: 38, light: 450 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Environment', value: 'Environment' }, { label: 'Room Sensors', value: 'Room Sensors' }, { label: 'Air Quality', value: 'Air Quality' },
     ] },
     { key: 'tempUnit', label: 'Temp Unit', kind: 'select', options: [
       { label: 'Celsius', value: 'C' }, { label: 'Fahrenheit', value: 'F' },
     ] },
+    { key: 'temp', label: 'Temperature', kind: 'number' as const, min: -10, max: 50, step: 0.5 },
+    { key: 'humidity', label: 'Humidity %', kind: 'number' as const, min: 0, max: 100, step: 1 },
+    { key: 'co2', label: 'CO2 (ppm)', kind: 'number' as const, min: 300, max: 2000, step: 10 },
+    { key: 'noise', label: 'Noise (dB)', kind: 'number' as const, min: 0, max: 120, step: 1 },
+    { key: 'light', label: 'Light (lux)', kind: 'number' as const, min: 0, max: 2000, step: 10 },
   ]),
 
   // Agriculture
@@ -971,10 +1012,16 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
       { label: 'Gallons', value: 'gal' }, { label: 'Liters', value: 'L' }, { label: 'Cubic Meters', value: 'm\u00B3' },
     ] },
   ]),
-  story('weather-station', 'Weather Station', 'Agriculture', WeatherStation, { title: 'Weather Station', tempUnit: 'C' }, [
+  story('weather-station', 'Weather Station', 'Agriculture', WeatherStation, { title: 'Weather Station', tempUnit: 'C', temp: 24.6, humidity: 62, windSpeed: 12.3, rainfall: 2.4, uvIndex: 6.2, pressure: 1013.2 }, [
     { key: 'tempUnit', label: 'Temp Unit', kind: 'select', options: [
       { label: 'Celsius', value: 'C' }, { label: 'Fahrenheit', value: 'F' },
     ] },
+    { key: 'temp', label: 'Temperature', kind: 'number' as const, min: -10, max: 50, step: 0.5 },
+    { key: 'humidity', label: 'Humidity %', kind: 'number' as const, min: 0, max: 100, step: 1 },
+    { key: 'windSpeed', label: 'Wind Speed', kind: 'number' as const, min: 0, max: 60, step: 0.5 },
+    { key: 'rainfall', label: 'Rainfall mm', kind: 'number' as const, min: 0, max: 50, step: 0.2 },
+    { key: 'uvIndex', label: 'UV Index', kind: 'number' as const, min: 0, max: 12, step: 0.5 },
+    { key: 'pressure', label: 'Pressure hPa', kind: 'number' as const, min: 980, max: 1040, step: 0.5 },
   ]),
   story('crop-health', 'Crop Health', 'Agriculture', CropHealth, { title: 'Crop Health', ndviThreshold: 0.5 }, [
     { key: 'ndviThreshold', label: 'NDVI Warning', kind: 'number', min: 0.1, max: 0.9, step: 0.1 },
@@ -989,8 +1036,11 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
   ]),
 
   // Broadcast
-  story('stream-health', 'Stream Health', 'Broadcast', StreamHealth, { title: 'Stream Health', bitrateTarget: 8000 }, [
+  story('stream-health', 'Stream Health', 'Broadcast', StreamHealth, { title: 'Stream Health', bitrateTarget: 8000, bitrate: 8500, viewers: 12400, frameDrops: 0.12 }, [
     { key: 'bitrateTarget', label: 'Bitrate Target', kind: 'number', min: 2000, max: 20000, step: 1000 },
+    { key: 'bitrate', label: 'Bitrate (kbps)', kind: 'number', min: 1000, max: 20000, step: 500 },
+    { key: 'viewers', label: 'Viewers', kind: 'number', min: 0, max: 100000, step: 1000 },
+    { key: 'frameDrops', label: 'Frame Drops %', kind: 'number', min: 0, max: 5, step: 0.05 },
   ]),
   story('encoder-status', 'Encoder Status', 'Broadcast', EncoderStatus, { title: 'Encoder Status', cpuWarningThreshold: 80 }, [
     { key: 'cpuWarningThreshold', label: 'CPU Warning %', kind: 'number', min: 50, max: 95, step: 5 },
@@ -1004,15 +1054,19 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
   story('playout-schedule', 'Playout Schedule', 'Broadcast', PlayoutSchedule, { title: 'Playout Schedule', maxItems: 6 }, [
     { key: 'maxItems', label: 'Max Items', kind: 'number', min: 3, max: 6, step: 1 },
   ]),
-  story('audio-loudness', 'Audio Loudness', 'Broadcast', AudioLoudness, { title: 'Audio Loudness', standard: 'EBU R128' }, [
+  story('audio-loudness', 'Audio Loudness', 'Broadcast', AudioLoudness, { title: 'Audio Loudness', standard: 'EBU R128', intLufs: -23 }, [
     { key: 'standard', label: 'Standard', kind: 'select', options: [
       { label: 'EBU R128', value: 'EBU R128' }, { label: 'ATSC A/85', value: 'ATSC A/85' }, { label: 'ITU BS.1770', value: 'ITU BS.1770' },
     ] },
+    { key: 'intLufs', label: 'Integrated LUFS', kind: 'number', min: -48, max: 0, step: 0.5 },
   ]),
-  story('caption-monitor', 'Caption Monitor', 'Broadcast', CaptionMonitor, { title: 'Caption Monitor', language: 'EN-US' }, [
+  story('caption-monitor', 'Caption Monitor', 'Broadcast', CaptionMonitor, { title: 'Caption Monitor', language: 'EN-US', wpm: 160, delay: 1.2, accuracy: 97.5 }, [
     { key: 'language', label: 'Language', kind: 'select', options: [
       { label: 'EN-US', value: 'EN-US' }, { label: 'ES-ES', value: 'ES-ES' }, { label: 'FR-FR', value: 'FR-FR' },
     ] },
+    { key: 'wpm', label: 'Words/min', kind: 'number', min: 50, max: 300, step: 10 },
+    { key: 'delay', label: 'Delay (s)', kind: 'number', min: 0, max: 5, step: 0.1 },
+    { key: 'accuracy', label: 'Accuracy %', kind: 'number', min: 50, max: 100, step: 0.5 },
   ]),
 
   // Datacenter
@@ -1028,26 +1082,33 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
   story('bandwidth-pipe', 'Bandwidth', 'Datacenter', BandwidthPipe, { title: 'Bandwidth', highUtilThreshold: 85 }, [
     { key: 'highUtilThreshold', label: 'High Util %', kind: 'number', min: 60, max: 95, step: 5 },
   ]),
-  story('ups-status', 'UPS Status', 'Datacenter', UPSStatus, { title: 'UPS Status', nominalVoltage: 230 }, [
+  story('ups-status', 'UPS Status', 'Datacenter', UPSStatus, { title: 'UPS Status', nominalVoltage: 230, load: 62, runtime: 24, inputV: 230, outputV: 230 }, [
     { key: 'nominalVoltage', label: 'Nominal Voltage', kind: 'select', options: [
       { label: '230V', value: '230' }, { label: '120V', value: '120' }, { label: '208V', value: '208' },
     ] },
+    { key: 'load', label: 'Load (%)', kind: 'number' as const, min: 0, max: 100, step: 1 },
+    { key: 'runtime', label: 'Runtime (min)', kind: 'number' as const, min: 0, max: 60, step: 1 },
+    { key: 'inputV', label: 'Input Voltage', kind: 'number' as const, min: 180, max: 260, step: 1 },
+    { key: 'outputV', label: 'Output Voltage', kind: 'number' as const, min: 180, max: 260, step: 1 },
   ]),
-  story('cooling-efficiency', 'Cooling Efficiency', 'Datacenter', CoolingEfficiency, { title: 'Cooling Efficiency', pueTarget: 1.4 }, [
+  story('cooling-efficiency', 'Cooling Efficiency', 'Datacenter', CoolingEfficiency, { title: 'Cooling Efficiency', pueTarget: 1.4, supplyTemp: 12.4, returnTemp: 22.6 }, [
     { key: 'pueTarget', label: 'PUE Target', kind: 'number', min: 1.0, max: 2.0, step: 0.1 },
+    { key: 'supplyTemp', label: 'Supply Temp (C)', kind: 'number' as const, min: 5, max: 25, step: 0.5 },
+    { key: 'returnTemp', label: 'Return Temp (C)', kind: 'number' as const, min: 15, max: 40, step: 0.5 },
   ]),
   story('patch-panel', 'Patch Panel', 'Datacenter', PatchPanel, { title: 'Patch Panel', portsPerRow: 6 }, [
     { key: 'portsPerRow', label: 'Ports/Row', kind: 'number', min: 3, max: 8, step: 1 },
   ]),
 
   // Education
-  story('classroom-av', 'Classroom AV', 'Education', ClassroomAV, { title: 'Classroom AV', room: 'Room 204', source: 'HDMI' }, [
+  story('classroom-av', 'Classroom AV', 'Education', ClassroomAV, { title: 'Classroom AV', room: 'Room 204', source: 'HDMI', audioLevel: 72 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Classroom AV', value: 'Classroom AV' }, { label: 'Room Controls', value: 'Room Controls' }, { label: 'AV Panel', value: 'AV Panel' },
     ] },
     { key: 'source', label: 'Source', kind: 'select', options: [
       { label: 'HDMI', value: 'HDMI' }, { label: 'Wireless', value: 'Wireless' }, { label: 'Doc Cam', value: 'Doc Cam' },
     ] },
+    { key: 'audioLevel', label: 'Audio Level (%)', kind: 'number' as const, min: 0, max: 100, step: 1 },
   ]),
   story('attendance-board', 'Attendance Board', 'Education', AttendanceBoard, { title: 'Attendance Board', warningThreshold: 75 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
@@ -1067,11 +1128,13 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
     ] },
     { key: 'currentPeriod', label: 'Current Period', kind: 'number', min: 0, max: 7, step: 1 },
   ]),
-  story('library-occupancy', 'Library Occupancy', 'Education', LibraryOccupancy, { title: 'Library Occupancy', capacity: 120 }, [
+  story('library-occupancy', 'Library Occupancy', 'Education', LibraryOccupancy, { title: 'Library Occupancy', capacity: 120, currentOcc: 78, noiseLevel: 38 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Library Occupancy', value: 'Library Occupancy' }, { label: 'Library Status', value: 'Library Status' }, { label: 'Study Space', value: 'Study Space' },
     ] },
     { key: 'capacity', label: 'Capacity', kind: 'number', min: 20, max: 500, step: 10 },
+    { key: 'currentOcc', label: 'Current Occupancy', kind: 'number' as const, min: 0, max: 500, step: 1 },
+    { key: 'noiseLevel', label: 'Noise Level', kind: 'number' as const, min: 0, max: 100, step: 1 },
   ]),
   story('exam-timer', 'Exam Timer', 'Education', ExamTimer, { title: 'Exam Timer', totalMin: 120, elapsedMin: 47 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
@@ -1153,17 +1216,23 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
     ] },
     { key: 'targetMinutes', label: 'Target (min)', kind: 'number', min: 15, max: 60, step: 5 },
   ]),
-  story('check-in-kiosk', 'Check-In / Out', 'Hospitality', CheckInKiosk, { title: 'Check-In / Out', vipCount: 6 }, [
+  story('check-in-kiosk', 'Check-In / Out', 'Hospitality', CheckInKiosk, { title: 'Check-In / Out', vipCount: 6, queueLen: 5, avgTime: 4.2 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Check-In / Out', value: 'Check-In / Out' }, { label: 'Front Desk', value: 'Front Desk' }, { label: 'Reception', value: 'Reception' },
     ] },
     { key: 'vipCount', label: 'VIP Guests', kind: 'number', min: 0, max: 20, step: 1 },
+    { key: 'queueLen', label: 'Queue Length', kind: 'number' as const, min: 0, max: 20, step: 1 },
+    { key: 'avgTime', label: 'Avg Check-in (min)', kind: 'number' as const, min: 1, max: 15, step: 0.5 },
   ]),
-  story('pool-sensors', 'Pool & Spa', 'Hospitality', PoolSensors, { title: 'Pool & Spa', targetTemp: 28 }, [
+  story('pool-sensors', 'Pool & Spa', 'Hospitality', PoolSensors, { title: 'Pool & Spa', targetTemp: 28, waterTemp: 28.2, pH: 7.3, chlorine: 1.4, filterPressure: 12 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Pool & Spa', value: 'Pool & Spa' }, { label: 'Aquatics', value: 'Aquatics' }, { label: 'Pool Monitor', value: 'Pool Monitor' },
     ] },
     { key: 'targetTemp', label: 'Target Temp (\u00B0C)', kind: 'number', min: 20, max: 38, step: 1 },
+    { key: 'waterTemp', label: 'Water Temp (°C)', kind: 'number' as const, min: 15, max: 40, step: 0.1 },
+    { key: 'pH', label: 'pH Level', kind: 'number' as const, min: 6.0, max: 8.5, step: 0.05 },
+    { key: 'chlorine', label: 'Chlorine (ppm)', kind: 'number' as const, min: 0, max: 5, step: 0.1 },
+    { key: 'filterPressure', label: 'Filter PSI', kind: 'number' as const, min: 0, max: 30, step: 1 },
   ]),
 
   // Logistics
@@ -1209,31 +1278,38 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
   ]),
 
   // Manufacturing
-  story('assembly-line', 'Assembly Line', 'Manufacturing', AssemblyLine, { title: 'Assembly Line', targetThroughput: 150 }, [
+  story('assembly-line', 'Assembly Line', 'Manufacturing', AssemblyLine, { title: 'Assembly Line', targetThroughput: 150, throughput: 142 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Assembly Line', value: 'Assembly Line' }, { label: 'Production Line', value: 'Production Line' }, { label: 'Line Status', value: 'Line Status' },
     ] },
     { key: 'targetThroughput', label: 'Target Throughput', kind: 'number', min: 50, max: 500, step: 10 },
+    { key: 'throughput', label: 'Throughput', kind: 'number' as const, min: 50, max: 300, step: 1 },
   ]),
-  story('oee-gauge', 'OEE Monitor', 'Manufacturing', OEEGauge, { title: 'OEE Monitor', oeeTarget: 85 }, [
+  story('oee-gauge', 'OEE Monitor', 'Manufacturing', OEEGauge, { title: 'OEE Monitor', oeeTarget: 85, availability: 91.2, performance: 84.7, quality: 97.3 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'OEE Monitor', value: 'OEE Monitor' }, { label: 'OEE Dashboard', value: 'OEE Dashboard' }, { label: 'Efficiency Gauge', value: 'Efficiency Gauge' },
     ] },
     { key: 'oeeTarget', label: 'OEE Target %', kind: 'number', min: 50, max: 100, step: 5 },
+    { key: 'availability', label: 'Availability %', kind: 'number' as const, min: 50, max: 100, step: 0.1 },
+    { key: 'performance', label: 'Performance %', kind: 'number' as const, min: 50, max: 100, step: 0.1 },
+    { key: 'quality', label: 'Quality %', kind: 'number' as const, min: 50, max: 100, step: 0.1 },
   ]),
-  story('quality-gate', 'Quality Gate', 'Manufacturing', QualityGate, { title: 'Quality Gate', defectTarget: 3 }, [
+  story('quality-gate', 'Quality Gate', 'Manufacturing', QualityGate, { title: 'Quality Gate', defectTarget: 3, defectRate: 2.48 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Quality Gate', value: 'Quality Gate' }, { label: 'QC Station', value: 'QC Station' }, { label: 'Inspection Gate', value: 'Inspection Gate' },
     ] },
     { key: 'defectTarget', label: 'Defect Target %', kind: 'number', min: 1, max: 10, step: 0.5 },
+    { key: 'defectRate', label: 'Defect Rate %', kind: 'number' as const, min: 0, max: 15, step: 0.1 },
   ]),
-  story('plc-status', 'PLC Controller', 'Manufacturing', PLCStatus, { title: 'PLC Controller', plcModel: 'Siemens S7-1500' }, [
+  story('plc-status', 'PLC Controller', 'Manufacturing', PLCStatus, { title: 'PLC Controller', plcModel: 'Siemens S7-1500', cycleTime: 24.6, scanRate: 4.2 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'PLC Controller', value: 'PLC Controller' }, { label: 'PLC Status', value: 'PLC Status' }, { label: 'Controller Panel', value: 'Controller Panel' },
     ] },
     { key: 'plcModel', label: 'PLC Model', kind: 'select', options: [
       { label: 'Siemens S7-1500', value: 'Siemens S7-1500' }, { label: 'Allen-Bradley CompactLogix', value: 'Allen-Bradley CompactLogix' }, { label: 'Mitsubishi FX5U', value: 'Mitsubishi FX5U' },
     ] },
+    { key: 'cycleTime', label: 'Cycle Time (ms)', kind: 'number' as const, min: 5, max: 100, step: 0.1 },
+    { key: 'scanRate', label: 'Scan Rate (ms)', kind: 'number' as const, min: 1, max: 20, step: 0.1 },
   ]),
   story('tank-level', 'Tank Levels', 'Manufacturing', TankLevel, { title: 'Tank Levels', lowLevelThreshold: 30 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
@@ -1241,11 +1317,14 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
     ] },
     { key: 'lowLevelThreshold', label: 'Low Level %', kind: 'number', min: 10, max: 50, step: 5 },
   ]),
-  story('conveyor-speed', 'Conveyor Belt', 'Manufacturing', ConveyorSpeed, { title: 'Conveyor Belt', targetSpeed: 2.0 }, [
+  story('conveyor-speed', 'Conveyor Belt', 'Manufacturing', ConveyorSpeed, { title: 'Conveyor Belt', targetSpeed: 2.0, speed: 1.82, tension: 342, itemsMin: 48 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Conveyor Belt', value: 'Conveyor Belt' }, { label: 'Belt Monitor', value: 'Belt Monitor' }, { label: 'Conveyor Status', value: 'Conveyor Status' },
     ] },
     { key: 'targetSpeed', label: 'Target Speed (m/s)', kind: 'number', min: 0.5, max: 5.0, step: 0.1 },
+    { key: 'speed', label: 'Speed (m/s)', kind: 'number' as const, min: 0.5, max: 5.0, step: 0.01 },
+    { key: 'tension', label: 'Tension (N)', kind: 'number' as const, min: 100, max: 500, step: 1 },
+    { key: 'itemsMin', label: 'Items/min', kind: 'number' as const, min: 10, max: 100, step: 1 },
   ]),
   story('shift-schedule', 'Shift Schedule', 'Manufacturing', ShiftSchedule, { title: 'Shift Schedule', shiftCount: 3 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
@@ -1255,13 +1334,15 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
   ]),
 
   // Retail
-  story('pos-analytics', 'POS Analytics', 'Retail', POSAnalytics, { title: 'POS Analytics', currency: '$' }, [
+  story('pos-analytics', 'POS Analytics', 'Retail', POSAnalytics, { title: 'POS Analytics', currency: '$', revenue: 24380, avgTx: 28.8 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'POS Analytics', value: 'POS Analytics' }, { label: 'Sales Dashboard', value: 'Sales Dashboard' }, { label: 'Transaction Monitor', value: 'Transaction Monitor' },
     ] },
     { key: 'currency', label: 'Currency', kind: 'select', options: [
       { label: 'USD ($)', value: '$' }, { label: 'EUR (\u20AC)', value: '\u20AC' }, { label: 'GBP (\u00A3)', value: '\u00A3' },
     ] },
+    { key: 'revenue', label: 'Revenue', kind: 'number' as const, min: 5000, max: 100000, step: 1000 },
+    { key: 'avgTx', label: 'Avg Transaction', kind: 'number' as const, min: 5, max: 100, step: 0.5 },
   ]),
   story('inventory-level', 'Inventory Levels', 'Retail', InventoryLevel, { title: 'Inventory Levels', showReorderLine: true }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
@@ -1269,17 +1350,22 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
     ] },
     { key: 'showReorderLine', label: 'Show Reorder Line', kind: 'boolean' },
   ]),
-  story('foot-traffic', 'Foot Traffic', 'Retail', FootTraffic, { title: 'Foot Traffic', maxCapacity: 300 }, [
+  story('foot-traffic', 'Foot Traffic', 'Retail', FootTraffic, { title: 'Foot Traffic', maxCapacity: 300, occupancy: 186 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Foot Traffic', value: 'Foot Traffic' }, { label: 'Store Traffic', value: 'Store Traffic' }, { label: 'Visitor Counter', value: 'Visitor Counter' },
     ] },
     { key: 'maxCapacity', label: 'Max Capacity', kind: 'number', min: 50, max: 1000, step: 50 },
+    { key: 'occupancy', label: 'Occupancy', kind: 'number' as const, min: 0, max: 500, step: 5 },
   ]),
-  story('queue-monitor', 'Queue Monitor', 'Retail', QueueMonitor, { title: 'Queue Monitor', longQueueThreshold: 5 }, [
+  story('queue-monitor', 'Queue Monitor', 'Retail', QueueMonitor, { title: 'Queue Monitor', longQueueThreshold: 5, r1: 3, r2: 5, r3: 1, r4: 0 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Queue Monitor', value: 'Queue Monitor' }, { label: 'Checkout Queues', value: 'Checkout Queues' }, { label: 'Wait Times', value: 'Wait Times' },
     ] },
     { key: 'longQueueThreshold', label: 'Long Queue At', kind: 'number', min: 2, max: 10, step: 1 },
+    { key: 'r1', label: 'Register 1', kind: 'number' as const, min: 0, max: 15, step: 1 },
+    { key: 'r2', label: 'Register 2', kind: 'number' as const, min: 0, max: 15, step: 1 },
+    { key: 'r3', label: 'Register 3', kind: 'number' as const, min: 0, max: 15, step: 1 },
+    { key: 'r4', label: 'Register 4', kind: 'number' as const, min: 0, max: 15, step: 1 },
   ]),
   story('price-tag', 'Dynamic Pricing', 'Retail', PriceTag, { title: 'Dynamic Pricing', currency: '$' }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
@@ -1297,15 +1383,16 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
       { label: 'All', value: 'all' }, { label: 'High Only', value: 'high' }, { label: 'Medium+', value: 'medium' },
     ] },
   ]),
-  story('loyalty-dash', 'Loyalty Program', 'Retail', LoyaltyDash, { title: 'Loyalty Program', redemptionTarget: 70 }, [
+  story('loyalty-dash', 'Loyalty Program', 'Retail', LoyaltyDash, { title: 'Loyalty Program', redemptionTarget: 70, pointsDist: 284000 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Loyalty Program', value: 'Loyalty Program' }, { label: 'Rewards Dashboard', value: 'Rewards Dashboard' }, { label: 'Member Status', value: 'Member Status' },
     ] },
     { key: 'redemptionTarget', label: 'Redemption Target %', kind: 'number', min: 30, max: 100, step: 5 },
+    { key: 'pointsDist', label: 'Points Distributed', kind: 'number' as const, min: 50000, max: 1000000, step: 10000 },
   ]),
 
   // Smart Building
-  story('hvac-zone', 'HVAC Zone', 'Smart Building', HVACZone, { title: 'HVAC Zone', zone: 'Zone A — Lobby', setpoint: 22, mode: 'auto' }, [
+  story('hvac-zone', 'HVAC Zone', 'Smart Building', HVACZone, { title: 'HVAC Zone', zone: 'Zone A — Lobby', setpoint: 22, mode: 'auto', humidity: 44, fanSpeed: 65 }, [
     { key: 'setpoint', label: 'Setpoint (°C)', kind: 'number', min: 16, max: 28, step: 1 },
     { key: 'mode', label: 'Mode', kind: 'select', options: [
       { label: 'Auto', value: 'auto' }, { label: 'Heat', value: 'heat' }, { label: 'Cool', value: 'cool' },
@@ -1317,12 +1404,12 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
   story('parking-occupancy', 'Parking Occupancy', 'Smart Building', ParkingOccupancy, { title: 'Parking Occupancy', warningThreshold: 65 }, [
     { key: 'warningThreshold', label: 'Warning %', kind: 'number', min: 40, max: 90, step: 5 },
   ]),
-  story('water-meter', 'Water Consumption', 'Smart Building', WaterMeter, { title: 'Water Consumption', flowUnit: 'L/min' }, [
+  story('water-meter', 'Water Consumption', 'Smart Building', WaterMeter, { title: 'Water Consumption', flowUnit: 'L/min', flowRate: 3.8, dailyUsage: 2840, monthlyUsage: 68400, pressure: 4.2 }, [
     { key: 'flowUnit', label: 'Flow Unit', kind: 'select', options: [
       { label: 'L/min', value: 'L/min' }, { label: 'gal/min', value: 'gal/min' }, { label: 'm³/hr', value: 'm³/hr' },
     ] },
   ]),
-  story('lighting-scene', 'Lighting Control', 'Smart Building', LightingScene, { title: 'Lighting Control', defaultScene: 'Meeting' }, [
+  story('lighting-scene', 'Lighting Control', 'Smart Building', LightingScene, { title: 'Lighting Control', defaultScene: 'Meeting', totalPower: 4.2 }, [
     { key: 'defaultScene', label: 'Default Scene', kind: 'select', options: [
       { label: 'Meeting', value: 'Meeting' }, { label: 'Presentation', value: 'Presentation' }, { label: 'Off', value: 'Off' },
     ] },
@@ -1345,13 +1432,15 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
       { label: 'Knots', value: 'kt' }, { label: 'km/h', value: 'km/h' }, { label: 'mph', value: 'mph' },
     ] },
   ]),
-  story('baggage-flow', 'Baggage Flow', 'Aerospace', BaggageFlow, { title: 'Baggage System', rateUnit: 'bags/min' }, [
+  story('baggage-flow', 'Baggage Flow', 'Aerospace', BaggageFlow, { title: 'Baggage System', rateUnit: 'bags/min', currentRate: 142 }, [
     { key: 'rateUnit', label: 'Rate Unit', kind: 'select', options: [
       { label: 'bags/min', value: 'bags/min' }, { label: 'bags/hr', value: 'bags/hr' },
     ] },
+    { key: 'currentRate', label: 'Current Rate', kind: 'number' as const, min: 0, max: 300, step: 5 },
   ]),
-  story('fuel-farm', 'Fuel Farm', 'Aerospace', FuelFarm, { title: 'Fuel Farm', lowLevelThreshold: 30 }, [
-    { key: 'lowLevelThreshold', label: 'Low Level %', kind: 'number', min: 10, max: 50, step: 5 },
+  story('fuel-farm', 'Fuel Farm', 'Aerospace', FuelFarm, { title: 'Fuel Farm', lowLevelThreshold: 30, dailyConsumption: 42.5 }, [
+    { key: 'lowLevelThreshold', label: 'Low Level %', kind: 'number' as const, min: 10, max: 50, step: 5 },
+    { key: 'dailyConsumption', label: 'Daily Consumption (kL)', kind: 'number' as const, min: 10, max: 100, step: 2.5 },
   ]),
   story('aircraft-maintenance', 'Aircraft Maintenance', 'Aerospace', AircraftMaintenance, { title: 'Maintenance Schedule', maxAircraft: 5 }, [
     { key: 'maxAircraft', label: 'Max Aircraft', kind: 'number', min: 2, max: 5, step: 1 },
@@ -1361,16 +1450,22 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
   ]),
 
   // Pharmaceutical
-  story('clean-room', 'Clean Room', 'Pharmaceutical', CleanRoom, { title: 'Clean Room Monitor', particleLimit: 100 }, [
-    { key: 'particleLimit', label: 'Particle Limit', kind: 'number', min: 50, max: 1000, step: 50 },
+  story('clean-room', 'Clean Room', 'Pharmaceutical', CleanRoom, { title: 'Clean Room Monitor', particleLimit: 100, particleCount: 85, diffPressure: 12.5, temperature: 21.0, humidity: 45, prevParticle: 90 }, [
+    { key: 'particleLimit', label: 'Particle Limit', kind: 'number' as const, min: 50, max: 1000, step: 50 },
+    { key: 'particleCount', label: 'Particle Count', kind: 'number' as const, min: 10, max: 500, step: 5 },
+    { key: 'diffPressure', label: 'Diff Pressure (Pa)', kind: 'number' as const, min: 5, max: 25, step: 0.5 },
+    { key: 'temperature', label: 'Temperature (°C)', kind: 'number' as const, min: 18, max: 26, step: 0.5 },
+    { key: 'humidity', label: 'Humidity (% RH)', kind: 'number' as const, min: 30, max: 70, step: 1 },
+    { key: 'prevParticle', label: 'Prev Particle Count', kind: 'number' as const, min: 10, max: 500, step: 5 },
   ]),
   story('batch-reactor', 'Batch Reactor', 'Pharmaceutical', BatchReactor, { title: 'Batch Reactors', tempWarning: 60 }, [
     { key: 'tempWarning', label: 'Temp Warning (°C)', kind: 'number', min: 40, max: 100, step: 5 },
   ]),
-  story('chromatograph', 'HPLC Chromatograph', 'Pharmaceutical', Chromatograph, { title: 'HPLC Chromatogram', method: 'USP-42' }, [
+  story('chromatograph', 'HPLC Chromatograph', 'Pharmaceutical', Chromatograph, { title: 'HPLC Chromatogram', method: 'USP-42', runTime: 18.4 }, [
     { key: 'method', label: 'Method', kind: 'select', options: [
       { label: 'USP-42', value: 'USP-42' }, { label: 'EP-10', value: 'EP-10' }, { label: 'JP-XVIII', value: 'JP-XVIII' },
     ] },
+    { key: 'runTime', label: 'Run Time (min)', kind: 'number' as const, min: 5, max: 30, step: 0.2 },
   ]),
   story('cold-chain', 'Cold Chain', 'Pharmaceutical', ColdChain, { title: 'Cold Chain Monitor', tempUnit: 'C' }, [
     { key: 'tempUnit', label: 'Temp Unit', kind: 'select', options: [
@@ -1397,11 +1492,12 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
     ] },
     { key: 'binCount', label: 'Frequency Bins', kind: 'number', min: 16, max: 64, step: 8 },
   ]),
-  story('subscriber-metrics', 'Subscriber Metrics', 'Telecom', SubscriberMetrics, { title: 'Subscribers', arpu: 42.50 }, [
+  story('subscriber-metrics', 'Subscriber Metrics', 'Telecom', SubscriberMetrics, { title: 'Subscribers', arpu: 42.50, activeSessions: 184200 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Subscribers', value: 'Subscribers' }, { label: 'Customer Base', value: 'Customer Base' }, { label: 'User Metrics', value: 'User Metrics' },
     ] },
     { key: 'arpu', label: 'ARPU ($)', kind: 'number', min: 10, max: 100, step: 5 },
+    { key: 'activeSessions', label: 'Active Sessions', kind: 'number', min: 0, max: 500000, step: 5000 },
   ]),
   story('network-slicing', 'Network Slicing', 'Telecom', NetworkSlicing, { title: '5G Network Slices', slaTarget: 99 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
@@ -1415,11 +1511,15 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
     ] },
     { key: 'dataWarning', label: 'Data Warning %', kind: 'number', min: 50, max: 95, step: 5 },
   ]),
-  story('call-quality', 'Call Quality', 'Telecom', CallQuality, { title: 'Call Quality', mosTarget: 4 }, [
+  story('call-quality', 'Call Quality', 'Telecom', CallQuality, { title: 'Call Quality', mosTarget: 4, mos: 4.2, jitter: 12, latency: 28, packetLoss: 0.3 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Call Quality', value: 'Call Quality' }, { label: 'Voice Quality', value: 'Voice Quality' }, { label: 'QoS Monitor', value: 'QoS Monitor' },
     ] },
     { key: 'mosTarget', label: 'MOS Target', kind: 'number', min: 2, max: 5, step: 0.5 },
+    { key: 'mos', label: 'MOS Score', kind: 'number', min: 1, max: 5, step: 0.1 },
+    { key: 'jitter', label: 'Jitter (ms)', kind: 'number', min: 0, max: 50, step: 1 },
+    { key: 'latency', label: 'Latency (ms)', kind: 'number', min: 0, max: 200, step: 5 },
+    { key: 'packetLoss', label: 'Packet Loss %', kind: 'number', min: 0, max: 5, step: 0.1 },
   ]),
 
   // Maritime
@@ -1437,13 +1537,14 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
     ] },
     { key: 'capacityWarning', label: 'Capacity Warning %', kind: 'number', min: 60, max: 100, step: 5 },
   ]),
-  story('tide-monitor', 'Tide Monitor', 'Maritime', TideMonitor, { title: 'Tide Monitor', depthUnit: 'meters' }, [
+  story('tide-monitor', 'Tide Monitor', 'Maritime', TideMonitor, { title: 'Tide Monitor', depthUnit: 'meters', tideLevel: 3.8 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Tide Monitor', value: 'Tide Monitor' }, { label: 'Tidal Data', value: 'Tidal Data' }, { label: 'Water Level', value: 'Water Level' },
     ] },
     { key: 'depthUnit', label: 'Depth Unit', kind: 'select', options: [
       { label: 'Meters', value: 'meters' }, { label: 'Feet', value: 'feet' }, { label: 'Fathoms', value: 'fathoms' },
     ] },
+    { key: 'tideLevel', label: 'Tide Level (m)', kind: 'number' as const, min: 0, max: 8, step: 0.1 },
   ]),
   story('crane-ops', 'Crane Operations', 'Maritime', CraneOps, { title: 'Quay Cranes', efficiencyTarget: 90 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
@@ -1489,25 +1590,34 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
       { label: 'All', value: 'all' }, { label: 'Critical', value: 'critical' }, { label: 'Low', value: 'low' },
     ] },
   ]),
-  story('weather-site', 'Site Weather', 'Construction', WeatherSite, { title: 'Site Weather', tempUnit: 'F' }, [
+  story('weather-site', 'Site Weather', 'Construction', WeatherSite, { title: 'Site Weather', tempUnit: 'F', temp: 82, wind: 18, gusts: 26, humidity: 54, precip: 12 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Site Weather', value: 'Site Weather' }, { label: 'Weather Station', value: 'Weather Station' }, { label: 'Field Conditions', value: 'Field Conditions' },
     ] },
     { key: 'tempUnit', label: 'Temp Unit', kind: 'select', options: [
       { label: 'Fahrenheit', value: 'F' }, { label: 'Celsius', value: 'C' },
     ] },
+    { key: 'temp', label: 'Temperature', kind: 'number' as const, min: 30, max: 120, step: 1 },
+    { key: 'wind', label: 'Wind mph', kind: 'number' as const, min: 0, max: 60, step: 1 },
+    { key: 'gusts', label: 'Gusts mph', kind: 'number' as const, min: 0, max: 80, step: 1 },
+    { key: 'humidity', label: 'Humidity %', kind: 'number' as const, min: 0, max: 100, step: 1 },
+    { key: 'precip', label: 'Precip %', kind: 'number' as const, min: 0, max: 100, step: 1 },
   ]),
-  story('safety-board', 'Safety Board', 'Construction', SafetyBoard, { title: 'Safety Board', incidentGoal: 0 }, [
+  story('safety-board', 'Safety Board', 'Construction', SafetyBoard, { title: 'Safety Board', incidentGoal: 0, workersOnSite: 84 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Safety Board', value: 'Safety Board' }, { label: 'Safety Dashboard', value: 'Safety Dashboard' }, { label: 'EHS Board', value: 'EHS Board' },
     ] },
     { key: 'incidentGoal', label: 'Incident Goal', kind: 'number', min: 0, max: 10, step: 1 },
+    { key: 'workersOnSite', label: 'Workers On Site', kind: 'number' as const, min: 0, max: 200, step: 1 },
   ]),
-  story('concrete-monitor', 'Concrete Monitor', 'Construction', ConcreteMonitor, { title: 'Concrete Monitor', targetPSI: 4000 }, [
+  story('concrete-monitor', 'Concrete Monitor', 'Construction', ConcreteMonitor, { title: 'Concrete Monitor', targetPSI: 4000, slump: 4.2, airContent: 5.8, concreteTemp: 72 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Concrete Monitor', value: 'Concrete Monitor' }, { label: 'Pour Monitor', value: 'Pour Monitor' }, { label: 'Cure Tracker', value: 'Cure Tracker' },
     ] },
     { key: 'targetPSI', label: 'Target PSI', kind: 'number', min: 2000, max: 8000, step: 500 },
+    { key: 'slump', label: 'Slump in', kind: 'number' as const, min: 1, max: 8, step: 0.1 },
+    { key: 'airContent', label: 'Air Content %', kind: 'number' as const, min: 1, max: 10, step: 0.1 },
+    { key: 'concreteTemp', label: 'Concrete Temp F', kind: 'number' as const, min: 40, max: 110, step: 1 },
   ]),
   story('equipment-fleet', 'Equipment Fleet', 'Construction', EquipmentFleet, { title: 'Equipment Fleet', lowFuelThreshold: 25 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
@@ -1517,11 +1627,14 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
   ]),
 
   // ── Mining ──────────────────────────────────────────────────────────
-  story('mine-shaft-depth', 'Mine Shaft Depth', 'Mining', MineShaftDepth, { title: 'Mine Shaft', maxDepth: 800 }, [
+  story('mine-shaft-depth', 'Mine Shaft Depth', 'Mining', MineShaftDepth, { title: 'Mine Shaft', maxDepth: 800, currentDepth: 520, temperature: 34, humidity: 78 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Mine Shaft', value: 'Mine Shaft' }, { label: 'Shaft Monitor', value: 'Shaft Monitor' }, { label: 'Depth Tracker', value: 'Depth Tracker' },
     ] },
     { key: 'maxDepth', label: 'Max Depth (m)', kind: 'number', min: 200, max: 2000, step: 100 },
+    { key: 'currentDepth', label: 'Current Depth (m)', kind: 'number', min: 0, max: 800, step: 10 },
+    { key: 'temperature', label: 'Temperature (°C)', kind: 'number', min: 20, max: 50, step: 1 },
+    { key: 'humidity', label: 'Humidity (%)', kind: 'number', min: 40, max: 100, step: 1 },
   ]),
   story('ore-grade', 'Ore Grade Analyzer', 'Mining', OreGradeAnalyzer, { title: 'Ore Grade', gradeThreshold: 65 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
@@ -1529,17 +1642,23 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
     ] },
     { key: 'gradeThreshold', label: 'Threshold %', kind: 'number', min: 30, max: 95, step: 5 },
   ]),
-  story('ventilation-fan', 'Ventilation Fan', 'Mining', VentilationFan, { title: 'Ventilation', rpmTarget: 1200 }, [
+  story('ventilation-fan', 'Ventilation Fan', 'Mining', VentilationFan, { title: 'Ventilation', rpmTarget: 1200, airflow: 42, power: 18.5 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Ventilation', value: 'Ventilation' }, { label: 'Fan Status', value: 'Fan Status' }, { label: 'Air Flow', value: 'Air Flow' },
     ] },
     { key: 'rpmTarget', label: 'Target RPM', kind: 'number', min: 600, max: 2400, step: 100 },
+    { key: 'airflow', label: 'Airflow (m³/s)', kind: 'number', min: 0, max: 100, step: 1 },
+    { key: 'power', label: 'Power (kW)', kind: 'number', min: 0, max: 50, step: 0.5 },
   ]),
-  story('conveyor-load', 'Conveyor Load', 'Mining', ConveyorLoad, { title: 'Conveyor Load', capacityWarning: 80 }, [
+  story('conveyor-load', 'Conveyor Load', 'Mining', ConveyorLoad, { title: 'Conveyor Load', capacityWarning: 80, loadPct: 68, speed: 2.4, throughput: 340, motorTemp: 62 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Conveyor Load', value: 'Conveyor Load' }, { label: 'Belt Status', value: 'Belt Status' }, { label: 'Load Monitor', value: 'Load Monitor' },
     ] },
     { key: 'capacityWarning', label: 'Warning %', kind: 'number', min: 50, max: 95, step: 5 },
+    { key: 'loadPct', label: 'Load (%)', kind: 'number', min: 0, max: 100, step: 1 },
+    { key: 'speed', label: 'Speed (m/s)', kind: 'number', min: 0, max: 5, step: 0.1 },
+    { key: 'throughput', label: 'Throughput (t/h)', kind: 'number', min: 0, max: 600, step: 10 },
+    { key: 'motorTemp', label: 'Motor Temp (°C)', kind: 'number', min: 30, max: 100, step: 1 },
   ]),
   story('blast-sequencer', 'Blast Sequencer', 'Mining', BlastSequencer, { title: 'Blast Sequence', countdown: 30 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
@@ -1547,13 +1666,17 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
     ] },
     { key: 'countdown', label: 'Countdown (s)', kind: 'number', min: 10, max: 120, step: 5 },
   ]),
-  story('cage-winder', 'Cage Winder', 'Mining', CageWinder, { title: 'Cage Winder', speedUnit: 'm/s' }, [
+  story('cage-winder', 'Cage Winder', 'Mining', CageWinder, { title: 'Cage Winder', speedUnit: 'm/s', speed: 8.2, depth: 420, loadWeight: 12.4, ropeStress: 62 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Cage Winder', value: 'Cage Winder' }, { label: 'Hoist System', value: 'Hoist System' }, { label: 'Winder Control', value: 'Winder Control' },
     ] },
     { key: 'speedUnit', label: 'Speed Unit', kind: 'select', options: [
       { label: 'm/s', value: 'm/s' }, { label: 'ft/min', value: 'ft/min' },
     ] },
+    { key: 'speed', label: 'Speed', kind: 'number', min: 0, max: 14, step: 0.1 },
+    { key: 'depth', label: 'Depth (m)', kind: 'number', min: 0, max: 800, step: 10 },
+    { key: 'loadWeight', label: 'Load Weight (t)', kind: 'number', min: 0, max: 25, step: 0.1 },
+    { key: 'ropeStress', label: 'Rope Stress (%)', kind: 'number', min: 0, max: 100, step: 1 },
   ]),
 
   // ── Water Treatment ─────────────────────────────────────────────────
@@ -1565,11 +1688,13 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
       { label: 'L/min', value: 'L/min' }, { label: 'GPM', value: 'GPM' }, { label: 'm³/h', value: 'm³/h' },
     ] },
   ]),
-  story('chemical-dosing', 'Chemical Dosing', 'Water Treatment', ChemicalDosing, { title: 'Chemical Dosing', phTarget: 7.0 }, [
+  story('chemical-dosing', 'Chemical Dosing', 'Water Treatment', ChemicalDosing, { title: 'Chemical Dosing', phTarget: 7.0, chlorine: 1.2, fluoride: 0.7 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Chemical Dosing', value: 'Chemical Dosing' }, { label: 'pH Control', value: 'pH Control' }, { label: 'Dosing System', value: 'Dosing System' },
     ] },
-    { key: 'phTarget', label: 'pH Target', kind: 'number', min: 5, max: 9, step: 0.5 },
+    { key: 'phTarget', label: 'pH Target', kind: 'number' as const, min: 5, max: 9, step: 0.5 },
+    { key: 'chlorine', label: 'Chlorine (ppm)', kind: 'number' as const, min: 0, max: 3, step: 0.1 },
+    { key: 'fluoride', label: 'Fluoride (ppm)', kind: 'number' as const, min: 0, max: 2, step: 0.05 },
   ]),
   story('filtration-bank', 'Filtration Bank', 'Water Treatment', FiltrationBank, { title: 'Filtration Bank', stageCount: 4 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
@@ -1583,11 +1708,12 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
     ] },
     { key: 'tankCount', label: 'Tanks', kind: 'number', min: 1, max: 6, step: 1 },
   ]),
-  story('turbidity-meter', 'Turbidity Meter', 'Water Treatment', TurbidityMeter, { title: 'Turbidity', ntuLimit: 4 }, [
+  story('turbidity-meter', 'Turbidity Meter', 'Water Treatment', TurbidityMeter, { title: 'Turbidity', ntuLimit: 4, ntu: 2.1 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Turbidity', value: 'Turbidity' }, { label: 'Water Clarity', value: 'Water Clarity' }, { label: 'NTU Monitor', value: 'NTU Monitor' },
     ] },
-    { key: 'ntuLimit', label: 'NTU Limit', kind: 'number', min: 1, max: 10, step: 1 },
+    { key: 'ntuLimit', label: 'NTU Limit', kind: 'number' as const, min: 1, max: 10, step: 1 },
+    { key: 'ntu', label: 'NTU Reading', kind: 'number' as const, min: 0, max: 10, step: 0.1 },
   ]),
   story('pump-station', 'Pump Station', 'Water Treatment', PumpStation, { title: 'Pump Station', pressureUnit: 'PSI' }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
@@ -1611,11 +1737,13 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
     ] },
     { key: 'torqueLimit', label: 'Limit (Nm)', kind: 'number', min: 20, max: 500, step: 10 },
   ]),
-  story('vision-feed', 'Vision Feed', 'Robotics', VisionFeed, { title: 'Vision Feed', confidence: 85 }, [
+  story('vision-feed', 'Vision Feed', 'Robotics', VisionFeed, { title: 'Vision Feed', confidence: 85, fps: 29.8, detections: 3 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Vision Feed', value: 'Vision Feed' }, { label: 'Camera View', value: 'Camera View' }, { label: 'Object Detection', value: 'Object Detection' },
     ] },
     { key: 'confidence', label: 'Confidence %', kind: 'number', min: 50, max: 99, step: 5 },
+    { key: 'fps', label: 'FPS', kind: 'number' as const, min: 1, max: 60, step: 0.5 },
+    { key: 'detections', label: 'Detections', kind: 'number' as const, min: 0, max: 20, step: 1 },
   ]),
   story('task-queue', 'Task Queue', 'Robotics', TaskQueue, { title: 'Task Queue', maxTasks: 8 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
@@ -1623,45 +1751,56 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
     ] },
     { key: 'maxTasks', label: 'Max Tasks', kind: 'number', min: 4, max: 16, step: 2 },
   ]),
-  story('gripper-status', 'Gripper Status', 'Robotics', GripperStatus, { title: 'Gripper', forceUnit: 'N' }, [
+  story('gripper-status', 'Gripper Status', 'Robotics', GripperStatus, { title: 'Gripper', forceUnit: 'N', force: 24.6 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Gripper', value: 'Gripper' }, { label: 'End Effector', value: 'End Effector' }, { label: 'Grip Control', value: 'Grip Control' },
     ] },
     { key: 'forceUnit', label: 'Force Unit', kind: 'select', options: [
       { label: 'N', value: 'N' }, { label: 'lbf', value: 'lbf' },
     ] },
+    { key: 'force', label: 'Grip Force', kind: 'number' as const, min: 0, max: 50, step: 0.5 },
   ]),
-  story('cycle-counter', 'Cycle Counter', 'Robotics', CycleCounter, { title: 'Cycle Counter', targetCycles: 10000 }, [
+  story('cycle-counter', 'Cycle Counter', 'Robotics', CycleCounter, { title: 'Cycle Counter', targetCycles: 10000, cycleRate: 12.4, uptime: 98.7 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Cycle Counter', value: 'Cycle Counter' }, { label: 'Production Count', value: 'Production Count' }, { label: 'Cycle Tracker', value: 'Cycle Tracker' },
     ] },
     { key: 'targetCycles', label: 'Target', kind: 'number', min: 1000, max: 50000, step: 1000 },
+    { key: 'cycleRate', label: 'Cycle Rate (/min)', kind: 'number' as const, min: 0, max: 30, step: 0.5 },
+    { key: 'uptime', label: 'Uptime %', kind: 'number' as const, min: 0, max: 100, step: 0.1 },
   ]),
 
   // ── Nuclear ─────────────────────────────────────────────────────────
-  story('reactor-status', 'Reactor Status', 'Nuclear', ReactorStatus, { title: 'Reactor Status', powerLevel: 85 }, [
+  story('reactor-status', 'Reactor Status', 'Nuclear', ReactorStatus, { title: 'Reactor Status', powerLevel: 85, temp: 315 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Reactor Status', value: 'Reactor Status' }, { label: 'Core Monitor', value: 'Core Monitor' }, { label: 'Power Plant', value: 'Power Plant' },
     ] },
     { key: 'powerLevel', label: 'Power %', kind: 'number', min: 0, max: 100, step: 5 },
+    { key: 'temp', label: 'Core Temp (\u00b0C)', kind: 'number' as const, min: 200, max: 500, step: 5 },
   ]),
-  story('cooling-loop', 'Cooling Loop', 'Nuclear', CoolingLoop, { title: 'Cooling Loop', flowWarning: 85 }, [
+  story('cooling-loop', 'Cooling Loop', 'Nuclear', CoolingLoop, { title: 'Cooling Loop', flowWarning: 85, flowRate: 92, inletTemp: 285, outletTemp: 320, pressure: 155 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Cooling Loop', value: 'Cooling Loop' }, { label: 'Coolant System', value: 'Coolant System' }, { label: 'Heat Exchanger', value: 'Heat Exchanger' },
     ] },
     { key: 'flowWarning', label: 'Warning %', kind: 'number', min: 50, max: 95, step: 5 },
+    { key: 'flowRate', label: 'Flow Rate %', kind: 'number' as const, min: 0, max: 100, step: 1 },
+    { key: 'inletTemp', label: 'Inlet Temp (\u00b0C)', kind: 'number' as const, min: 200, max: 350, step: 5 },
+    { key: 'outletTemp', label: 'Outlet Temp (\u00b0C)', kind: 'number' as const, min: 250, max: 400, step: 5 },
+    { key: 'pressure', label: 'Pressure (bar)', kind: 'number' as const, min: 100, max: 200, step: 5 },
   ]),
-  story('radiation-level', 'Radiation Level', 'Nuclear', RadiationLevel, { title: 'Radiation Level', alertThreshold: 80 }, [
+  story('radiation-level', 'Radiation Level', 'Nuclear', RadiationLevel, { title: 'Radiation Level', alertThreshold: 80, level: 42, dose: 0.12 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Radiation Level', value: 'Radiation Level' }, { label: 'Dose Rate', value: 'Dose Rate' }, { label: 'Rad Monitor', value: 'Rad Monitor' },
     ] },
     { key: 'alertThreshold', label: 'Alert %', kind: 'number', min: 40, max: 95, step: 5 },
+    { key: 'level', label: 'Level %', kind: 'number' as const, min: 0, max: 100, step: 1 },
+    { key: 'dose', label: 'Dose (mSv/h)', kind: 'number' as const, min: 0, max: 1, step: 0.01 },
   ]),
-  story('containment-status', 'Containment Status', 'Nuclear', ContainmentStatus, { title: 'Containment', sealCount: 4 }, [
+  story('containment-status', 'Containment Status', 'Nuclear', ContainmentStatus, { title: 'Containment', sealCount: 4, pressure: 1.02 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Containment', value: 'Containment' }, { label: 'Containment Seals', value: 'Containment Seals' }, { label: 'Barrier Status', value: 'Barrier Status' },
     ] },
     { key: 'sealCount', label: 'Seals', kind: 'number', min: 2, max: 8, step: 1 },
+    { key: 'pressure', label: 'Pressure (atm)', kind: 'number' as const, min: 0.9, max: 1.5, step: 0.01 },
   ]),
   story('fuel-rod-position', 'Fuel Rod Position', 'Nuclear', FuelRodPosition, { title: 'Fuel Rods', rodCount: 4 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
@@ -1669,30 +1808,39 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
     ] },
     { key: 'rodCount', label: 'Rods', kind: 'number', min: 2, max: 8, step: 1 },
   ]),
-  story('emergency-panel', 'Emergency Panel', 'Nuclear', EmergencyPanel, { title: 'Emergency', scramEnabled: true }, [
+  story('emergency-panel', 'Emergency Panel', 'Nuclear', EmergencyPanel, { title: 'Emergency', scramEnabled: true, elapsed: 0 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Emergency', value: 'Emergency' }, { label: 'SCRAM Panel', value: 'SCRAM Panel' }, { label: 'Emergency Controls', value: 'Emergency Controls' },
     ] },
+    { key: 'scramEnabled', label: 'SCRAM Enabled', kind: 'boolean' as const },
+    { key: 'elapsed', label: 'Elapsed (s)', kind: 'number' as const, min: 0, max: 3600, step: 10 },
   ]),
 
   // ── Semiconductor ───────────────────────────────────────────────────
-  story('fab-clean-room', 'Fab Clean Room', 'Semiconductor', FabCleanRoom, { title: 'Clean Room', isoClass: 5 }, [
+  story('fab-clean-room', 'Fab Clean Room', 'Semiconductor', FabCleanRoom, { title: 'Clean Room', isoClass: 5, temp: 21.5, humidity: 43, pressure: 1.2 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Clean Room', value: 'Clean Room' }, { label: 'Fab Environment', value: 'Fab Environment' }, { label: 'ISO Room', value: 'ISO Room' },
     ] },
-    { key: 'isoClass', label: 'ISO Class', kind: 'number', min: 1, max: 9, step: 1 },
+    { key: 'isoClass', label: 'ISO Class', kind: 'number' as const, min: 1, max: 9, step: 1 },
+    { key: 'temp', label: 'Temperature', kind: 'number' as const, min: 18, max: 28, step: 0.5 },
+    { key: 'humidity', label: 'Humidity %', kind: 'number' as const, min: 30, max: 65, step: 1 },
+    { key: 'pressure', label: 'Pressure Pa', kind: 'number' as const, min: 0.5, max: 2.5, step: 0.1 },
   ]),
-  story('wafer-yield', 'Wafer Yield', 'Semiconductor', WaferYield, { title: 'Wafer Yield', targetYield: 95 }, [
+  story('wafer-yield', 'Wafer Yield', 'Semiconductor', WaferYield, { title: 'Wafer Yield', targetYield: 95, waferTemp: 22.3 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Wafer Yield', value: 'Wafer Yield' }, { label: 'Die Yield', value: 'Die Yield' }, { label: 'Wafer Map', value: 'Wafer Map' },
     ] },
-    { key: 'targetYield', label: 'Target %', kind: 'number', min: 70, max: 99, step: 1 },
+    { key: 'targetYield', label: 'Target %', kind: 'number' as const, min: 70, max: 99, step: 1 },
+    { key: 'waferTemp', label: 'Wafer Temp', kind: 'number' as const, min: 18, max: 30, step: 0.1 },
   ]),
-  story('lithography-step', 'Lithography Step', 'Semiconductor', LithographyStep, { title: 'Lithography', layerCount: 7 }, [
+  story('lithography-step', 'Lithography Step', 'Semiconductor', LithographyStep, { title: 'Lithography', layerCount: 7, exposureDose: 245, alignOffset: 0.8, focusDepth: 42 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Lithography', value: 'Lithography' }, { label: 'Layer Progress', value: 'Layer Progress' }, { label: 'Exposure Step', value: 'Exposure Step' },
     ] },
-    { key: 'layerCount', label: 'Layers', kind: 'number', min: 3, max: 15, step: 1 },
+    { key: 'layerCount', label: 'Layers', kind: 'number' as const, min: 3, max: 15, step: 1 },
+    { key: 'exposureDose', label: 'Dose mJ', kind: 'number' as const, min: 100, max: 400, step: 5 },
+    { key: 'alignOffset', label: 'Align nm', kind: 'number' as const, min: 0.1, max: 2.0, step: 0.1 },
+    { key: 'focusDepth', label: 'Focus nm', kind: 'number' as const, min: 20, max: 80, step: 1 },
   ]),
   story('defect-map', 'Defect Map', 'Semiconductor', DefectMap, { title: 'Defect Map', dpiThreshold: 15 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
@@ -1700,19 +1848,24 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
     ] },
     { key: 'dpiThreshold', label: 'DPI Threshold', kind: 'number', min: 5, max: 50, step: 5 },
   ]),
-  story('etch-chamber', 'Etch Chamber', 'Semiconductor', EtchChamber, { title: 'Etch Chamber', pressureUnit: 'mTorr' }, [
+  story('etch-chamber', 'Etch Chamber', 'Semiconductor', EtchChamber, { title: 'Etch Chamber', pressureUnit: 'mTorr', chamberPressure: 85, gasFlow: 120, rfPower: 750, etchRate: 2.4 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Etch Chamber', value: 'Etch Chamber' }, { label: 'Plasma Etch', value: 'Plasma Etch' }, { label: 'RIE Chamber', value: 'RIE Chamber' },
     ] },
     { key: 'pressureUnit', label: 'Unit', kind: 'select', options: [
       { label: 'mTorr', value: 'mTorr' }, { label: 'Pa', value: 'Pa' },
     ] },
+    { key: 'chamberPressure', label: 'Pressure', kind: 'number' as const, min: 20, max: 200, step: 5 },
+    { key: 'gasFlow', label: 'Gas Flow', kind: 'number' as const, min: 20, max: 250, step: 10 },
+    { key: 'rfPower', label: 'RF Power W', kind: 'number' as const, min: 100, max: 1200, step: 50 },
+    { key: 'etchRate', label: 'Etch Rate', kind: 'number' as const, min: 0.5, max: 5.0, step: 0.1 },
   ]),
-  story('wafer-transport', 'Wafer Transport', 'Semiconductor', WaferTransport, { title: 'Wafer Transport', lotSize: 25 }, [
+  story('wafer-transport', 'Wafer Transport', 'Semiconductor', WaferTransport, { title: 'Wafer Transport', lotSize: 25, speed: 1.8 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Wafer Transport', value: 'Wafer Transport' }, { label: 'FOUP Handler', value: 'FOUP Handler' }, { label: 'Lot Transport', value: 'Lot Transport' },
     ] },
-    { key: 'lotSize', label: 'Lot Size', kind: 'number', min: 10, max: 50, step: 5 },
+    { key: 'lotSize', label: 'Lot Size', kind: 'number' as const, min: 10, max: 50, step: 5 },
+    { key: 'speed', label: 'Speed m/s', kind: 'number' as const, min: 0.5, max: 3.0, step: 0.1 },
   ]),
 
   // ── Railway ─────────────────────────────────────────────────────────
@@ -1734,13 +1887,17 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
     ] },
     { key: 'maxTrains', label: 'Max Trains', kind: 'number', min: 3, max: 8, step: 1 },
   ]),
-  story('pantograph-monitor', 'Pantograph Monitor', 'Railway', PantographMonitor, { title: 'Pantograph', voltageUnit: 'kV' }, [
+  story('pantograph-monitor', 'Pantograph Monitor', 'Railway', PantographMonitor, { title: 'Pantograph', voltageUnit: 'kV', voltage: 25.0, currentDraw: 420, contactForce: 78, temperature: 52 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Pantograph', value: 'Pantograph' }, { label: 'Catenary Monitor', value: 'Catenary Monitor' }, { label: 'OHL Status', value: 'OHL Status' },
     ] },
     { key: 'voltageUnit', label: 'Unit', kind: 'select', options: [
       { label: 'kV', value: 'kV' }, { label: 'V', value: 'V' },
     ] },
+    { key: 'voltage', label: 'Voltage (kV)', kind: 'number' as const, min: 0, max: 30, step: 0.5 },
+    { key: 'currentDraw', label: 'Current Draw (A)', kind: 'number' as const, min: 0, max: 600, step: 10 },
+    { key: 'contactForce', label: 'Contact Force (N)', kind: 'number' as const, min: 0, max: 150, step: 1 },
+    { key: 'temperature', label: 'Temperature (\u00B0C)', kind: 'number' as const, min: 20, max: 100, step: 1 },
   ]),
   story('points-switch', 'Points Switch', 'Railway', PointsSwitch, { title: 'Points Control', switchCount: 4 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
@@ -1768,24 +1925,30 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
     ] },
     { key: 'targetTemp', label: 'Target °C', kind: 'number', min: 4, max: 35, step: 1 },
   ]),
-  story('carbonation-level', 'Carbonation Level', 'Brewing', CarbonationLevel, { title: 'CO₂ Level', co2Unit: 'psi' }, [
+  story('carbonation-level', 'Carbonation Level', 'Brewing', CarbonationLevel, { title: 'CO₂ Level', co2Unit: 'psi', pressure: 12.5, volumes: 2.4, temp: 4.2 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'CO₂ Level', value: 'CO₂ Level' }, { label: 'Carbonation', value: 'Carbonation' }, { label: 'CO₂ Pressure', value: 'CO₂ Pressure' },
     ] },
     { key: 'co2Unit', label: 'Unit', kind: 'select', options: [
       { label: 'psi', value: 'psi' }, { label: 'bar', value: 'bar' }, { label: 'vol', value: 'vol' },
     ] },
+    { key: 'pressure', label: 'Pressure', kind: 'number' as const, min: 0, max: 30, step: 0.5 },
+    { key: 'volumes', label: 'Volumes', kind: 'number' as const, min: 0, max: 5, step: 0.1 },
+    { key: 'temp', label: 'Carb Temp (C)', kind: 'number' as const, min: 0, max: 20, step: 0.5 },
   ]),
-  story('mash-tun-control', 'Mash Tun Control', 'Brewing', MashTunControl, { title: 'Mash Tun', recipeSteps: 4 }, [
+  story('mash-tun-control', 'Mash Tun Control', 'Brewing', MashTunControl, { title: 'Mash Tun', recipeSteps: 4, temp: 65 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Mash Tun', value: 'Mash Tun' }, { label: 'Mash Control', value: 'Mash Control' }, { label: 'Brew Kettle', value: 'Brew Kettle' },
     ] },
     { key: 'recipeSteps', label: 'Steps', kind: 'number', min: 2, max: 6, step: 1 },
+    { key: 'temp', label: 'Temperature (C)', kind: 'number' as const, min: 40, max: 80, step: 1 },
   ]),
-  story('gravity-reading', 'Gravity Reading', 'Brewing', GravityReading, { title: 'Gravity', ogTarget: 1.055 }, [
+  story('gravity-reading', 'Gravity Reading', 'Brewing', GravityReading, { title: 'Gravity', ogTarget: 1.055, sg: 1.042 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Gravity', value: 'Gravity' }, { label: 'Hydrometer', value: 'Hydrometer' }, { label: 'SG Reading', value: 'SG Reading' },
     ] },
+    { key: 'ogTarget', label: 'OG Target', kind: 'number' as const, min: 1.030, max: 1.100, step: 0.001 },
+    { key: 'sg', label: 'Specific Gravity', kind: 'number' as const, min: 1.000, max: 1.080, step: 0.001 },
   ]),
   story('brew-batch-tracker', 'Batch Tracker', 'Brewing', BatchTracker, { title: 'Batch Tracker', maxBatches: 6 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
@@ -1795,47 +1958,68 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
   ]),
 
   // ── Offshore Oil ────────────────────────────────────────────────────
-  story('wellhead-pressure', 'Wellhead Pressure', 'Offshore Oil', WellheadPressure, { title: 'Wellhead Pressure', maxPSI: 5000 }, [
+  story('wellhead-pressure', 'Wellhead Pressure', 'Offshore Oil', WellheadPressure, { title: 'Wellhead Pressure', maxPSI: 5000, psi: 3200, temp: 185, flowRate: 1240 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Wellhead Pressure', value: 'Wellhead Pressure' }, { label: 'Well Gauge', value: 'Well Gauge' }, { label: 'Pressure Monitor', value: 'Pressure Monitor' },
     ] },
     { key: 'maxPSI', label: 'Max PSI', kind: 'number', min: 1000, max: 15000, step: 1000 },
+    { key: 'psi', label: 'PSI', kind: 'number' as const, min: 0, max: 8000, step: 50 },
+    { key: 'temp', label: 'Temperature (F)', kind: 'number' as const, min: 0, max: 500, step: 1 },
+    { key: 'flowRate', label: 'Flow Rate (bbl/d)', kind: 'number' as const, min: 0, max: 3000, step: 10 },
   ]),
-  story('bop-status', 'BOP Status', 'Offshore Oil', BOPStatus, { title: 'BOP Status', ramCount: 4 }, [
+  story('bop-status', 'BOP Status', 'Offshore Oil', BOPStatus, { title: 'BOP Status', ramCount: 4, testPressure: 4800, annularPressure: 1200 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'BOP Status', value: 'BOP Status' }, { label: 'Blowout Preventer', value: 'Blowout Preventer' }, { label: 'BOP Panel', value: 'BOP Panel' },
     ] },
     { key: 'ramCount', label: 'Ram Count', kind: 'number', min: 2, max: 6, step: 1 },
+    { key: 'testPressure', label: 'Test Pressure (PSI)', kind: 'number' as const, min: 0, max: 12000, step: 100 },
+    { key: 'annularPressure', label: 'Annular Pressure (PSI)', kind: 'number' as const, min: 0, max: 3000, step: 50 },
   ]),
-  story('mud-weight', 'Mud Weight', 'Offshore Oil', MudWeight, { title: 'Mud Weight', weightUnit: 'ppg' }, [
+  story('mud-weight', 'Mud Weight', 'Offshore Oil', MudWeight, { title: 'Mud Weight', weightUnit: 'ppg', weight: 12.4, viscosity: 48, pH: 9.8, chlorides: 18000 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Mud Weight', value: 'Mud Weight' }, { label: 'Drilling Fluid', value: 'Drilling Fluid' }, { label: 'Mud Properties', value: 'Mud Properties' },
     ] },
     { key: 'weightUnit', label: 'Unit', kind: 'select', options: [
       { label: 'ppg', value: 'ppg' }, { label: 'SG', value: 'SG' }, { label: 'kg/m³', value: 'kg/m³' },
     ] },
+    { key: 'weight', label: 'Weight (ppg)', kind: 'number' as const, min: 0, max: 25, step: 0.1 },
+    { key: 'viscosity', label: 'Viscosity (sec/qt)', kind: 'number' as const, min: 0, max: 120, step: 1 },
+    { key: 'pH', label: 'pH', kind: 'number' as const, min: 0, max: 14, step: 0.1 },
+    { key: 'chlorides', label: 'Chlorides (ppm)', kind: 'number' as const, min: 0, max: 50000, step: 500 },
   ]),
-  story('drill-depth', 'Drill Depth', 'Offshore Oil', DrillDepth, { title: 'Drill Depth', depthUnit: 'ft' }, [
+  story('drill-depth', 'Drill Depth', 'Offshore Oil', DrillDepth, { title: 'Drill Depth', depthUnit: 'ft', currentDepth: 8400, rop: 42, wob: 28, torque: 14200 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Drill Depth', value: 'Drill Depth' }, { label: 'Well Depth', value: 'Well Depth' }, { label: 'Bit Depth', value: 'Bit Depth' },
     ] },
     { key: 'depthUnit', label: 'Unit', kind: 'select', options: [
       { label: 'ft', value: 'ft' }, { label: 'm', value: 'm' },
     ] },
+    { key: 'currentDepth', label: 'Current Depth (ft)', kind: 'number' as const, min: 0, max: 25000, step: 100 },
+    { key: 'rop', label: 'ROP (ft/h)', kind: 'number' as const, min: 0, max: 100, step: 1 },
+    { key: 'wob', label: 'WOB (klb)', kind: 'number' as const, min: 0, max: 70, step: 1 },
+    { key: 'torque', label: 'Torque (ft-lb)', kind: 'number' as const, min: 0, max: 40000, step: 100 },
   ]),
-  story('gas-separator', 'Gas Separator', 'Offshore Oil', GasSeparator, { title: 'Gas Separator', flowUnit: 'MCF/d' }, [
+  story('gas-separator', 'Gas Separator', 'Offshore Oil', GasSeparator, { title: 'Gas Separator', flowUnit: 'MCF/d', gasFlow: 320, liquidFlow: 180, pressure: 85, efficiency: 94 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Gas Separator', value: 'Gas Separator' }, { label: 'Separation Unit', value: 'Separation Unit' }, { label: 'Gas Processing', value: 'Gas Processing' },
     ] },
     { key: 'flowUnit', label: 'Flow Unit', kind: 'select', options: [
       { label: 'MCF/d', value: 'MCF/d' }, { label: 'MMSCF/d', value: 'MMSCF/d' },
     ] },
+    { key: 'gasFlow', label: 'Gas Flow (MCF/d)', kind: 'number' as const, min: 0, max: 800, step: 10 },
+    { key: 'liquidFlow', label: 'Liquid Flow (bbl/d)', kind: 'number' as const, min: 0, max: 450, step: 5 },
+    { key: 'pressure', label: 'Pressure (PSI)', kind: 'number' as const, min: 0, max: 200, step: 1 },
+    { key: 'efficiency', label: 'Efficiency (%)', kind: 'number' as const, min: 0, max: 100, step: 1 },
   ]),
-  story('rig-tension', 'Rig Tension', 'Offshore Oil', RigTension, { title: 'Rig Tension', loadLimit: 500 }, [
+  story('rig-tension', 'Rig Tension', 'Offshore Oil', RigTension, { title: 'Rig Tension', loadLimit: 500, hookLoad: 320, torque: 18500, rpm: 120, standpipe: 3200 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Rig Tension', value: 'Rig Tension' }, { label: 'Drill String', value: 'Drill String' }, { label: 'Load Monitor', value: 'Load Monitor' },
     ] },
     { key: 'loadLimit', label: 'Limit (klb)', kind: 'number', min: 100, max: 1000, step: 50 },
+    { key: 'hookLoad', label: 'Hook Load (klb)', kind: 'number' as const, min: 0, max: 800, step: 10 },
+    { key: 'torque', label: 'Torque (ft-lb)', kind: 'number' as const, min: 0, max: 50000, step: 500 },
+    { key: 'rpm', label: 'RPM', kind: 'number' as const, min: 0, max: 300, step: 1 },
+    { key: 'standpipe', label: 'Standpipe (PSI)', kind: 'number' as const, min: 0, max: 8000, step: 50 },
   ]),
 
   // ── Stadium & Events ────────────────────────────────────────────────
@@ -1863,13 +2047,15 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
     ] },
     { key: 'zoneCount', label: 'Zones', kind: 'number', min: 2, max: 8, step: 1 },
   ]),
-  story('score-board', 'Score Board', 'Stadium & Events', ScoreBoard, { title: 'Scoreboard', sport: 'Football' }, [
+  story('score-board', 'Score Board', 'Stadium & Events', ScoreBoard, { title: 'Scoreboard', sport: 'Football', homeScore: 2, awayScore: 1 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Scoreboard', value: 'Scoreboard' }, { label: 'Match Score', value: 'Match Score' }, { label: 'Game Board', value: 'Game Board' },
     ] },
     { key: 'sport', label: 'Sport', kind: 'select', options: [
       { label: 'Football', value: 'Football' }, { label: 'Basketball', value: 'Basketball' }, { label: 'Hockey', value: 'Hockey' }, { label: 'Tennis', value: 'Tennis' },
     ] },
+    { key: 'homeScore', label: 'Home Score', kind: 'number' as const, min: 0, max: 20, step: 1 },
+    { key: 'awayScore', label: 'Away Score', kind: 'number' as const, min: 0, max: 20, step: 1 },
   ]),
   story('turnstile-flow', 'Turnstile Flow', 'Stadium & Events', TurnstileFlow, { title: 'Turnstile Flow', entryPoints: 4 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
@@ -1887,37 +2073,56 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
       { label: 'LEO', value: 'LEO' }, { label: 'MEO', value: 'MEO' }, { label: 'GEO', value: 'GEO' },
     ] },
   ]),
-  story('sat-telemetry', 'Sat Telemetry', 'Space & Satellite', SatTelemetry, { title: 'Sat Telemetry', channelCount: 4 }, [
+  story('sat-telemetry', 'Sat Telemetry', 'Space & Satellite', SatTelemetry, { title: 'Sat Telemetry', channelCount: 4, battery: 78, signal: 62, temp: 22, attitude: 0.4 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Sat Telemetry', value: 'Sat Telemetry' }, { label: 'Spacecraft Health', value: 'Spacecraft Health' }, { label: 'TM Data', value: 'TM Data' },
     ] },
     { key: 'channelCount', label: 'Channels', kind: 'number', min: 2, max: 6, step: 1 },
+    { key: 'battery', label: 'Battery', kind: 'number' as const, min: 0, max: 100, step: 1 },
+    { key: 'signal', label: 'Signal', kind: 'number' as const, min: 0, max: 100, step: 1 },
+    { key: 'temp', label: 'Temperature', kind: 'number' as const, min: -50, max: 200, step: 0.5 },
+    { key: 'attitude', label: 'Attitude', kind: 'number' as const, min: 0, max: 1, step: 0.01 },
   ]),
-  story('solar-array-angle', 'Solar Array Angle', 'Space & Satellite', SolarArrayAngle, { title: 'Solar Array', panelCount: 2 }, [
+  story('solar-array-angle', 'Solar Array Angle', 'Space & Satellite', SolarArrayAngle, { title: 'Solar Array', panelCount: 2, sunAngle: 45, panelAngle: 42, power: 4.2, efficiency: 88 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Solar Array', value: 'Solar Array' }, { label: 'Panel Angle', value: 'Panel Angle' }, { label: 'Array Control', value: 'Array Control' },
     ] },
     { key: 'panelCount', label: 'Panels', kind: 'number', min: 1, max: 4, step: 1 },
+    { key: 'sunAngle', label: 'Sun Angle', kind: 'number' as const, min: 0, max: 90, step: 1 },
+    { key: 'panelAngle', label: 'Panel Angle', kind: 'number' as const, min: 0, max: 90, step: 1 },
+    { key: 'power', label: 'Power', kind: 'number' as const, min: 0, max: 10, step: 0.1 },
+    { key: 'efficiency', label: 'Efficiency', kind: 'number' as const, min: 0, max: 100, step: 1 },
   ]),
-  story('link-budget', 'Link Budget', 'Space & Satellite', LinkBudget, { title: 'Link Budget', frequencyBand: 'Ka' }, [
+  story('link-budget', 'Link Budget', 'Space & Satellite', LinkBudget, { title: 'Link Budget', frequencyBand: 'Ka', signalStrength: 72, linkMargin: 6.2, ber: 1e-9, cnr: 12.5 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Link Budget', value: 'Link Budget' }, { label: 'RF Link', value: 'RF Link' }, { label: 'Signal Budget', value: 'Signal Budget' },
     ] },
     { key: 'frequencyBand', label: 'Band', kind: 'select', options: [
       { label: 'Ka', value: 'Ka' }, { label: 'Ku', value: 'Ku' }, { label: 'S', value: 'S' }, { label: 'X', value: 'X' },
     ] },
+    { key: 'signalStrength', label: 'Signal Strength', kind: 'number' as const, min: 0, max: 100, step: 1 },
+    { key: 'linkMargin', label: 'Link Margin', kind: 'number' as const, min: 0, max: 15, step: 0.1 },
+    { key: 'ber', label: 'BER', kind: 'number' as const, min: 0, max: 1e-6, step: 1e-10 },
+    { key: 'cnr', label: 'C/N Ratio', kind: 'number' as const, min: 0, max: 30, step: 0.1 },
   ]),
-  story('thruster-control', 'Thruster Control', 'Space & Satellite', ThrusterControl, { title: 'Thruster Control', thrusterCount: 8 }, [
+  story('thruster-control', 'Thruster Control', 'Space & Satellite', ThrusterControl, { title: 'Thruster Control', thrusterCount: 8, fuelLevel: 64, pressure: 220, totalImpulse: 12.4 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Thruster Control', value: 'Thruster Control' }, { label: 'Propulsion', value: 'Propulsion' }, { label: 'RCS Panel', value: 'RCS Panel' },
     ] },
     { key: 'thrusterCount', label: 'Thrusters', kind: 'number', min: 4, max: 12, step: 2 },
+    { key: 'fuelLevel', label: 'Fuel Level', kind: 'number' as const, min: 0, max: 100, step: 1 },
+    { key: 'pressure', label: 'Pressure', kind: 'number' as const, min: 0, max: 500, step: 1 },
+    { key: 'totalImpulse', label: 'Total Impulse', kind: 'number' as const, min: 0, max: 30, step: 0.1 },
   ]),
-  story('ground-station', 'Ground Station', 'Space & Satellite', GroundStation, { title: 'Ground Station', antennaCount: 3 }, [
+  story('ground-station', 'Ground Station', 'Space & Satellite', GroundStation, { title: 'Ground Station', antennaCount: 3, elevation: 42, azimuth: 185, snr: 18.5, tracking: true }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Ground Station', value: 'Ground Station' }, { label: 'Earth Station', value: 'Earth Station' }, { label: 'Tracking Station', value: 'Tracking Station' },
     ] },
     { key: 'antennaCount', label: 'Antennas', kind: 'number', min: 1, max: 5, step: 1 },
+    { key: 'elevation', label: 'Elevation', kind: 'number' as const, min: 0, max: 90, step: 1 },
+    { key: 'azimuth', label: 'Azimuth', kind: 'number' as const, min: 0, max: 360, step: 1 },
+    { key: 'snr', label: 'SNR', kind: 'number' as const, min: 0, max: 40, step: 0.1 },
+    { key: 'tracking', label: 'Tracking', kind: 'boolean' as const },
   ]),
 
   // ── Aviation Cockpit ────────────────────────────────────────────────
@@ -1926,27 +2131,32 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
       { label: 'Attitude', value: 'Attitude' }, { label: 'Artificial Horizon', value: 'Artificial Horizon' }, { label: 'AHRS', value: 'AHRS' },
     ] },
   ]),
-  story('altimeter', 'Altimeter', 'Aviation Cockpit', Altimeter, { title: 'Altimeter', maxAlt: 35000 }, [
+  story('altimeter', 'Altimeter', 'Aviation Cockpit', Altimeter, { title: 'Altimeter', altitude: 24500, maxAlt: 35000 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Altimeter', value: 'Altimeter' }, { label: 'Altitude', value: 'Altitude' }, { label: 'ALT', value: 'ALT' },
     ] },
+    { key: 'altitude', label: 'Altitude (ft)', kind: 'number' as const, min: 0, max: 45000, step: 500 },
     { key: 'maxAlt', label: 'Max Altitude', kind: 'number', min: 10000, max: 50000, step: 5000 },
   ]),
-  story('airspeed-indicator', 'Airspeed Indicator', 'Aviation Cockpit', AirspeedIndicator, { title: 'Airspeed', vne: 250 }, [
+  story('airspeed-indicator', 'Airspeed Indicator', 'Aviation Cockpit', AirspeedIndicator, { title: 'Airspeed', airspeed: 165, vne: 250 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Airspeed', value: 'Airspeed' }, { label: 'ASI', value: 'ASI' }, { label: 'IAS', value: 'IAS' },
     ] },
+    { key: 'airspeed', label: 'Airspeed (kts)', kind: 'number' as const, min: 0, max: 280, step: 5 },
     { key: 'vne', label: 'VNE (kts)', kind: 'number', min: 150, max: 400, step: 10 },
   ]),
-  story('heading-compass', 'Heading Compass', 'Aviation Cockpit', HeadingCompass, { title: 'Heading' }, [
+  story('heading-compass', 'Heading Compass', 'Aviation Cockpit', HeadingCompass, { title: 'Heading', heading: 270, wobble: 0 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Heading', value: 'Heading' }, { label: 'HSI', value: 'HSI' }, { label: 'Compass', value: 'Compass' },
     ] },
+    { key: 'heading', label: 'Heading (deg)', kind: 'number' as const, min: 0, max: 360, step: 5 },
+    { key: 'wobble', label: 'Wobble (deg)', kind: 'number' as const, min: -5, max: 5, step: 0.5 },
   ]),
-  story('vertical-speed', 'Vertical Speed', 'Aviation Cockpit', VerticalSpeed, { title: 'Vertical Speed' }, [
+  story('vertical-speed', 'Vertical Speed', 'Aviation Cockpit', VerticalSpeed, { title: 'Vertical Speed', vsi: 500 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Vertical Speed', value: 'Vertical Speed' }, { label: 'VSI', value: 'VSI' }, { label: 'Climb Rate', value: 'Climb Rate' },
     ] },
+    { key: 'vsi', label: 'VSI (ft/min)', kind: 'number' as const, min: -2000, max: 2000, step: 100 },
   ]),
   story('annunciator-panel', 'Annunciator Panel', 'Aviation Cockpit', AnnunciatorPanel, { title: 'Annunciator' }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
@@ -1955,16 +2165,18 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
   ]),
 
   // ── Submarine ──────────────────────────────────────────────────────
-  story('depth-gauge', 'Depth Gauge', 'Submarine', DepthGauge, { title: 'Depth', maxDepth: 400 }, [
+  story('depth-gauge', 'Depth Gauge', 'Submarine', DepthGauge, { title: 'Depth', depth: 185, maxDepth: 400 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Depth', value: 'Depth' }, { label: 'Depth Gauge', value: 'Depth Gauge' }, { label: 'Fathometer', value: 'Fathometer' },
     ] },
+    { key: 'depth', label: 'Depth (m)', kind: 'number' as const, min: 0, max: 500, step: 5 },
     { key: 'maxDepth', label: 'Max Depth (m)', kind: 'number', min: 100, max: 1000, step: 50 },
   ]),
-  story('ballast-tank', 'Ballast Tank', 'Submarine', BallastTank, { title: 'Ballast' }, [
+  story('ballast-tank', 'Ballast Tank', 'Submarine', BallastTank, { title: 'Ballast', fillPct: 65 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Ballast', value: 'Ballast' }, { label: 'MBT', value: 'MBT' }, { label: 'Trim Tank', value: 'Trim Tank' },
     ] },
+    { key: 'fillPct', label: 'Fill %', kind: 'number' as const, min: 0, max: 100, step: 5 },
   ]),
   story('torpedo-status', 'Torpedo Status', 'Submarine', TorpedoStatus, { title: 'Torpedo Bay' }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
@@ -1976,34 +2188,40 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
       { label: 'Sonar', value: 'Sonar' }, { label: 'Passive Sonar', value: 'Passive Sonar' }, { label: 'Active Sonar', value: 'Active Sonar' },
     ] },
   ]),
-  story('hull-pressure', 'Hull Pressure', 'Submarine', HullPressure, { title: 'Hull Pressure', maxPSI: 600 }, [
+  story('hull-pressure', 'Hull Pressure', 'Submarine', HullPressure, { title: 'Hull Pressure', psi: 380, maxPSI: 600 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Hull Pressure', value: 'Hull Pressure' }, { label: 'Hull Integrity', value: 'Hull Integrity' }, { label: 'Pressure', value: 'Pressure' },
     ] },
+    { key: 'psi', label: 'Pressure (PSI)', kind: 'number' as const, min: 0, max: 700, step: 10 },
     { key: 'maxPSI', label: 'Max PSI', kind: 'number', min: 200, max: 1000, step: 50 },
   ]),
-  story('dive-plane', 'Dive Plane', 'Submarine', DivePlane, { title: 'Dive Planes' }, [
+  story('dive-plane', 'Dive Plane', 'Submarine', DivePlane, { title: 'Dive Planes', planeAngle: 12 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Dive Planes', value: 'Dive Planes' }, { label: 'Hydroplanes', value: 'Hydroplanes' }, { label: 'Trim Control', value: 'Trim Control' },
     ] },
+    { key: 'planeAngle', label: 'Plane Angle (deg)', kind: 'number' as const, min: -25, max: 25, step: 1 },
   ]),
 
   // ── Vintage HiFi ──────────────────────────────────────────────────
-  story('vacuum-tube-amp', 'Vacuum Tube Amp', 'Vintage HiFi', VacuumTubeAmp, { title: 'Tube Amplifier', tubes: 4 }, [
+  story('vacuum-tube-amp', 'Vacuum Tube Amp', 'Vintage HiFi', VacuumTubeAmp, { title: 'Tube Amplifier', tubes: 4, powerOut: 42, warmup: 96 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Tube Amplifier', value: 'Tube Amplifier' }, { label: 'Valve Amp', value: 'Valve Amp' }, { label: 'Power Amp', value: 'Power Amp' },
     ] },
-    { key: 'tubes', label: 'Tubes', kind: 'number', min: 2, max: 8, step: 1 },
+    { key: 'tubes', label: 'Tubes', kind: 'number' as const, min: 2, max: 8, step: 1 },
+    { key: 'powerOut', label: 'Power Output (W)', kind: 'number' as const, min: 10, max: 100, step: 1 },
+    { key: 'warmup', label: 'Warm-up (%)', kind: 'number' as const, min: 0, max: 100, step: 1 },
   ]),
   story('reel-to-reel', 'Reel-to-Reel', 'Vintage HiFi', ReelToReel, { title: 'Reel-to-Reel' }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Reel-to-Reel', value: 'Reel-to-Reel' }, { label: 'Tape Deck', value: 'Tape Deck' }, { label: 'Master Recorder', value: 'Master Recorder' },
     ] },
   ]),
-  story('vu-meter', 'VU Meter', 'Vintage HiFi', VUMeter, { title: 'VU Meter' }, [
+  story('vu-meter', 'VU Meter', 'Vintage HiFi', VUMeter, { title: 'VU Meter', levelL: -8, levelR: -6 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'VU Meter', value: 'VU Meter' }, { label: 'Level Meter', value: 'Level Meter' }, { label: 'Peak Meter', value: 'Peak Meter' },
     ] },
+    { key: 'levelL', label: 'Level L (dB)', kind: 'number' as const, min: -20, max: 3, step: 1 },
+    { key: 'levelR', label: 'Level R (dB)', kind: 'number' as const, min: -20, max: 3, step: 1 },
   ]),
   story('graphic-eq', 'Graphic EQ', 'Vintage HiFi', GraphicEQ, { title: 'Equalizer' }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
@@ -2015,10 +2233,13 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
       { label: 'Tape Counter', value: 'Tape Counter' }, { label: 'Counter', value: 'Counter' }, { label: 'Position', value: 'Position' },
     ] },
   ]),
-  story('transformer-hum', 'Transformer', 'Vintage HiFi', TransformerHum, { title: 'Transformer' }, [
+  story('transformer-hum', 'Transformer', 'Vintage HiFi', TransformerHum, { title: 'Transformer', voltage: 240, current: 2.4, temp: 62 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Transformer', value: 'Transformer' }, { label: 'Power Supply', value: 'Power Supply' }, { label: 'PSU', value: 'PSU' },
     ] },
+    { key: 'voltage', label: 'Voltage (V)', kind: 'number' as const, min: 100, max: 260, step: 5 },
+    { key: 'current', label: 'Current (A)', kind: 'number' as const, min: 0.5, max: 5, step: 0.1 },
+    { key: 'temp', label: 'Temperature (C)', kind: 'number' as const, min: 30, max: 90, step: 1 },
   ]),
 
   // ── Watchmaking ───────────────────────────────────────────────────
@@ -2033,16 +2254,18 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
     ] },
     { key: 'day', label: 'Lunar Day', kind: 'number', min: 0, max: 29, step: 1 },
   ]),
-  story('power-reserve', 'Power Reserve', 'Watchmaking', PowerReserve, { title: 'Power Reserve', hours: 72 }, [
+  story('power-reserve', 'Power Reserve', 'Watchmaking', PowerReserve, { title: 'Power Reserve', hours: 72, liveHours: 48 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Power Reserve', value: 'Power Reserve' }, { label: 'Réserve de Marche', value: 'Réserve de Marche' }, { label: 'Wind Indicator', value: 'Wind Indicator' },
     ] },
-    { key: 'hours', label: 'Max Hours', kind: 'number', min: 24, max: 120, step: 12 },
+    { key: 'hours', label: 'Max Hours', kind: 'number' as const, min: 24, max: 120, step: 12 },
+    { key: 'liveHours', label: 'Reserve Hours', kind: 'number' as const, min: 0, max: 120, step: 1 },
   ]),
-  story('tourbillon-cage', 'Tourbillon Cage', 'Watchmaking', TourbillonCage, { title: 'Tourbillon' }, [
+  story('tourbillon-cage', 'Tourbillon Cage', 'Watchmaking', TourbillonCage, { title: 'Tourbillon', oscillationRate: 28800 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Tourbillon', value: 'Tourbillon' }, { label: 'Flying Tourbillon', value: 'Flying Tourbillon' }, { label: 'Cage', value: 'Cage' },
     ] },
+    { key: 'oscillationRate', label: 'Oscillation (vph)', kind: 'number' as const, min: 18000, max: 36000, step: 1800 },
   ]),
   story('date-wheel', 'Date Wheel', 'Watchmaking', DateWheel, { title: 'Date', currentDate: 15 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
@@ -2050,46 +2273,56 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
     ] },
     { key: 'currentDate', label: 'Date', kind: 'number', min: 1, max: 31, step: 1 },
   ]),
-  story('balance-wheel', 'Balance Wheel', 'Watchmaking', BalanceWheel, { title: 'Balance Wheel', frequency: 28800 }, [
+  story('balance-wheel', 'Balance Wheel', 'Watchmaking', BalanceWheel, { title: 'Balance Wheel', frequency: 28800, amplitude: 300 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Balance Wheel', value: 'Balance Wheel' }, { label: 'Oscillator', value: 'Oscillator' }, { label: 'Escapement', value: 'Escapement' },
     ] },
-    { key: 'frequency', label: 'BPH', kind: 'number', min: 18000, max: 36000, step: 3600 },
+    { key: 'frequency', label: 'BPH', kind: 'number' as const, min: 18000, max: 36000, step: 3600 },
+    { key: 'amplitude', label: 'Amplitude (deg)', kind: 'number' as const, min: 180, max: 360, step: 5 },
   ]),
 
   // ── Automotive ────────────────────────────────────────────────────
-  story('speedometer', 'Speedometer', 'Automotive', Speedometer, { title: 'Speed', maxSpeed: 260 }, [
+  story('speedometer', 'Speedometer', 'Automotive', Speedometer, { title: 'Speed', maxSpeed: 260, speed: 95 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Speed', value: 'Speed' }, { label: 'Speedometer', value: 'Speedometer' }, { label: 'Velocity', value: 'Velocity' },
     ] },
     { key: 'maxSpeed', label: 'Max Speed', kind: 'number', min: 120, max: 400, step: 20 },
+    { key: 'speed', label: 'Speed (km/h)', kind: 'number' as const, min: 0, max: 260, step: 5 },
   ]),
-  story('tachometer', 'Tachometer', 'Automotive', Tachometer, { title: 'Tachometer', redline: 7000 }, [
+  story('tachometer', 'Tachometer', 'Automotive', Tachometer, { title: 'Tachometer', redline: 7000, rpm: 3200 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Tachometer', value: 'Tachometer' }, { label: 'RPM', value: 'RPM' }, { label: 'Rev Counter', value: 'Rev Counter' },
     ] },
     { key: 'redline', label: 'Redline RPM', kind: 'number', min: 5000, max: 10000, step: 500 },
+    { key: 'rpm', label: 'RPM', kind: 'number' as const, min: 0, max: 8000, step: 100 },
   ]),
-  story('boost-gauge', 'Boost Gauge', 'Automotive', BoostGauge, { title: 'Boost', maxBoost: 25 }, [
+  story('boost-gauge', 'Boost Gauge', 'Automotive', BoostGauge, { title: 'Boost', maxBoost: 25, boost: 8 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Boost', value: 'Boost' }, { label: 'Turbo', value: 'Turbo' }, { label: 'Manifold', value: 'Manifold' },
     ] },
     { key: 'maxBoost', label: 'Max Boost (PSI)', kind: 'number', min: 10, max: 40, step: 5 },
+    { key: 'boost', label: 'Boost (PSI)', kind: 'number' as const, min: -30, max: 25, step: 1 },
   ]),
-  story('oil-temp', 'Oil Temperature', 'Automotive', OilTemp, { title: 'Oil Temperature' }, [
+  story('oil-temp', 'Oil Temperature', 'Automotive', OilTemp, { title: 'Oil Temperature', temp: 92 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Oil Temperature', value: 'Oil Temperature' }, { label: 'Oil Temp', value: 'Oil Temp' }, { label: 'Lubricant Temp', value: 'Lubricant Temp' },
     ] },
+    { key: 'temp', label: 'Temperature (C)', kind: 'number' as const, min: 50, max: 140, step: 1 },
   ]),
-  story('fuel-gauge', 'Fuel Gauge', 'Automotive', FuelGauge, { title: 'Fuel Level' }, [
+  story('fuel-gauge', 'Fuel Gauge', 'Automotive', FuelGauge, { title: 'Fuel Level', fuel: 62 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Fuel Level', value: 'Fuel Level' }, { label: 'Fuel', value: 'Fuel' }, { label: 'Tank Level', value: 'Tank Level' },
     ] },
+    { key: 'fuel', label: 'Fuel Level (%)', kind: 'number' as const, min: 0, max: 100, step: 1 },
   ]),
-  story('eng-diagnostics', 'Engine Diagnostics', 'Automotive', EngDiagnostics, { title: 'Engine Diagnostics' }, [
+  story('eng-diagnostics', 'Engine Diagnostics', 'Automotive', EngDiagnostics, { title: 'Engine Diagnostics', rpmVal: 2800, coolantVal: 92, intakeVal: 38, batteryVal: 13.8 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Engine Diagnostics', value: 'Engine Diagnostics' }, { label: 'OBD-II', value: 'OBD-II' }, { label: 'ECU Status', value: 'ECU Status' },
     ] },
+    { key: 'rpmVal', label: 'RPM', kind: 'number' as const, min: 0, max: 8000, step: 100 },
+    { key: 'coolantVal', label: 'Coolant (C)', kind: 'number' as const, min: 50, max: 130, step: 1 },
+    { key: 'intakeVal', label: 'Intake (C)', kind: 'number' as const, min: 10, max: 80, step: 1 },
+    { key: 'batteryVal', label: 'Battery (V)', kind: 'number' as const, min: 10, max: 16, step: 0.1 },
   ]),
 
   // ── Oscilloscope & Lab ────────────────────────────────────────────
@@ -2104,82 +2337,99 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
       { label: 'Spectrum Analyzer', value: 'Spectrum Analyzer' }, { label: 'FFT', value: 'FFT' }, { label: 'Spectrum', value: 'Spectrum' },
     ] },
   ]),
-  story('function-generator', 'Function Generator', 'Oscilloscope & Lab', FunctionGenerator, { title: 'Function Gen' }, [
+  story('function-generator', 'Function Generator', 'Oscilloscope & Lab', FunctionGenerator, { title: 'Function Gen', freq: 1000 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Function Gen', value: 'Function Gen' }, { label: 'Signal Generator', value: 'Signal Generator' }, { label: 'Waveform Gen', value: 'Waveform Gen' },
     ] },
+    { key: 'freq', label: 'Frequency', kind: 'number', min: 100, max: 5000, step: 50 },
   ]),
-  story('multimeter', 'Multimeter', 'Oscilloscope & Lab', Multimeter, { title: 'Multimeter' }, [
+  story('multimeter', 'Multimeter', 'Oscilloscope & Lab', Multimeter, { title: 'Multimeter', voltage: 12.47 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Multimeter', value: 'Multimeter' }, { label: 'DMM', value: 'DMM' }, { label: 'Volt Meter', value: 'Volt Meter' },
     ] },
+    { key: 'voltage', label: 'Voltage', kind: 'number', min: 0, max: 50, step: 0.1 },
   ]),
-  story('centrifuge', 'Centrifuge', 'Oscilloscope & Lab', Centrifuge, { title: 'Centrifuge', rpm: 12000 }, [
+  story('centrifuge', 'Centrifuge', 'Oscilloscope & Lab', Centrifuge, { title: 'Centrifuge', rpm: 12000, temperature: 4.0 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Centrifuge', value: 'Centrifuge' }, { label: 'Ultracentrifuge', value: 'Ultracentrifuge' }, { label: 'Spinner', value: 'Spinner' },
     ] },
     { key: 'rpm', label: 'Max RPM', kind: 'number', min: 5000, max: 20000, step: 1000 },
+    { key: 'temperature', label: 'Temperature', kind: 'number', min: -10, max: 40, step: 0.5 },
   ]),
-  story('titration-apparatus', 'Titration Apparatus', 'Oscilloscope & Lab', TitrationApparatus, { title: 'Titration' }, [
+  story('titration-apparatus', 'Titration Apparatus', 'Oscilloscope & Lab', TitrationApparatus, { title: 'Titration', pH: 6.8, volume: 25.4 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Titration', value: 'Titration' }, { label: 'pH Analysis', value: 'pH Analysis' }, { label: 'Acid-Base', value: 'Acid-Base' },
     ] },
+    { key: 'pH', label: 'pH', kind: 'number', min: 0, max: 14, step: 0.1 },
+    { key: 'volume', label: 'Volume (mL)', kind: 'number', min: 0, max: 50, step: 0.5 },
   ]),
 
   // ── Weather Station ───────────────────────────────────────────────
-  story('mercury-barometer', 'Mercury Barometer', 'Weather Station', MercuryBarometer, { title: 'Barometer', maxHPa: 1050 }, [
+  story('mercury-barometer', 'Mercury Barometer', 'Weather Station', MercuryBarometer, { title: 'Barometer', maxHPa: 1050, pressure: 1013, prevPressure: 1013 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Barometer', value: 'Barometer' }, { label: 'Pressure', value: 'Pressure' }, { label: 'Barograph', value: 'Barograph' },
     ] },
     { key: 'maxHPa', label: 'Max hPa', kind: 'number', min: 1000, max: 1100, step: 10 },
+    { key: 'pressure', label: 'Pressure (hPa)', kind: 'number' as const, min: 950, max: 1050, step: 1 },
+    { key: 'prevPressure', label: 'Prev Pressure (hPa)', kind: 'number' as const, min: 950, max: 1050, step: 1 },
   ]),
-  story('anemometer', 'Anemometer', 'Weather Station', Anemometer, { title: 'Wind Speed' }, [
+  story('anemometer', 'Anemometer', 'Weather Station', Anemometer, { title: 'Wind Speed', windSpeed: 24 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Wind Speed', value: 'Wind Speed' }, { label: 'Anemometer', value: 'Anemometer' }, { label: 'Wind Gauge', value: 'Wind Gauge' },
     ] },
+    { key: 'windSpeed', label: 'Wind Speed (km/h)', kind: 'number' as const, min: 0, max: 120, step: 1 },
   ]),
-  story('rain-gauge', 'Rain Gauge', 'Weather Station', RainGauge, { title: 'Rain Gauge' }, [
+  story('rain-gauge', 'Rain Gauge', 'Weather Station', RainGauge, { title: 'Rain Gauge', rainfall: 12.4, rate: 2.1 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Rain Gauge', value: 'Rain Gauge' }, { label: 'Pluviometer', value: 'Pluviometer' }, { label: 'Rainfall', value: 'Rainfall' },
     ] },
+    { key: 'rainfall', label: 'Rainfall (mm)', kind: 'number' as const, min: 0, max: 50, step: 0.5 },
+    { key: 'rate', label: 'Rate (mm/hr)', kind: 'number' as const, min: 0, max: 10, step: 0.1 },
   ]),
-  story('wind-vane', 'Wind Vane', 'Weather Station', WindVane, { title: 'Wind Direction' }, [
+  story('wind-vane', 'Wind Vane', 'Weather Station', WindVane, { title: 'Wind Direction', direction: 225 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Wind Direction', value: 'Wind Direction' }, { label: 'Wind Vane', value: 'Wind Vane' }, { label: 'Weathercock', value: 'Weathercock' },
     ] },
+    { key: 'direction', label: 'Direction (deg)', kind: 'number' as const, min: 0, max: 359, step: 1 },
   ]),
-  story('hygrometer', 'Hygrometer', 'Weather Station', Hygrometer, { title: 'Humidity' }, [
+  story('hygrometer', 'Hygrometer', 'Weather Station', Hygrometer, { title: 'Humidity', dryTemp: 24, wetTemp: 20 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Humidity', value: 'Humidity' }, { label: 'Hygrometer', value: 'Hygrometer' }, { label: 'Wet/Dry Bulb', value: 'Wet/Dry Bulb' },
     ] },
+    { key: 'dryTemp', label: 'Dry Temp (C)', kind: 'number' as const, min: 0, max: 45, step: 0.5 },
+    { key: 'wetTemp', label: 'Wet Temp (C)', kind: 'number' as const, min: 0, max: 40, step: 0.5 },
   ]),
-  story('storm-glass', 'Storm Glass', 'Weather Station', StormGlass, { title: 'Storm Glass' }, [
+  story('storm-glass', 'Storm Glass', 'Weather Station', StormGlass, { title: 'Storm Glass', temp: 18 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Storm Glass', value: 'Storm Glass' }, { label: 'Weather Glass', value: 'Weather Glass' }, { label: 'FitzRoy', value: 'FitzRoy' },
     ] },
+    { key: 'temp', label: 'Temperature (C)', kind: 'number' as const, min: -10, max: 40, step: 0.5 },
   ]),
 
   // ── Steam & Mechanical ────────────────────────────────────────────
-  story('boiler-pressure', 'Boiler Pressure', 'Steam & Mechanical', BoilerPressure, { title: 'Boiler Pressure', maxPSI: 200 }, [
+  story('boiler-pressure', 'Boiler Pressure', 'Steam & Mechanical', BoilerPressure, { title: 'Boiler Pressure', maxPSI: 200, psi: 145 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Boiler Pressure', value: 'Boiler Pressure' }, { label: 'Steam Pressure', value: 'Steam Pressure' }, { label: 'Bourdon Gauge', value: 'Bourdon Gauge' },
     ] },
     { key: 'maxPSI', label: 'Max PSI', kind: 'number', min: 100, max: 500, step: 50 },
+    { key: 'psi', label: 'PSI', kind: 'number' as const, min: 0, max: 300, step: 5 },
   ]),
-  story('steam-valve', 'Steam Valve', 'Steam & Mechanical', SteamValve, { title: 'Steam Valve' }, [
+  story('steam-valve', 'Steam Valve', 'Steam & Mechanical', SteamValve, { title: 'Steam Valve', flow: 340 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Steam Valve', value: 'Steam Valve' }, { label: 'Gate Valve', value: 'Gate Valve' }, { label: 'Throttle Valve', value: 'Throttle Valve' },
     ] },
+    { key: 'flow', label: 'Flow (kg/hr)', kind: 'number' as const, min: 0, max: 600, step: 10 },
   ]),
   story('flywheel', 'Flywheel', 'Steam & Mechanical', Flywheel, { title: 'Flywheel' }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Flywheel', value: 'Flywheel' }, { label: 'Inertia Wheel', value: 'Inertia Wheel' }, { label: 'Momentum Store', value: 'Momentum Store' },
     ] },
   ]),
-  story('governor', 'Governor', 'Steam & Mechanical', Governor, { title: 'Governor' }, [
+  story('governor', 'Governor', 'Steam & Mechanical', Governor, { title: 'Governor', speed: 60 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Governor', value: 'Governor' }, { label: 'Centrifugal Gov', value: 'Centrifugal Gov' }, { label: 'Watt Governor', value: 'Watt Governor' },
     ] },
+    { key: 'speed', label: 'Speed %', kind: 'number' as const, min: 0, max: 100, step: 5 },
   ]),
   story('piston-indicator', 'Piston Indicator', 'Steam & Mechanical', PistonIndicator, { title: 'Piston' }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
@@ -2198,31 +2448,37 @@ export const WIDGET_STORIES: WidgetStoryDefinition[] = [
       { label: 'Ink Density', value: 'Ink Density' }, { label: 'Densitometer', value: 'Densitometer' }, { label: 'Ink Control', value: 'Ink Control' },
     ] },
   ]),
-  story('cmyk-registration', 'CMYK Registration', 'Printing & Typography', CMYKRegistration, { title: 'Registration' }, [
+  story('cmyk-registration', 'CMYK Registration', 'Printing & Typography', CMYKRegistration, { title: 'Registration', offset: 0.3 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Registration', value: 'Registration' }, { label: 'Color Register', value: 'Color Register' }, { label: 'Alignment', value: 'Alignment' },
     ] },
+    { key: 'offset', label: 'Offset', kind: 'number' as const, min: 0, max: 1, step: 0.05 },
   ]),
-  story('paper-tension', 'Paper Tension', 'Printing & Typography', PaperTension, { title: 'Paper Tension', maxTension: 100 }, [
+  story('paper-tension', 'Paper Tension', 'Printing & Typography', PaperTension, { title: 'Paper Tension', maxTension: 100, tension: 65 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Paper Tension', value: 'Paper Tension' }, { label: 'Web Tension', value: 'Web Tension' }, { label: 'Tension Control', value: 'Tension Control' },
     ] },
-    { key: 'maxTension', label: 'Max Tension', kind: 'number', min: 50, max: 200, step: 10 },
+    { key: 'maxTension', label: 'Max Tension', kind: 'number' as const, min: 50, max: 200, step: 10 },
+    { key: 'tension', label: 'Tension (N/m)', kind: 'number' as const, min: 10, max: 150, step: 1 },
   ]),
-  story('press-cylinder', 'Press Cylinder', 'Printing & Typography', PressCylinder, { title: 'Press Cylinder' }, [
+  story('press-cylinder', 'Press Cylinder', 'Printing & Typography', PressCylinder, { title: 'Press Cylinder', speed: 8500, pressure: 4.2 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Press Cylinder', value: 'Press Cylinder' }, { label: 'Impression', value: 'Impression' }, { label: 'Blanket Cylinder', value: 'Blanket Cylinder' },
     ] },
+    { key: 'speed', label: 'Speed (sph)', kind: 'number' as const, min: 3000, max: 15000, step: 500 },
+    { key: 'pressure', label: 'Pressure (bar)', kind: 'number' as const, min: 2, max: 7, step: 0.1 },
   ]),
   story('color-separation', 'Color Separation', 'Printing & Typography', ColorSeparation, { title: 'Color Separation' }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Color Separation', value: 'Color Separation' }, { label: 'CMYK Plates', value: 'CMYK Plates' }, { label: 'Halftone', value: 'Halftone' },
     ] },
   ]),
-  story('drying-oven', 'Drying Oven', 'Printing & Typography', DryingOven, { title: 'Drying Oven' }, [
+  story('drying-oven', 'Drying Oven', 'Printing & Typography', DryingOven, { title: 'Drying Oven', temp: 185, feedSpeed: 12.5 }, [
     { key: 'title', label: 'Title', kind: 'select', options: [
       { label: 'Drying Oven', value: 'Drying Oven' }, { label: 'IR Dryer', value: 'IR Dryer' }, { label: 'Curing Oven', value: 'Curing Oven' },
     ] },
+    { key: 'temp', label: 'Temperature (°C)', kind: 'number' as const, min: 100, max: 250, step: 5 },
+    { key: 'feedSpeed', label: 'Feed Speed (m/min)', kind: 'number' as const, min: 5, max: 25, step: 0.5 },
   ]),
 
   // ── Vintage Computing ─────────────────────────────────────────────

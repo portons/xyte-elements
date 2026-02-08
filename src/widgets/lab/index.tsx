@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { getX, ease, Card, Badge, Btn, Prog, Lbl, M, Dot } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useAnim, useTick } from '../hooks';
 
 function neo() {
   const X = getX();
@@ -126,10 +126,10 @@ export function LabSpectrumAnalyzer({ title = 'Spectrum Analyzer' }: { title?: s
 
   // Live bar heights (0-100)
   const barValues = [
-    useLive(72, 20, 300), useLive(85, 18, 280), useLive(60, 22, 320), useLive(90, 15, 260),
-    useLive(45, 25, 340), useLive(78, 20, 300), useLive(55, 22, 310), useLive(68, 18, 290),
-    useLive(82, 16, 270), useLive(40, 24, 350), useLive(65, 20, 300), useLive(75, 19, 280),
-    useLive(50, 23, 330), useLive(88, 14, 250), useLive(58, 21, 310), useLive(70, 20, 300),
+    72, 85, 60, 90,
+    45, 78, 55, 68,
+    82, 40, 65, 75,
+    50, 88, 58, 70,
   ];
 
   // Peak-hold tracking
@@ -246,11 +246,10 @@ export function LabSpectrumAnalyzer({ title = 'Spectrum Analyzer' }: { title?: s
 }
 
 // ── Function Generator ──────────────────────────────────────────────
-export function FunctionGenerator({ title = 'Function Gen' }: { title?: string } = {}) {
+export function FunctionGenerator({ title = 'Function Gen', freq }: { title?: string; freq: number } = {} as any) {
   const X = getX();
   const n = neo();
   const tick = useTick(60);
-  const freq = useLive(1000, 50, 1500);
 
   const waveforms = ['sine', 'square', 'triangle', 'sawtooth'] as const;
   const [waveIdx, setWaveIdx] = useState(0);
@@ -441,10 +440,9 @@ export function FunctionGenerator({ title = 'Function Gen' }: { title?: string }
 }
 
 // ── Multimeter ──────────────────────────────────────────────────────
-export function Multimeter({ title = 'Multimeter' }: { title?: string } = {}) {
+export function Multimeter({ title = 'Multimeter', voltage }: { title?: string; voltage: number } = {} as any) {
   const X = getX();
   const n = neo();
-  const voltage = useLive(12.47, 0.5, 1500);
 
   const modes = ['V DC', 'V AC', 'A DC', '\u03A9', 'Hz'] as const;
   const [modeIdx, setModeIdx] = useState(0);
@@ -679,13 +677,12 @@ export function Multimeter({ title = 'Multimeter' }: { title?: string } = {}) {
 }
 
 // ── Centrifuge ───────────────────────────────────────────────────────
-export function Centrifuge({ title = 'Centrifuge', rpm = 12000 }: { title?: string; rpm?: number } = {}) {
+export function Centrifuge({ title = 'Centrifuge', rpm = 12000, temperature }: { title?: string; rpm?: number; temperature: number } = {} as any) {
   const X = getX();
   const n = neo();
   const tick = useTick(40);
 
-  const currentRPM = useLive(rpm, rpm * 0.05, 3000);
-  const temperature = useLive(4.0, 0.3, 4000);
+  const currentRPM = rpm;
   const [timerMin] = useState(() => Math.floor(Math.random() * 10) + 5);
   const timerSec = (timerMin * 60 - (tick % (timerMin * 60)));
   const timerDisplay = `${Math.floor(timerSec / 60)}:${(timerSec % 60).toString().padStart(2, '0')}`;
@@ -838,12 +835,10 @@ export function Centrifuge({ title = 'Centrifuge', rpm = 12000 }: { title?: stri
 }
 
 // ── Titration Apparatus ─────────────────────────────────────────────
-export function TitrationApparatus({ title = 'Titration' }: { title?: string } = {}) {
+export function TitrationApparatus({ title = 'Titration', pH, volume }: { title?: string; pH: number; volume: number } = {} as any) {
   const X = getX();
   const n = neo();
   const tick = useTick(80);
-  const pH = useLive(6.8, 0.5, 2000);
-  const volume = useLive(25.4, 1.2, 3000);
 
   // pH to color mapping
   function pHColor(p: number): string {

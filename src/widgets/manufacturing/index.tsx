@@ -1,13 +1,12 @@
 import { useState, useMemo } from 'react';
 import { getX, ease, Card, Badge, Lbl, M, Dot, Prog } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useAnim, useTick } from '../hooks';
 
 // ── Assembly Line ───────────────────────────────────────────────────
-export function AssemblyLine({ title = 'Assembly Line', targetThroughput = 150 }: {
-  title?: string; targetThroughput?: number;
-} = {}) {
+export function AssemblyLine({ title = 'Assembly Line', targetThroughput = 150, throughput }: {
+  title?: string; targetThroughput?: number; throughput: number;
+}) {
   const X = getX();
-  const throughput = useLive(142, 8, 2500);
   const tick = useTick(1500);
   const stations = useMemo(() => [
     { name: 'Intake', status: 'running' as const },
@@ -69,13 +68,10 @@ export function AssemblyLine({ title = 'Assembly Line', targetThroughput = 150 }
 }
 
 // ── OEE Gauge ───────────────────────────────────────────────────────
-export function OEEGauge({ title = 'OEE Monitor', oeeTarget = 85 }: {
-  title?: string; oeeTarget?: number;
-} = {}) {
+export function OEEGauge({ title = 'OEE Monitor', oeeTarget = 85, availability, performance, quality }: {
+  title?: string; oeeTarget?: number; availability: number; performance: number; quality: number;
+}) {
   const X = getX();
-  const availability = useLive(91.2, 2, 4000);
-  const performance = useLive(84.7, 3, 3500);
-  const quality = useLive(97.3, 1, 5000);
   const oee = (availability / 100) * (performance / 100) * (quality / 100) * 100;
   const animOee = useAnim(oee, 1400);
 
@@ -133,14 +129,13 @@ export function OEEGauge({ title = 'OEE Monitor', oeeTarget = 85 }: {
 }
 
 // ── Quality Gate ────────────────────────────────────────────────────
-export function QualityGate({ title = 'Quality Gate', defectTarget = 3 }: {
-  title?: string; defectTarget?: number;
-} = {}) {
+export function QualityGate({ title = 'Quality Gate', defectTarget = 3, defectRate }: {
+  title?: string; defectTarget?: number; defectRate: number;
+}) {
   const X = getX();
   const pass = useAnim(1842, 1200);
   const fail = useAnim(47, 1000);
   const rework = useAnim(23, 1100);
-  const defectRate = useLive(2.48, 0.5, 3000);
   const batches = useMemo(() => Array.from({ length: 10 }, () => ({
     pass: 70 + Math.random() * 28,
     fail: Math.random() * 8,
@@ -186,12 +181,10 @@ export function QualityGate({ title = 'Quality Gate', defectTarget = 3 }: {
 }
 
 // ── PLC Status ──────────────────────────────────────────────────────
-export function PLCStatus({ title = 'PLC Controller', plcModel = 'Siemens S7-1500' }: {
-  title?: string; plcModel?: string;
-} = {}) {
+export function PLCStatus({ title = 'PLC Controller', plcModel = 'Siemens S7-1500', cycleTime, scanRate }: {
+  title?: string; plcModel?: string; cycleTime: number; scanRate: number;
+}) {
   const X = getX();
-  const cycleTime = useLive(24.6, 2, 2000);
-  const scanRate = useLive(4.2, 0.5, 1800);
   const [mode] = useState<'RUN' | 'PROG' | 'FAULT'>('RUN');
   const ioPoints = useMemo(() => [
     { label: 'DI-0', on: true },
@@ -252,10 +245,10 @@ export function TankLevel({ title = 'Tank Levels', lowLevelThreshold = 30 }: {
     { name: 'Tank D', fluid: 'DI Water', capacity: 1000, temp: 18 },
   ], []);
   const levels = [
-    useLive(72, 5, 3000),
-    useLive(45, 8, 3500),
-    useLive(88, 3, 4000),
-    useLive(31, 6, 2800),
+    72,
+    45,
+    88,
+    31,
   ];
 
   const levelColor = (pct: number) => pct > 70 ? X.teal : pct > lowLevelThreshold ? X.amber : X.red;
@@ -309,13 +302,10 @@ export function TankLevel({ title = 'Tank Levels', lowLevelThreshold = 30 }: {
 }
 
 // ── Conveyor Speed ──────────────────────────────────────────────────
-export function ConveyorSpeed({ title = 'Conveyor Belt', targetSpeed = 2.0 }: {
-  title?: string; targetSpeed?: number;
-} = {}) {
+export function ConveyorSpeed({ title = 'Conveyor Belt', targetSpeed = 2.0, speed, tension, itemsMin }: {
+  title?: string; targetSpeed?: number; speed: number; tension: number; itemsMin: number;
+}) {
   const X = getX();
-  const speed = useLive(1.82, 0.15, 1200);
-  const tension = useLive(342, 20, 3000);
-  const itemsMin = useLive(48, 5, 2000);
   const [sparkData, setSparkData] = useState(() => Array.from({ length: 30 }, () => 1.6 + Math.random() * 0.5));
 
   const tick = useTick(800);

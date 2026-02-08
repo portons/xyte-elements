@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react';
 import { getX, ease, Card, Badge, Btn, Prog, Lbl, M, Dot } from '../primitives';
-import { useAnim, useLive } from '../hooks';
+import { useAnim } from '../hooks';
 
 // ── Network Info ──────────────────────────────────────────────────────
-export function NetworkInfo({ title = 'Network', vlan = 10 }: { title?: string; vlan?: number }) {
+export function NetworkInfo({ title = 'Network', vlan = 10, j, lat }: { title?: string; vlan?: number; j: number; lat: number }) {
   const X = getX();
-  const j = useLive(1.2, 2, 1500);
-  const lat = useLive(2.1, 0.8, 1800);
   const rows: [string, string][] = [['IP', '192.168.1.42'], ['MAC', 'A8:5E:45:3B:C1:9F'], ['Gateway', '192.168.1.1'], ['Link', '1 Gbps'], ['PoE', '25.2W Active'], ['VLAN', vlan + ' (AV)'], ['Latency', lat.toFixed(1) + ' ms'], ['Jitter', j.toFixed(1) + ' ms']];
   return (
     <Card style={{ width: 350 }}>
@@ -51,11 +49,8 @@ export function BandwidthMonitor({ title = 'Bandwidth', sampleCount = 30 }: { ti
 }
 
 // ── AVoIP Stats ───────────────────────────────────────────────────────
-export function AVoIPStats({ title = 'AV-over-IP', codec = 'H.265' }: { title?: string; codec?: string }) {
+export function AVoIPStats({ title = 'AV-over-IP', codec = 'H.265', bitrate, latency, drops }: { title?: string; codec?: string; bitrate: number; latency: number; drops: number }) {
   const X = getX();
-  const bitrate = useLive(42, 10, 1500);
-  const latency = useLive(1.8, 0.6, 2000);
-  const drops = useLive(0.2, 0.4, 3000);
   return (
     <Card style={{ width: 350 }}>
       <div style={{ fontSize: 13, fontWeight: 700, color: X.text, marginBottom: 10 }}>{title}</div>
@@ -93,7 +88,7 @@ export function LatencyGraph({ title = 'Latency', warningMs = 3 }: { title?: str
 // ── Power Monitor ─────────────────────────────────────────────────────
 export function PowerMonitor({ title = 'Power', nominalWatts = 850 }: { title?: string; nominalWatts?: number }) {
   const X = getX();
-  const watts = useLive(nominalWatts, 80, 2000);
+  const watts = nominalWatts;
   const [history, setHistory] = useState(() => Array.from({ length: 40 }, () => nominalWatts - 50 + Math.random() * 200));
   useEffect(() => { const i = setInterval(() => setHistory(h => [...h.slice(1), watts]), 2000); return () => clearInterval(i); }, [watts]);
   const mn = Math.min(...history), mx = Math.max(...history);

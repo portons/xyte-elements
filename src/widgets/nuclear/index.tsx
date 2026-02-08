@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { getX, ease, Card, Badge, Btn, Prog, Lbl, M, Dot } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useAnim, useTick } from '../hooks';
 
 function neo() {
   const X = getX();
@@ -15,11 +15,10 @@ function neo() {
 }
 
 // ── Reactor Status ───────────────────────────────────────────────────
-export function ReactorStatus({ title = 'Reactor Status', powerLevel = 85 }: { title?: string; powerLevel?: number } = {}) {
+export function ReactorStatus({ title = 'Reactor Status', powerLevel = 85, temp }: { title?: string; powerLevel?: number; temp: number } = {} as any) {
   const X = getX();
   const n = neo();
-  const power = useLive(powerLevel, 3, 2000);
-  const temp = useLive(315, 5, 2500);
+  const power = powerLevel;
   const pct = Math.max(0, Math.min(100, power));
   const animPct = useAnim(pct);
   const angle = -135 + (animPct / 100) * 270;
@@ -77,13 +76,9 @@ export function ReactorStatus({ title = 'Reactor Status', powerLevel = 85 }: { t
 }
 
 // ── Cooling Loop ─────────────────────────────────────────────────────
-export function CoolingLoop({ title = 'Cooling Loop', flowWarning = 85 }: { title?: string; flowWarning?: number } = {}) {
+export function CoolingLoop({ title = 'Cooling Loop', flowWarning = 85, flowRate, inletTemp, outletTemp, pressure }: { title?: string; flowWarning?: number; flowRate: number; inletTemp: number; outletTemp: number; pressure: number } = {} as any) {
   const X = getX();
   const n = neo();
-  const flowRate = useLive(92, 4, 2000);
-  const inletTemp = useLive(285, 3, 2500);
-  const outletTemp = useLive(320, 4, 3000);
-  const pressure = useLive(155, 5, 2200);
   const tick = useTick(80);
   const isWarning = flowRate < flowWarning;
 
@@ -133,11 +128,9 @@ export function CoolingLoop({ title = 'Cooling Loop', flowWarning = 85 }: { titl
 }
 
 // ── Radiation Level ──────────────────────────────────────────────────
-export function RadiationLevel({ title = 'Radiation Level', alertThreshold = 80 }: { title?: string; alertThreshold?: number } = {}) {
+export function RadiationLevel({ title = 'Radiation Level', alertThreshold = 80, level, dose }: { title?: string; alertThreshold?: number; level: number; dose: number } = {} as any) {
   const X = getX();
   const n = neo();
-  const level = useLive(42, 8, 1500);
-  const dose = useLive(0.12, 0.03, 2000);
   const pct = Math.max(0, Math.min(100, level));
   const isAlert = pct > alertThreshold;
   const bars = 12;
@@ -181,10 +174,9 @@ export function RadiationLevel({ title = 'Radiation Level', alertThreshold = 80 
 }
 
 // ── Containment Status ───────────────────────────────────────────────
-export function ContainmentStatus({ title = 'Containment', sealCount = 4 }: { title?: string; sealCount?: number } = {}) {
+export function ContainmentStatus({ title = 'Containment', sealCount = 4, pressure }: { title?: string; sealCount?: number; pressure: number } = {} as any) {
   const X = getX();
   const n = neo();
-  const pressure = useLive(1.02, 0.01, 3000);
   const [seals, setSeals] = useState<boolean[]>(() => Array.from({ length: sealCount }, () => true));
 
   const toggleSeal = (i: number) => {
@@ -250,7 +242,7 @@ export function FuelRodPosition({ title = 'Fuel Rods', rodCount = 4 }: { title?:
   const n = neo();
   const rods = Array.from({ length: Math.min(rodCount, 6) }, (_, i) => ({
     label: `Rod ${String.fromCharCode(65 + i)}`,
-    position: useLive(40 + i * 10, 5, 2000 + i * 300),
+    position: 40 + i * 10,
   }));
   const avgPos = rods.reduce((s, r) => s + r.position, 0) / rods.length;
 
@@ -303,12 +295,11 @@ export function FuelRodPosition({ title = 'Fuel Rods', rodCount = 4 }: { title?:
 }
 
 // ── Emergency Panel ──────────────────────────────────────────────────
-export function EmergencyPanel({ title = 'Emergency', scramEnabled = true }: { title?: string; scramEnabled?: boolean } = {}) {
+export function EmergencyPanel({ title = 'Emergency', scramEnabled = true, elapsed }: { title?: string; scramEnabled?: boolean; elapsed: number } = {} as any) {
   const X = getX();
   const n = neo();
   const [scramPressed, setScramPressed] = useState(false);
   const [armed, setArmed] = useState(scramEnabled);
-  const elapsed = useLive(0, 0, 1000);
 
   const buttons: { label: string; color: string; icon: string }[] = [
     { label: 'SCRAM', color: X.red, icon: '⚠' },

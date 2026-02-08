@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { getX, ease, Card, Badge, Lbl, M, Dot } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useAnim, useTick } from '../hooks';
 
 function neo() {
   const X = getX();
@@ -375,13 +375,9 @@ export function TrainSchedule({ title = 'Departures', maxTrains = 5 }: { title?:
 }
 
 // ── Pantograph Monitor ───────────────────────────────────────────────
-export function PantographMonitor({ title = 'Pantograph', voltageUnit = 'kV' }: { title?: string; voltageUnit?: string } = {}) {
+export function PantographMonitor({ title = 'Pantograph', voltageUnit = 'kV', voltage, currentDraw, contactForce, temperature }: { title?: string; voltageUnit?: string; voltage: number; currentDraw: number; contactForce: number; temperature: number }) {
   const X = getX();
   const n = neo();
-  const voltage = useLive(25.0, 1.5, 2000);
-  const currentDraw = useLive(420, 40, 2500);
-  const contactForce = useLive(78, 5, 3000);
-  const temperature = useLive(52, 4, 3500);
 
   const maxVoltage = 30;
   const normalizedV = Math.min(1, Math.max(0, voltage / maxVoltage));

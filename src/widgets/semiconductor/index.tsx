@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { getX, ease, Card, Badge, Lbl, M, Dot, Prog } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useAnim, useTick } from '../hooks';
 
 function neo() {
   const X = getX();
@@ -15,13 +15,10 @@ function neo() {
 }
 
 // ── Fab Clean Room ───────────────────────────────────────────────────
-export function FabCleanRoom({ title = 'Clean Room', isoClass = 5 }: { title?: string; isoClass?: number } = {}) {
+export function FabCleanRoom({ title = 'Clean Room', isoClass = 5, temp, humidity, pressure }: { title?: string; isoClass?: number; temp: number; humidity: number; pressure: number } = {} as any) {
   const X = getX();
   const n = neo();
-  const particleCount = useLive(isoClass <= 3 ? 35 : isoClass <= 5 ? 3520 : 352000, isoClass <= 3 ? 8 : isoClass <= 5 ? 400 : 25000, 2500);
-  const temp = useLive(21.5, 0.3, 3000);
-  const humidity = useLive(43, 2, 3500);
-  const pressure = useLive(1.2, 0.1, 4000);
+  const particleCount = isoClass <= 3 ? 35 : isoClass <= 5 ? 3520 : 352000;
   const animParticle = useAnim(Math.min(100, (particleCount / (isoClass <= 3 ? 100 : isoClass <= 5 ? 10000 : 1000000)) * 100), 1200);
 
   const pColor = animParticle > 80 ? X.red : animParticle > 55 ? X.amber : X.teal;
@@ -121,7 +118,7 @@ export function FabCleanRoom({ title = 'Clean Room', isoClass = 5 }: { title?: s
 }
 
 // ── Wafer Yield ──────────────────────────────────────────────────────
-export function WaferYield({ title = 'Wafer Yield', targetYield = 95 }: { title?: string; targetYield?: number } = {}) {
+export function WaferYield({ title = 'Wafer Yield', targetYield = 95, waferTemp }: { title?: string; targetYield?: number; waferTemp: number } = {} as any) {
   const X = getX();
   const n = neo();
 
@@ -139,7 +136,6 @@ export function WaferYield({ title = 'Wafer Yield', targetYield = 95 }: { title?
   const yieldPct = (passCount / totalDies) * 100;
   const animYield = useAnim(yieldPct, 1400);
   const yieldColor = yieldPct >= targetYield ? X.teal : yieldPct >= targetYield - 5 ? X.amber : X.red;
-  const waferTemp = useLive(22.3, 0.4, 3000);
 
   // Build die positions inside a circle
   const rows = 10;
@@ -246,14 +242,11 @@ export function WaferYield({ title = 'Wafer Yield', targetYield = 95 }: { title?
 }
 
 // ── Lithography Step ─────────────────────────────────────────────────
-export function LithographyStep({ title = 'Lithography', layerCount = 7 }: { title?: string; layerCount?: number } = {}) {
+export function LithographyStep({ title = 'Lithography', layerCount = 7, exposureDose, alignOffset, focusDepth }: { title?: string; layerCount?: number; exposureDose: number; alignOffset: number; focusDepth: number } = {} as any) {
   const X = getX();
   const n = neo();
-  const currentLayer = useLive(Math.ceil(layerCount * 0.6), 0.6, 4000);
+  const currentLayer = Math.ceil(layerCount * 0.6);
   const clampedLayer = Math.max(1, Math.min(layerCount, Math.round(currentLayer)));
-  const exposureDose = useLive(245, 8, 3000);
-  const alignOffset = useLive(0.8, 0.3, 3500);
-  const focusDepth = useLive(42, 3, 2800);
   const progressPct = (clampedLayer / layerCount) * 100;
   const animProgress = useAnim(progressPct, 1000);
 
@@ -388,7 +381,7 @@ export function DefectMap({ title = 'Defect Map', dpiThreshold = 15 }: { title?:
   const totalDefects = defects.reduce((s, d) => s + d.count, 0);
   const failZones = defects.filter(d => d.count > dpiThreshold).length;
   const passZones = defects.filter(d => d.count === 0 || d.count <= dpiThreshold).length;
-  const liveDefects = useLive(totalDefects, 4, 3000);
+  const liveDefects = totalDefects;
   const animDefects = useAnim(Math.min(100, (liveDefects / (gridSize * gridSize * 10)) * 100), 1200);
 
   const overallColor = failZones > 5 ? X.red : failZones > 2 ? X.amber : X.teal;
@@ -491,14 +484,9 @@ export function DefectMap({ title = 'Defect Map', dpiThreshold = 15 }: { title?:
 }
 
 // ── Etch Chamber ─────────────────────────────────────────────────────
-export function EtchChamber({ title = 'Etch Chamber', pressureUnit = 'mTorr' }: { title?: string; pressureUnit?: string } = {}) {
+export function EtchChamber({ title = 'Etch Chamber', pressureUnit = 'mTorr', chamberPressure, gasFlow, rfPower, etchRate }: { title?: string; pressureUnit?: string; chamberPressure: number; gasFlow: number; rfPower: number; etchRate: number } = {} as any) {
   const X = getX();
   const n = neo();
-
-  const chamberPressure = useLive(85, 8, 2500);
-  const gasFlow = useLive(120, 10, 3000);
-  const rfPower = useLive(750, 40, 3200);
-  const etchRate = useLive(2.4, 0.3, 2800);
 
   const maxPressure = 200;
   const maxGas = 250;
@@ -645,15 +633,14 @@ export function EtchChamber({ title = 'Etch Chamber', pressureUnit = 'mTorr' }: 
 }
 
 // ── Wafer Transport ──────────────────────────────────────────────────
-export function WaferTransport({ title = 'Wafer Transport', lotSize = 25 }: { title?: string; lotSize?: number } = {}) {
+export function WaferTransport({ title = 'Wafer Transport', lotSize = 25, speed }: { title?: string; lotSize?: number; speed: number } = {} as any) {
   const X = getX();
   const n = neo();
   const tick = useTick(80);
-  const processed = useLive(Math.floor(lotSize * 0.64), 1.5, 5000);
+  const processed = Math.floor(lotSize * 0.64);
   const clampedProcessed = Math.max(0, Math.min(lotSize, Math.round(processed)));
   const progressPct = (clampedProcessed / lotSize) * 100;
   const animProgress = useAnim(progressPct, 1200);
-  const speed = useLive(1.8, 0.2, 3000);
 
   const stations = [
     { name: 'LOAD', color: X.teal },

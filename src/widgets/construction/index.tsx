@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { getX, ease, Card, Badge, Lbl, M, Dot, Prog } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useAnim, useTick } from '../hooks';
 
 // ── Site Progress ────────────────────────────────────────────────────
 export function SiteProgress({ title = 'Site Progress', targetDate = 'Jan 2026' }: { title?: string; targetDate?: string }) {
@@ -72,15 +72,15 @@ export function CraneMonitor({ title = 'Crane Monitor', windLimit = 25 }: { titl
   ], []);
 
   const loads = [
-    useLive(8.4, 1.2, 2500),
-    useLive(0, 0, 2500),
-    useLive(0, 0, 2500),
+    8.4,
+    0,
+    0,
   ];
 
   const winds = [
-    useLive(14.2, 3, 3000),
-    useLive(13.8, 2.5, 3200),
-    useLive(15.1, 3.5, 2800),
+    14.2,
+    13.8,
+    15.1,
   ];
 
   const sc: Record<string, string> = { operating: X.teal, standby: X.amber, maintenance: X.red };
@@ -178,13 +178,8 @@ export function MaterialsTracker({ title = 'Materials Tracker', statusFilter = '
 }
 
 // ── Weather Site ─────────────────────────────────────────────────────
-export function WeatherSite({ title = 'Site Weather', tempUnit = 'F' }: { title?: string; tempUnit?: string }) {
+export function WeatherSite({ title = 'Site Weather', tempUnit = 'F', temp, wind, gusts, humidity, precip }: { title?: string; tempUnit?: string; temp: number; wind: number; gusts: number; humidity: number; precip: number }) {
   const X = getX();
-  const temp = useLive(82, 3, 5000);
-  const wind = useLive(18, 4, 3000);
-  const gusts = useLive(26, 6, 3500);
-  const humidity = useLive(54, 5, 4000);
-  const precip = useLive(12, 4, 6000);
 
   const forecast = useMemo(() => [
     { hour: '+1h', temp: 84, wind: 20, icon: 'Partly Cloudy' },
@@ -244,12 +239,11 @@ export function WeatherSite({ title = 'Site Weather', tempUnit = 'F' }: { title?
 }
 
 // ── Safety Board ─────────────────────────────────────────────────────
-export function SafetyBoard({ title = 'Safety Board', incidentGoal = 0 }: { title?: string; incidentGoal?: number }) {
+export function SafetyBoard({ title = 'Safety Board', incidentGoal = 0, workersOnSite }: { title?: string; incidentGoal?: number; workersOnSite: number }) {
   const X = getX();
   const daysWithout = useAnim(147, 1600);
   const totalIncidents = 3;
   const nearMisses = 11;
-  const workersOnSite = useLive(84, 8, 4000);
 
   const categories = useMemo(() => [
     { label: 'Falls', count: 1, color: X.red },
@@ -307,11 +301,8 @@ export function SafetyBoard({ title = 'Safety Board', incidentGoal = 0 }: { titl
 }
 
 // ── Concrete Monitor ─────────────────────────────────────────────────
-export function ConcreteMonitor({ title = 'Concrete Monitor', targetPSI = 4000 }: { title?: string; targetPSI?: number }) {
+export function ConcreteMonitor({ title = 'Concrete Monitor', targetPSI = 4000, slump, airContent, concreteTemp }: { title?: string; targetPSI?: number; slump: number; airContent: number; concreteTemp: number }) {
   const X = getX();
-  const slump = useLive(4.2, 0.6, 3000);
-  const airContent = useLive(5.8, 0.8, 3500);
-  const concreteTemp = useLive(72, 3, 4000);
 
   const curePoints = useMemo(() => [
     { id: 'CP-A', loc: 'Column A3', target28: 4000 },

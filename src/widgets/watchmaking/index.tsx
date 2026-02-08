@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { getX, ease, Card, Badge, Btn, Prog, Lbl, M, Dot } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useAnim, useTick } from '../hooks';
 
 function neo() {
   const X = getX();
@@ -216,7 +216,7 @@ export function Chronograph({ title = 'Chronograph' }: { title?: string } = {}) 
 export function MoonPhase({ title = 'Moon Phase', day = 14 }: { title?: string; day?: number } = {}) {
   const X = getX();
   const n = neo();
-  const liveDay = useLive(day, 1, 5000);
+  const liveDay = day;
   const currentDay = Math.max(0, Math.min(29.5, liveDay));
 
   const phaseNames = [
@@ -310,10 +310,9 @@ export function MoonPhase({ title = 'Moon Phase', day = 14 }: { title?: string; 
 }
 
 // ── Power Reserve ─────────────────────────────────────────────────
-export function PowerReserve({ title = 'Power Reserve', hours = 72 }: { title?: string; hours?: number } = {}) {
+export function PowerReserve({ title = 'Power Reserve', hours = 72, liveHours }: { title?: string; hours?: number; liveHours: number }) {
   const X = getX();
   const n = neo();
-  const liveHours = useLive(48, 3, 3000);
   const reserve = Math.max(0, Math.min(hours, liveHours));
   const pct = reserve / hours;
   const animPct = useAnim(pct * 100);
@@ -414,14 +413,13 @@ export function PowerReserve({ title = 'Power Reserve', hours = 72 }: { title?: 
 }
 
 // ── Tourbillon Cage ───────────────────────────────────────────────
-export function TourbillonCage({ title = 'Tourbillon' }: { title?: string } = {}) {
+export function TourbillonCage({ title = 'Tourbillon', oscillationRate }: { title?: string; oscillationRate: number }) {
   const X = getX();
   const n = neo();
   const tick = useTick(50);
   const cageAngle = tick * 3;
   const balanceAngle = Math.sin(tick * 0.3) * 30;
   const gearAngle = -(tick * 6);
-  const oscillationRate = useLive(28800, 200, 2000);
 
   // Gear teeth path for outer cage
   const gearTeeth = (() => {
@@ -544,7 +542,7 @@ export function TourbillonCage({ title = 'Tourbillon' }: { title?: string } = {}
 export function DateWheel({ title = 'Date', currentDate = 15 }: { title?: string; currentDate?: number } = {}) {
   const X = getX();
   const n = neo();
-  const liveDateRaw = useLive(currentDate, 2, 8000);
+  const liveDateRaw = currentDate;
   const [manualDate, setManualDate] = useState<number | null>(null);
   const liveDate = manualDate !== null ? manualDate : Math.max(1, Math.min(31, Math.round(liveDateRaw)));
 
@@ -651,13 +649,12 @@ export function DateWheel({ title = 'Date', currentDate = 15 }: { title?: string
 }
 
 // ── Balance Wheel ─────────────────────────────────────────────────
-export function BalanceWheel({ title = 'Balance Wheel', frequency = 28800 }: { title?: string; frequency?: number } = {}) {
+export function BalanceWheel({ title = 'Balance Wheel', frequency = 28800, amplitude }: { title?: string; frequency?: number; amplitude: number }) {
   const X = getX();
   const n = neo();
   const tick = useTick(30);
   const currentAngle = Math.sin(tick * 2) * 180;
-  const liveFreq = useLive(frequency, 100, 2000);
-  const amplitude = useLive(300, 8, 1500);
+  const liveFreq = frequency;
 
   // Trail angles for persistence-of-vision
   const trailOpacities = [0.4, 0.25, 0.15, 0.08, 0.03];

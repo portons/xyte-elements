@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { getX, ease, Card, Badge, Btn, Prog, Lbl, M, Dot } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useAnim, useTick } from '../hooks';
 
 function neo() {
   const X = getX();
@@ -15,10 +15,9 @@ function neo() {
 }
 
 // -- Depth Gauge ---------------------------------------------------------------
-export function DepthGauge({ title = 'Depth', maxDepth = 400 }: { title?: string; maxDepth?: number } = {}) {
+export function DepthGauge({ title = 'Depth', maxDepth = 400, depth }: { title?: string; maxDepth?: number; depth: number }) {
   const X = getX();
   const n = neo();
-  const depth = useLive(185, 15);
 
   const depthPct = Math.min(1, Math.max(0, depth / maxDepth));
   const animPct = useAnim(depthPct * 100, 1200);
@@ -173,11 +172,10 @@ export function DepthGauge({ title = 'Depth', maxDepth = 400 }: { title?: string
 }
 
 // -- Ballast Tank -------------------------------------------------------------
-export function BallastTank({ title = 'Ballast' }: { title?: string } = {}) {
+export function BallastTank({ title = 'Ballast', fillPct }: { title?: string; fillPct: number }) {
   const X = getX();
   const n = neo();
   const tick = useTick(50);
-  const fillPct = useLive(65, 5);
   const [flooding, setFlooding] = useState(false);
   const [draining, setDraining] = useState(false);
 
@@ -536,10 +534,9 @@ export function SonarDisplay({ title = 'Sonar' }: { title?: string } = {}) {
 }
 
 // -- Hull Pressure ------------------------------------------------------------
-export function HullPressure({ title = 'Hull Pressure', maxPSI = 600 }: { title?: string; maxPSI?: number } = {}) {
+export function HullPressure({ title = 'Hull Pressure', maxPSI = 600, psi }: { title?: string; maxPSI?: number; psi: number }) {
   const X = getX();
   const n = neo();
-  const psi = useLive(380, 25);
 
   const psiPct = Math.min(1, Math.max(0, psi / maxPSI));
   const animPct = useAnim(psiPct * 100, 1200);
@@ -716,10 +713,9 @@ export function HullPressure({ title = 'Hull Pressure', maxPSI = 600 }: { title?
 }
 
 // -- Dive Plane ---------------------------------------------------------------
-export function DivePlane({ title = 'Dive Planes' }: { title?: string } = {}) {
+export function DivePlane({ title = 'Dive Planes', planeAngle }: { title?: string; planeAngle: number }) {
   const X = getX();
   const n = neo();
-  const planeAngle = useLive(12, 5, 2000);
 
   // Spring easing for bubble position
   const animAngle = useAnim(planeAngle, 1400);

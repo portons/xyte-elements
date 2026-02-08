@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { getX, ease, Card, Badge, Lbl, M, Dot, Prog } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useAnim, useTick } from '../hooks';
 
 // ── Flight Board ───────────────────────────────────────────────────
 export function FlightBoard({ title = 'Departures', maxFlights = 6 }: {
@@ -70,14 +70,14 @@ export function RunwayStatus({ title = 'Runway Status', windUnit = 'kt' }: {
   ], []);
 
   const windComponents = [
-    useLive(runways[0].baseWind, 3, 2500),
-    useLive(runways[1].baseWind, 4, 2800),
-    useLive(runways[2].baseWind, 2, 3000),
+    runways[0].baseWind,
+    runways[1].baseWind,
+    runways[2].baseWind,
   ];
   const visLive = [
-    useLive(runways[0].visibility, 1.5, 4000),
-    useLive(runways[1].visibility, 2, 3800),
-    useLive(runways[2].visibility, 1, 4500),
+    runways[0].visibility,
+    runways[1].visibility,
+    runways[2].visibility,
   ];
 
   const statusColor: Record<string, string> = { active: X.teal, closed: X.red, maintenance: X.amber };
@@ -131,13 +131,12 @@ export function RunwayStatus({ title = 'Runway Status', windUnit = 'kt' }: {
 }
 
 // ── Baggage Flow ───────────────────────────────────────────────────
-export function BaggageFlow({ title = 'Baggage System', rateUnit = 'bags/min' }: {
-  title?: string; rateUnit?: string;
+export function BaggageFlow({ title = 'Baggage System', rateUnit = 'bags/min', currentRate }: {
+  title?: string; rateUnit?: string; currentRate: number;
 }) {
   const X = getX();
   const totalBags = 18420;
   const animTotal = useAnim(totalBags, 1200);
-  const currentRate = useLive(142, 18, 1800);
 
   const carousels = useMemo(() => [
     { id: 'C1', flight: 'UA 1842', status: 'active' as const, baseBags: 84 },
@@ -147,10 +146,10 @@ export function BaggageFlow({ title = 'Baggage System', rateUnit = 'bags/min' }:
   ], []);
 
   const carouselBags = [
-    useLive(carousels[0].baseBags, 8, 2500),
-    useLive(carousels[1].baseBags, 12, 2200),
-    useLive(0, 0, 5000),
-    useLive(carousels[3].baseBags, 6, 2800),
+    carousels[0].baseBags,
+    carousels[1].baseBags,
+    0,
+    carousels[3].baseBags,
   ];
 
   const sparkline = useMemo(() => {
@@ -230,8 +229,8 @@ export function BaggageFlow({ title = 'Baggage System', rateUnit = 'bags/min' }:
 }
 
 // ── Fuel Farm ──────────────────────────────────────────────────────
-export function FuelFarm({ title = 'Fuel Farm', lowLevelThreshold = 30 }: {
-  title?: string; lowLevelThreshold?: number;
+export function FuelFarm({ title = 'Fuel Farm', lowLevelThreshold = 30, dailyConsumption }: {
+  title?: string; lowLevelThreshold?: number; dailyConsumption: number;
 }) {
   const X = getX();
 
@@ -243,21 +242,20 @@ export function FuelFarm({ title = 'Fuel Farm', lowLevelThreshold = 30 }: {
   ], []);
 
   const levels = [
-    useLive(82, 3, 4000),
-    useLive(54, 5, 3500),
-    useLive(91, 2, 4500),
-    useLive(38, 4, 3000),
+    82,
+    54,
+    91,
+    38,
   ];
   const temps = [
-    useLive(tanks[0].baseTemp, 1, 5000),
-    useLive(tanks[1].baseTemp, 1.2, 4800),
-    useLive(tanks[2].baseTemp, 0.8, 5200),
-    useLive(tanks[3].baseTemp, 1.5, 4500),
+    tanks[0].baseTemp,
+    tanks[1].baseTemp,
+    tanks[2].baseTemp,
+    tanks[3].baseTemp,
   ];
 
   const totalVolume = tanks.reduce((a, t, i) => a + (levels[i] / 100) * t.capacity, 0);
   const animVolume = useAnim(totalVolume / 1000, 1000);
-  const dailyConsumption = useLive(42.5, 5, 6000);
 
   const levelColor = (pct: number) => pct > 60 ? X.teal : pct > lowLevelThreshold ? X.amber : X.red;
 

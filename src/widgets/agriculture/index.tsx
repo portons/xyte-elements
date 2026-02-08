@@ -1,6 +1,5 @@
 import { useState, useMemo } from 'react';
 import { getX, ease, Card, Badge, Lbl, M, Dot, Prog } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
 
 // ── Soil Moisture ────────────────────────────────────────────────────
 export function SoilMoisture({ title = 'Soil Moisture', zoneCount = 4 }: { title?: string; zoneCount?: number }) {
@@ -15,7 +14,7 @@ export function SoilMoisture({ title = 'Soil Moisture', zoneCount = 4 }: { title
   const visibleZones = zones.slice(0, zoneCount);
 
   const liveZones = visibleZones.map((z, i) => {
-    const m = useLive(z.moisture, 4, 3000 + i * 400);
+    const m = z.moisture;
     return { ...z, live: Math.max(0, Math.min(100, Math.round(m))) };
   });
 
@@ -97,14 +96,8 @@ export function IrrigationControl({ title = 'Irrigation Control', volumeUnit = '
 }
 
 // ── Weather Station ──────────────────────────────────────────────────
-export function WeatherStation({ title = 'Weather Station', tempUnit = 'C' }: { title?: string; tempUnit?: string }) {
+export function WeatherStation({ title = 'Weather Station', tempUnit = 'C', temp, humidity, windSpeed, rainfall, uvIndex, pressure }: { title?: string; tempUnit?: string; temp: number; humidity: number; windSpeed: number; rainfall: number; uvIndex: number; pressure: number }) {
   const X = getX();
-  const temp = useLive(24.6, 2, 2500);
-  const humidity = useLive(62, 5, 3500);
-  const windSpeed = useLive(12.3, 4, 2000);
-  const rainfall = useLive(2.4, 0.8, 5000);
-  const uvIndex = useLive(6.2, 1.5, 4000);
-  const pressure = useLive(1013.2, 2, 6000);
 
   const windDirs = useMemo(() => ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'], []);
   const windDir = useMemo(() => windDirs[Math.floor(Math.random() * windDirs.length)], []);
@@ -165,7 +158,7 @@ export function CropHealth({ title = 'Crop Health', ndviThreshold = 0.5 }: { tit
   const ndviColor = (v: number) => v >= 0.7 ? X.teal : v >= ndviThreshold ? X.amber : X.red;
 
   const liveFields = fields.map((f, i) => {
-    const n = useLive(f.ndvi, 0.06, 4000 + i * 500);
+    const n = f.ndvi;
     return { ...f, liveNdvi: Math.max(0, Math.min(1, n)) };
   });
 
@@ -214,8 +207,8 @@ export function DroneView({ title = 'Drone Fleet', lowBatteryThreshold = 20 }: {
   const missionColor: Record<string, string> = { Surveying: X.indigo, Spraying: X.teal, Idle: X.textMut, Charging: X.amber };
 
   const liveDrones = drones.map((d, i) => {
-    const b = useLive(d.battery, 3, 4000 + i * 600);
-    const cov = useLive(d.coverage, 5, 3000 + i * 400);
+    const b = d.battery;
+    const cov = d.coverage;
     return { ...d, liveBat: Math.max(0, Math.min(100, Math.round(b))), liveCov: Math.max(0, Math.min(100, Math.round(cov))) };
   });
 
@@ -274,7 +267,7 @@ export function HarvestTracker({ title = 'Harvest Tracker', yieldUnit = 'tons' }
   const gradeColor: Record<string, string> = { A: X.teal, B: X.amber, C: X.red };
 
   const liveCrops = crops.map((c, i) => {
-    const comp = useLive(c.complete, 3, 5000 + i * 500);
+    const comp = c.complete;
     return { ...c, liveComplete: Math.max(0, Math.min(100, Math.round(comp))) };
   });
 

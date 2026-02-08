@@ -1,13 +1,12 @@
 import { useState, useMemo } from 'react';
 import { getX, ease, Card, Badge, Lbl, M, Dot, Prog } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useAnim, useTick } from '../hooks';
 
 // ── Classroom AV ────────────────────────────────────────────────────
-export function ClassroomAV({ title = 'Classroom AV', room = 'Room 204', projector = true, source = 'HDMI', screenPos = 85, recording = true }: {
-  title?: string; room?: string; projector?: boolean; source?: string; screenPos?: number; recording?: boolean;
+export function ClassroomAV({ title = 'Classroom AV', room = 'Room 204', projector = true, source = 'HDMI', screenPos = 85, recording = true, audioLevel }: {
+  title?: string; room?: string; projector?: boolean; source?: string; screenPos?: number; recording?: boolean; audioLevel: number;
 }) {
   const X = getX();
-  const audioLevel = useLive(72, 12, 800);
   const [src, setSrc] = useState(source);
   const sources = ['HDMI', 'Wireless', 'Doc Cam'];
   const srcColors: Record<string, string> = { HDMI: X.purple, Wireless: X.teal, 'Doc Cam': X.indigo };
@@ -289,9 +288,8 @@ export function BellSchedule({ title = 'Bell Schedule', currentPeriod = 3 }: { t
 }
 
 // ── Library Occupancy ───────────────────────────────────────────────
-export function LibraryOccupancy({ title = 'Library Occupancy', capacity = 120 }: { title?: string; capacity?: number }) {
+export function LibraryOccupancy({ title = 'Library Occupancy', capacity = 120, currentOcc, noiseLevel }: { title?: string; capacity?: number; currentOcc: number; noiseLevel: number }) {
   const X = getX();
-  const currentOcc = useLive(78, 6, 5000);
   const occ = Math.max(0, Math.round(currentOcc));
   const pct = Math.min(100, (occ / capacity) * 100);
   const animOcc = useAnim(78, 1000);
@@ -307,7 +305,6 @@ export function LibraryOccupancy({ title = 'Library Occupancy', capacity = 120 }
   const statusColor: Record<string, string> = { available: X.teal, occupied: X.red, reserved: X.amber };
   const statusLabel: Record<string, string> = { available: 'Open', occupied: 'In Use', reserved: 'Rsrvd' };
 
-  const noiseLevel = useLive(38, 8, 3000);
   const noiseVal = Math.max(0, Math.min(100, noiseLevel));
   const noiseTag = noiseVal > 60 ? 'Loud' : noiseVal > 35 ? 'Moderate' : 'Quiet';
   const noiseColor = noiseVal > 60 ? X.red : noiseVal > 35 ? X.amber : X.teal;

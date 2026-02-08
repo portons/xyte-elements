@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { getX, ease, Card, Badge, Btn, Prog, Lbl, M, Dot } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useAnim, useTick } from '../hooks';
 
 function neo() {
   const X = getX();
@@ -15,25 +15,14 @@ function neo() {
 }
 
 // ── Robot Arm Pose ───────────────────────────────────────────────────
-export function RobotArmPose({ title = 'Robot Arm', joints = 6 }: {
-  title?: string; joints?: number;
-} = {}) {
+export function RobotArmPose({ title = 'Robot Arm', joints = 6, angles }: {
+  title?: string; joints?: number; angles: number[];
+}) {
   const X = getX();
   const n = neo();
 
   const jointNames = ['Base', 'Shoulder', 'Elbow', 'Wrist 1', 'Wrist 2', 'Wrist 3', 'Tool', 'Aux'];
   const visibleJoints = jointNames.slice(0, joints);
-
-  const angles = [
-    useLive(45.2, 3, 1800),
-    useLive(-12.8, 4, 2200),
-    useLive(90.5, 2, 2000),
-    useLive(178.3, 5, 1600),
-    useLive(-45.0, 3, 2400),
-    useLive(0.7, 2, 1900),
-    useLive(22.1, 3, 2100),
-    useLive(-88.4, 4, 2300),
-  ];
 
   const statuses = ['ok', 'ok', 'ok', 'warn', 'ok', 'ok', 'ok', 'ok'];
   const statusColor = (s: string) => s === 'ok' ? X.teal : s === 'warn' ? X.amber : X.red;
@@ -99,9 +88,9 @@ export function RobotArmPose({ title = 'Robot Arm', joints = 6 }: {
 }
 
 // ── Joint Torque ────────────────────────────────────────────────────
-export function JointTorque({ title = 'Joint Torque', torqueLimit = 100 }: {
-  title?: string; torqueLimit?: number;
-} = {}) {
+export function JointTorque({ title = 'Joint Torque', torqueLimit = 100, torques }: {
+  title?: string; torqueLimit?: number; torques: number[];
+}) {
   const X = getX();
   const n = neo();
 
@@ -110,13 +99,6 @@ export function JointTorque({ title = 'Joint Torque', torqueLimit = 100 }: {
     { name: 'J2', base: 78 },
     { name: 'J3', base: 45 },
     { name: 'J4', base: 91 },
-  ];
-
-  const torques = [
-    useLive(jointData[0].base, 5, 1500),
-    useLive(jointData[1].base, 6, 1800),
-    useLive(jointData[2].base, 4, 2000),
-    useLive(jointData[3].base, 3, 1600),
   ];
 
   const torqueColor = (pct: number) => pct > 90 ? X.red : pct > 70 ? X.amber : X.teal;
@@ -198,15 +180,11 @@ export function JointTorque({ title = 'Joint Torque', torqueLimit = 100 }: {
 }
 
 // ── Vision Feed ─────────────────────────────────────────────────────
-export function VisionFeed({ title = 'Vision Feed', confidence = 85 }: {
-  title?: string; confidence?: number;
-} = {}) {
+export function VisionFeed({ title = 'Vision Feed', conf, fps, detections }: {
+  title?: string; conf: number; fps: number; detections: number;
+}) {
   const X = getX();
   const n = neo();
-
-  const conf = useLive(confidence, 4, 1200);
-  const fps = useLive(29.8, 1.5, 800);
-  const detections = useLive(3, 2, 3000);
   const tick = useTick(2000);
 
   const confColor = conf > 80 ? X.teal : conf > 60 ? X.amber : X.red;
@@ -411,13 +389,11 @@ export function TaskQueue({ title = 'Task Queue', maxTasks = 8 }: {
 }
 
 // ── Gripper Status ──────────────────────────────────────────────────
-export function GripperStatus({ title = 'Gripper', forceUnit = 'N' }: {
-  title?: string; forceUnit?: string;
-} = {}) {
+export function GripperStatus({ title = 'Gripper', forceUnit = 'N', force }: {
+  title?: string; forceUnit?: string; force: number;
+}) {
   const X = getX();
   const n = neo();
-
-  const force = useLive(24.6, 3, 1000);
   const [gripState] = useState<'Open' | 'Closed' | 'Gripping'>('Gripping');
   const tick = useTick(800);
 
@@ -522,9 +498,9 @@ export function GripperStatus({ title = 'Gripper', forceUnit = 'N' }: {
 }
 
 // ── Cycle Counter ───────────────────────────────────────────────────
-export function CycleCounter({ title = 'Cycle Counter', targetCycles = 10000 }: {
-  title?: string; targetCycles?: number;
-} = {}) {
+export function CycleCounter({ title = 'Cycle Counter', targetCycles = 10000, cycleRate, uptime }: {
+  title?: string; targetCycles?: number; cycleRate: number; uptime: number;
+}) {
   const X = getX();
   const n = neo();
 
@@ -533,9 +509,6 @@ export function CycleCounter({ title = 'Cycle Counter', targetCycles = 10000 }: 
   const displayCycles = Math.round(animCycles);
   const completion = (displayCycles / targetCycles) * 100;
   const animCompletion = useAnim(completion, 1400);
-
-  const cycleRate = useLive(12.4, 1.5, 2000);
-  const uptime = useLive(98.7, 0.3, 5000);
 
   // Format number into individual digit cells
   const digits = String(displayCycles).padStart(6, '0').split('');

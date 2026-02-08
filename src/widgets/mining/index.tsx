@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { getX, ease, Card, Badge, Btn, Prog, Lbl, M, Dot } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useAnim, useTick } from '../hooks';
 
 function neo() {
   const X = getX();
@@ -15,12 +15,9 @@ function neo() {
 }
 
 // ── Mine Shaft Depth ─────────────────────────────────────────────────
-export function MineShaftDepth({ title = 'Mine Shaft', maxDepth = 800 }: { title?: string; maxDepth?: number } = {}) {
+export function MineShaftDepth({ title = 'Mine Shaft', maxDepth = 800, currentDepth, temperature, humidity }: { title?: string; maxDepth?: number; currentDepth: number; temperature: number; humidity: number }) {
   const X = getX();
   const n = neo();
-  const currentDepth = useLive(520, 15, 3000);
-  const temperature = useLive(34, 2, 4000);
-  const humidity = useLive(78, 4, 3500);
   const depthPct = Math.min(100, Math.max(0, (currentDepth / maxDepth) * 100));
   const animDepth = useAnim(depthPct, 1400);
   const depthColor = depthPct > 85 ? X.red : depthPct > 60 ? X.amber : X.teal;
@@ -117,15 +114,15 @@ export function MineShaftDepth({ title = 'Mine Shaft', maxDepth = 800 }: { title
 }
 
 // ── Ore Grade Analyzer ───────────────────────────────────────────────
-export function OreGradeAnalyzer({ title = 'Ore Grade', gradeThreshold = 65 }: { title?: string; gradeThreshold?: number } = {}) {
+export function OreGradeAnalyzer({ title = 'Ore Grade', gradeThreshold = 65, goldGrade, copperGrade, ironGrade, lithiumGrade }: { title?: string; gradeThreshold?: number; goldGrade: number; copperGrade: number; ironGrade: number; lithiumGrade: number }) {
   const X = getX();
   const n = neo();
 
   const ores = [
-    { name: 'Gold', grade: useLive(72, 6, 3000), color: X.amber, unit: 'g/t' },
-    { name: 'Copper', grade: useLive(58, 5, 3200), color: X.teal, unit: '%' },
-    { name: 'Iron', grade: useLive(81, 4, 2800), color: X.red, unit: '%' },
-    { name: 'Lithium', grade: useLive(44, 7, 3500), color: X.purple, unit: 'ppm' },
+    { name: 'Gold', grade: goldGrade, color: X.amber, unit: 'g/t' },
+    { name: 'Copper', grade: copperGrade, color: X.teal, unit: '%' },
+    { name: 'Iron', grade: ironGrade, color: X.red, unit: '%' },
+    { name: 'Lithium', grade: lithiumGrade, color: X.purple, unit: 'ppm' },
   ];
 
   const animGrades = [
@@ -197,13 +194,10 @@ export function OreGradeAnalyzer({ title = 'Ore Grade', gradeThreshold = 65 }: {
 }
 
 // ── Ventilation Fan ──────────────────────────────────────────────────
-export function VentilationFan({ title = 'Ventilation', rpmTarget = 1200 }: { title?: string; rpmTarget?: number } = {}) {
+export function VentilationFan({ title = 'Ventilation', rpmTarget = 1200, rpm, airflow, power }: { title?: string; rpmTarget?: number; rpm: number; airflow: number; power: number }) {
   const X = getX();
   const n = neo();
   const tick = useTick(50);
-  const rpm = useLive(rpmTarget, 80, 2500);
-  const airflow = useLive(42, 3, 3000);
-  const power = useLive(18.5, 2, 3500);
   const [running, setRunning] = useState(true);
 
   const rotation = running ? tick * 12 : 0;
@@ -294,13 +288,9 @@ export function VentilationFan({ title = 'Ventilation', rpmTarget = 1200 }: { ti
 }
 
 // ── Conveyor Load ────────────────────────────────────────────────────
-export function ConveyorLoad({ title = 'Conveyor Load', capacityWarning = 80 }: { title?: string; capacityWarning?: number } = {}) {
+export function ConveyorLoad({ title = 'Conveyor Load', capacityWarning = 80, loadPct, speed, throughput, motorTemp }: { title?: string; capacityWarning?: number; loadPct: number; speed: number; throughput: number; motorTemp: number }) {
   const X = getX();
   const n = neo();
-  const loadPct = useLive(68, 8, 2500);
-  const speed = useLive(2.4, 0.3, 3000);
-  const throughput = useLive(340, 25, 3500);
-  const motorTemp = useLive(62, 4, 4000);
   const animLoad = useAnim(loadPct, 1200);
 
   const loadColor = loadPct >= 90 ? X.red : loadPct >= capacityWarning ? X.amber : X.teal;
@@ -508,13 +498,9 @@ export function BlastSequencer({ title = 'Blast Sequence', countdown = 30 }: { t
 }
 
 // ── Cage Winder ──────────────────────────────────────────────────────
-export function CageWinder({ title = 'Cage Winder', speedUnit = 'm/s' }: { title?: string; speedUnit?: string } = {}) {
+export function CageWinder({ title = 'Cage Winder', speedUnit = 'm/s', speed, depth, loadWeight, ropeStress }: { title?: string; speedUnit?: string; speed: number; depth: number; loadWeight: number; ropeStress: number }) {
   const X = getX();
   const n = neo();
-  const speed = useLive(8.2, 1.5, 2000);
-  const depth = useLive(420, 20, 3000);
-  const loadWeight = useLive(12.4, 1.2, 3500);
-  const ropeStress = useLive(62, 5, 4000);
 
   const maxSpeed = 14;
   const normalizedSpeed = Math.min(1, Math.max(0, speed / maxSpeed));

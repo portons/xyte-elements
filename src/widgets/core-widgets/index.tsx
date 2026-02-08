@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { getX, ease, Card, Badge, Btn, Slider, Prog, Lbl, M, Dot } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useAnim, useTick } from '../hooks';
 
 // ── Types ────────────────────────────────────────────────────────────
 
@@ -532,7 +532,7 @@ export function SplineChart({ title = 'Trend', measurements, data }: {
 
 // ── 12. ScatterChart ─────────────────────────────────────────────────
 
-function generateScatterData(count = 30): { x: number; y: number; label?: string }[] {
+function generateScatterData(count = 30): { x: number; y: number; label?: string; color?: string }[] {
   const data: { x: number; y: number; label?: string }[] = [];
   const labels = ['Alert', 'Warning', 'Info', 'Error', 'Reset'];
   for (let i = 0; i < count; i++) {

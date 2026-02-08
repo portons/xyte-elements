@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { getX, ease, Card, Badge, Lbl, M, Dot, Prog } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useAnim, useTick } from '../hooks';
 
 // ── Fleet GPS ────────────────────────────────────────────────────────
 export function FleetGPS({ title = 'Fleet GPS', speedUnit = 'mph' }: {
@@ -20,12 +20,12 @@ export function FleetGPS({ title = 'Fleet GPS', speedUnit = 'mph' }: {
   const sc: Record<string, string> = { moving: X.teal, idle: X.amber, stopped: X.red };
 
   const speeds = [
-    useLive(vehicles[0].spd, 5, 2500),
-    useLive(vehicles[1].spd, 0, 2500),
-    useLive(vehicles[2].spd, 4, 2500),
-    useLive(vehicles[3].spd, 0, 2500),
-    useLive(vehicles[4].spd, 6, 2500),
-    useLive(vehicles[5].spd, 4, 2500),
+    vehicles[0].spd,
+    vehicles[1].spd,
+    vehicles[2].spd,
+    vehicles[3].spd,
+    vehicles[4].spd,
+    vehicles[5].spd,
   ];
 
   const moving = vehicles.filter(v => v.status === 'moving').length;
@@ -276,10 +276,10 @@ export function FuelMonitor({ title = 'Fuel Monitor', lowThreshold = 25 }: {
   ];
 
   const mpgLive = [
-    useLive(vehicles[0].mpg, 0.4, 3000),
-    useLive(vehicles[1].mpg, 0.3, 3000),
-    useLive(vehicles[2].mpg, 0.6, 3000),
-    useLive(vehicles[3].mpg, 0.3, 3000),
+    vehicles[0].mpg,
+    vehicles[1].mpg,
+    vehicles[2].mpg,
+    vehicles[3].mpg,
   ];
 
   const tankColor = (v: number) => v >= 60 ? X.teal : v >= 30 ? X.amber : X.red;

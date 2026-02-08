@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { getX, ease, Card, Badge, Btn, Lbl, M, Dot } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useAnim, useTick } from '../hooks';
 
 function neo() {
   const X = getX();
@@ -20,12 +20,12 @@ export function CrowdDensity({ title = 'Crowd Density', maxCapacity = 50000 }: {
   const n = neo();
 
   const zones = [
-    { name: 'North Stand', density: useLive(78, 6, 2800) },
-    { name: 'South Stand', density: useLive(92, 4, 3200) },
-    { name: 'East Wing', density: useLive(61, 8, 3000) },
-    { name: 'West Wing', density: useLive(55, 7, 2600) },
-    { name: 'VIP Box', density: useLive(44, 5, 3400) },
-    { name: 'Pitch Side', density: useLive(85, 3, 3100) },
+    { name: 'North Stand', density: 78 },
+    { name: 'South Stand', density: 92 },
+    { name: 'East Wing', density: 61 },
+    { name: 'West Wing', density: 55 },
+    { name: 'VIP Box', density: 44 },
+    { name: 'Pitch Side', density: 85 },
   ];
 
   const avgDensity = zones.reduce((s, z) => s + z.density, 0) / zones.length;
@@ -125,9 +125,9 @@ export function TicketGate({ title = 'Ticket Gates', gateCount = 8 }: { title?: 
 
   const gates = Array.from({ length: gateCount }, (_, i) => ({
     id: i + 1,
-    entries: useLive(120 + i * 15, 12, 2200 + i * 200),
-    throughput: useLive(24 + i * 2, 3, 2800 + i * 150),
-    active: useLive(1, 0.4, 5000 + i * 500) > 0.6,
+    entries: 120 + i * 15,
+    throughput: 24 + i * 2,
+    active: 1 > 0.6,
   }));
 
   const totalEntries = gates.reduce((s, g) => s + g.entries, 0);
@@ -209,8 +209,8 @@ export function LightingRig({ title = 'Lighting Rig', fixtureCount = 6 }: { titl
 
   const fixtures = Array.from({ length: fixtureCount }, (_, i) => ({
     zone: ['Main Field', 'North End', 'South End', 'East Stand', 'West Stand', 'Stage'][i % 6],
-    brightness: useLive(70 + i * 4, 8, 2600 + i * 300),
-    power: useLive(1.8 + i * 0.3, 0.2, 3200 + i * 200),
+    brightness: 70 + i * 4,
+    power: 1.8 + i * 0.3,
   }));
 
   const avgBrightness = fixtures.reduce((s, f) => s + f.brightness, 0) / fixtures.length;
@@ -314,8 +314,8 @@ export function PASystem({ title = 'PA System', zoneCount = 4 }: { title?: strin
   const zoneNames = ['Main', 'North', 'South', 'East', 'West', 'Concourse', 'VIP', 'Stage'];
   const zones = Array.from({ length: zoneCount }, (_, i) => ({
     name: zoneNames[i % zoneNames.length],
-    volume: useLive(72 + i * 3, 6, 1800 + i * 300),
-    level: useLive(65 + i * 5, 14, 200 + i * 50),
+    volume: 72 + i * 3,
+    level: 65 + i * 5,
   }));
 
   const activeLevel = zones[activeZone]?.level ?? 0;
@@ -437,13 +437,10 @@ export function PASystem({ title = 'PA System', zoneCount = 4 }: { title?: strin
 }
 
 // ── Score Board ──────────────────────────────────────────────────────
-export function ScoreBoard({ title = 'Scoreboard', sport = 'Football' }: { title?: string; sport?: string } = {}) {
+export function ScoreBoard({ title = 'Scoreboard', sport = 'Football', homeScore, awayScore }: { title?: string; sport?: string; homeScore: number; awayScore: number }) {
   const X = getX();
   const n = neo();
   const tick = useTick(1000);
-
-  const homeScore = useLive(2, 0.3, 15000);
-  const awayScore = useLive(1, 0.4, 18000);
   const minutes = Math.floor(tick / 6) % 90;
   const seconds = (tick * 10) % 60;
   const period = minutes < 45 ? '1st Half' : '2nd Half';
@@ -584,9 +581,9 @@ export function TurnstileFlow({ title = 'Turnstile Flow', entryPoints = 4 }: { t
 
   const turnstiles = Array.from({ length: entryPoints }, (_, i) => ({
     label: String.fromCharCode(65 + i),
-    entries: useLive(1240 + i * 180, 30, 3000 + i * 400),
-    exits: useLive(890 + i * 120, 25, 3200 + i * 350),
-    rpm: useLive(12 + i * 2, 3, 2000 + i * 300),
+    entries: 1240 + i * 180,
+    exits: 890 + i * 120,
+    rpm: 12 + i * 2,
   }));
 
   const totalEntries = turnstiles.reduce((s, t) => s + t.entries, 0);

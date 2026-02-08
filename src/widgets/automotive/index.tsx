@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { getX, ease, Card, Badge, Btn, Prog, Lbl, M, Dot } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useAnim, useTick } from '../hooks';
 
 function neo() {
   const X = getX();
@@ -15,10 +15,9 @@ function neo() {
 }
 
 // ── Speedometer ─────────────────────────────────────────────────────
-export function Speedometer({ title = 'Speed', maxSpeed = 260 }: { title?: string; maxSpeed?: number } = {}) {
+export function Speedometer({ title = 'Speed', maxSpeed = 260, speed }: { title?: string; maxSpeed?: number; speed: number }) {
   const X = getX();
   const n = neo();
-  const speed = useLive(95, 15, 2000);
   const tick = useTick(1000);
   const pct = Math.max(0, Math.min(1, speed / maxSpeed));
   const sweepDeg = 270;
@@ -167,10 +166,9 @@ export function Speedometer({ title = 'Speed', maxSpeed = 260 }: { title?: strin
 }
 
 // ── Tachometer ──────────────────────────────────────────────────────
-export function Tachometer({ title = 'Tachometer', redline = 7000 }: { title?: string; redline?: number } = {}) {
+export function Tachometer({ title = 'Tachometer', redline = 7000, rpm }: { title?: string; redline?: number; rpm: number }) {
   const X = getX();
   const n = neo();
-  const rpm = useLive(3200, 400, 1500);
   const maxRPM = 8000;
   const pct = Math.max(0, Math.min(1, rpm / maxRPM));
   const sweepDeg = 270;
@@ -312,10 +310,9 @@ export function Tachometer({ title = 'Tachometer', redline = 7000 }: { title?: s
 }
 
 // ── Boost Gauge ─────────────────────────────────────────────────────
-export function BoostGauge({ title = 'Boost', maxBoost = 25 }: { title?: string; maxBoost?: number } = {}) {
+export function BoostGauge({ title = 'Boost', maxBoost = 25, boost }: { title?: string; maxBoost?: number; boost: number }) {
   const X = getX();
   const n = neo();
-  const boost = useLive(8, 6, 1500);
   const tick = useTick(60);
 
   const minVac = -30;
@@ -469,10 +466,9 @@ export function BoostGauge({ title = 'Boost', maxBoost = 25 }: { title?: string;
 }
 
 // ── Oil Temperature ─────────────────────────────────────────────────
-export function OilTemp({ title = 'Oil Temperature' }: { title?: string } = {}) {
+export function OilTemp({ title = 'Oil Temperature', temp }: { title?: string; temp: number }) {
   const X = getX();
   const n = neo();
-  const temp = useLive(92, 4, 3000);
   const tick = useTick(80);
   const isWarning = temp > 120;
 
@@ -586,10 +582,9 @@ export function OilTemp({ title = 'Oil Temperature' }: { title?: string } = {}) 
 }
 
 // ── Fuel Gauge ──────────────────────────────────────────────────────
-export function FuelGauge({ title = 'Fuel Level' }: { title?: string } = {}) {
+export function FuelGauge({ title = 'Fuel Level', fuel }: { title?: string; fuel: number }) {
   const X = getX();
   const n = neo();
-  const fuel = useLive(62, 4, 4000);
   const tick = useTick(80);
   const isLow = fuel < 15;
 
@@ -720,15 +715,10 @@ export function FuelGauge({ title = 'Fuel Level' }: { title?: string } = {}) {
 }
 
 // ── Engine Diagnostics ──────────────────────────────────────────────
-export function EngDiagnostics({ title = 'Engine Diagnostics' }: { title?: string } = {}) {
+export function EngDiagnostics({ title = 'Engine Diagnostics', rpmVal, coolantVal, intakeVal, batteryVal }: { title?: string; rpmVal: number; coolantVal: number; intakeVal: number; batteryVal: number }) {
   const X = getX();
   const n = neo();
   const tick = useTick(500);
-
-  const rpmVal = useLive(2800, 200, 1500);
-  const coolantVal = useLive(92, 3, 3000);
-  const intakeVal = useLive(38, 2, 2500);
-  const batteryVal = useLive(13.8, 0.3, 4000);
 
   const readings = [
     { label: 'RPM', value: Math.round(rpmVal), digits: 4, unit: '', color: X.teal },

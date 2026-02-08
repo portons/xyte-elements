@@ -1,6 +1,6 @@
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
 import { getX, ease, Card, Badge, Lbl, M, Dot, Prog } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useAnim } from '../hooks';
 
 // ── Rack Thermal ────────────────────────────────────────────────────
 export function RackThermal({ title = 'Rack Thermal Map', alertTemp = 45 }: { title?: string; alertTemp?: number }) {
@@ -15,8 +15,8 @@ export function RackThermal({ title = 'Rack Thermal Map', alertTemp = 45 }: { ti
   ], []);
 
   const liveTemps = racks.map((r, i) => ({
-    front: useLive(r.front, 1.5, 2000 + i * 200),
-    rear: useLive(r.rear, 2, 1800 + i * 150),
+    front: r.front,
+    rear: r.rear,
   }));
 
   const hotSpot = Math.max(...liveTemps.map(t => t.rear));
@@ -177,7 +177,7 @@ export function BandwidthPipe({ title = 'Bandwidth', highUtilThreshold = 85 }: {
     { name: 'Transit', capacity: 100, base: 42.3, color: X.amber },
   ], []);
 
-  const liveThroughputs = links.map((l, i) => useLive(l.base, l.base * 0.12, 1500 + i * 300));
+  const liveThroughputs = links.map((l, i) => l.base);
 
   return (
     <Card style={{ width: 370 }}>
@@ -216,14 +216,10 @@ export function BandwidthPipe({ title = 'Bandwidth', highUtilThreshold = 85 }: {
 }
 
 // ── UPS Status ──────────────────────────────────────────────────────
-export function UPSStatus({ title = 'UPS Status', nominalVoltage = 230 }: { title?: string; nominalVoltage?: number }) {
+export function UPSStatus({ title = 'UPS Status', nominalVoltage = 230, load, runtime, inputV, outputV }: { title?: string; nominalVoltage?: number; load: number; runtime: number; inputV: number; outputV: number }) {
   const X = getX();
   const battery = 87;
   const animBattery = useAnim(battery, 1200);
-  const load = useLive(62, 4, 2500);
-  const runtime = useLive(24, 2, 4000);
-  const inputV = useLive(230, 3, 2000);
-  const outputV = useLive(230, 0.8, 1800);
 
   const battColor = battery > 60 ? X.teal : battery > 30 ? X.amber : X.red;
   const loadColor = load > 80 ? X.red : load > 60 ? X.amber : X.teal;
@@ -278,12 +274,10 @@ export function UPSStatus({ title = 'UPS Status', nominalVoltage = 230 }: { titl
 }
 
 // ── Cooling Efficiency ──────────────────────────────────────────────
-export function CoolingEfficiency({ title = 'Cooling Efficiency', pueTarget = 1.4 }: { title?: string; pueTarget?: number }) {
+export function CoolingEfficiency({ title = 'Cooling Efficiency', pueTarget = 1.4, supplyTemp, returnTemp }: { title?: string; pueTarget?: number; supplyTemp: number; returnTemp: number }) {
   const X = getX();
   const pue = 1.38;
   const animPue = useAnim(pue * 100, 1400);
-  const supplyTemp = useLive(12.4, 0.8, 2000);
-  const returnTemp = useLive(22.6, 1.2, 2200);
   const chillerStatus = 'Running';
 
   const crahUnits = useMemo(() => [

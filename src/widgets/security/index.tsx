@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { getX, ease, Card, Badge, Btn, Prog, Lbl, M, Dot } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useAnim, useTick } from '../hooks';
 
 // ── Threat Map ───────────────────────────────────────────────────────
-export function ThreatMap({ title = 'Threat Map', refreshInterval = 3000 }: { title?: string; refreshInterval?: number }) {
+export function ThreatMap({ title = 'Threat Map', refreshInterval = 3000, liveThreats }: { title?: string; refreshInterval?: number; liveThreats: number }) {
   const X = getX();
   const tick = useTick(refreshInterval);
   const regions: { name: string; code: string; threats: number; sev: 'critical' | 'high' | 'medium' | 'low' }[] = [
@@ -16,7 +16,6 @@ export function ThreatMap({ title = 'Threat Map', refreshInterval = 3000 }: { ti
   ];
   const sevColor: Record<string, string> = { critical: X.red, high: X.amber, medium: X.purple, low: X.teal };
   const [selected, setSelected] = useState<number | null>(null);
-  const liveThreats = useLive(57, 8, 4000);
 
   return (
     <Card style={{ width: 350 }}>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { getX, ease, Card, Badge, Lbl, M, Dot, Prog, Btn } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useAnim, useTick } from '../hooks';
 
 function neo() {
   const X = getX();
@@ -15,12 +15,9 @@ function neo() {
 }
 
 // ── Wellhead Pressure ────────────────────────────────────────────────
-export function WellheadPressure({ title = 'Wellhead Pressure', maxPSI = 5000 }: { title?: string; maxPSI?: number } = {}) {
+export function WellheadPressure({ title = 'Wellhead Pressure', maxPSI = 5000, psi, temp, flowRate }: { title?: string; maxPSI?: number; psi: number; temp: number; flowRate: number }) {
   const X = getX();
   const n = neo();
-  const psi = useLive(3200, 120, 2000);
-  const temp = useLive(185, 8, 3200);
-  const flowRate = useLive(1240, 60, 2800);
   const psiPct = Math.min(100, Math.max(0, (psi / maxPSI) * 100));
   const animPct = useAnim(psiPct, 1400);
 
@@ -186,16 +183,13 @@ export function WellheadPressure({ title = 'Wellhead Pressure', maxPSI = 5000 }:
 }
 
 // ── BOP Status ───────────────────────────────────────────────────────
-export function BOPStatus({ title = 'BOP Status', ramCount = 4 }: { title?: string; ramCount?: number } = {}) {
+export function BOPStatus({ title = 'BOP Status', ramCount = 4, testPressure, annularPressure }: { title?: string; ramCount?: number; testPressure: number; annularPressure: number }) {
   const X = getX();
   const n = neo();
   const tick = useTick(3000);
 
   const ramLabels = ['Blind Ram', 'Pipe Ram', 'Shear Ram', 'Annular'].slice(0, ramCount);
   const [ramStates, setRamStates] = useState<boolean[]>(() => ramLabels.map((_, i) => i < 2));
-
-  const testPressure = useLive(4800, 150, 2500);
-  const annularPressure = useLive(1200, 80, 3000);
   const allClosed = ramStates.every(Boolean);
   const anyOpen = ramStates.some(s => !s);
   const statusColor = allClosed ? X.teal : anyOpen ? X.amber : X.red;
@@ -309,13 +303,9 @@ export function BOPStatus({ title = 'BOP Status', ramCount = 4 }: { title?: stri
 }
 
 // ── Mud Weight ───────────────────────────────────────────────────────
-export function MudWeight({ title = 'Mud Weight', weightUnit = 'ppg' }: { title?: string; weightUnit?: string } = {}) {
+export function MudWeight({ title = 'Mud Weight', weightUnit = 'ppg', weight, viscosity, pH, chlorides }: { title?: string; weightUnit?: string; weight: number; viscosity: number; pH: number; chlorides: number }) {
   const X = getX();
   const n = neo();
-  const weight = useLive(12.4, 0.6, 2200);
-  const viscosity = useLive(48, 3, 3000);
-  const pH = useLive(9.8, 0.4, 3500);
-  const chlorides = useLive(18000, 1200, 4000);
 
   const minW = 8, maxW = 18;
   const weightPct = Math.min(100, Math.max(0, ((weight - minW) / (maxW - minW)) * 100));
@@ -464,14 +454,10 @@ export function MudWeight({ title = 'Mud Weight', weightUnit = 'ppg' }: { title?
 }
 
 // ── Drill Depth ──────────────────────────────────────────────────────
-export function DrillDepth({ title = 'Drill Depth', depthUnit = 'ft' }: { title?: string; depthUnit?: string } = {}) {
+export function DrillDepth({ title = 'Drill Depth', depthUnit = 'ft', currentDepth, rop, wob, torque }: { title?: string; depthUnit?: string; currentDepth: number; rop: number; wob: number; torque: number }) {
   const X = getX();
   const n = neo();
   const maxDepth = 15000;
-  const currentDepth = useLive(8400, 150, 2500);
-  const rop = useLive(42, 6, 3000);
-  const wob = useLive(28, 4, 3200);
-  const torque = useLive(14200, 800, 3500);
 
   const depthPct = Math.min(100, Math.max(0, (currentDepth / maxDepth) * 100));
   const animDepth = useAnim(depthPct, 1400);
@@ -591,14 +577,10 @@ export function DrillDepth({ title = 'Drill Depth', depthUnit = 'ft' }: { title?
 }
 
 // ── Gas Separator ────────────────────────────────────────────────────
-export function GasSeparator({ title = 'Gas Separator', flowUnit = 'MCF/d' }: { title?: string; flowUnit?: string } = {}) {
+export function GasSeparator({ title = 'Gas Separator', flowUnit = 'MCF/d', gasFlow, liquidFlow, pressure, efficiency }: { title?: string; flowUnit?: string; gasFlow: number; liquidFlow: number; pressure: number; efficiency: number }) {
   const X = getX();
   const n = neo();
   const tick = useTick(80);
-  const gasFlow = useLive(320, 30, 2500);
-  const liquidFlow = useLive(180, 20, 3000);
-  const pressure = useLive(85, 6, 2800);
-  const efficiency = useLive(94, 2, 4000);
 
   const effColor = efficiency > 92 ? X.teal : efficiency > 85 ? X.amber : X.red;
   const animEff = useAnim(efficiency, 1200);
@@ -740,13 +722,9 @@ export function GasSeparator({ title = 'Gas Separator', flowUnit = 'MCF/d' }: { 
 }
 
 // ── Rig Tension ──────────────────────────────────────────────────────
-export function RigTension({ title = 'Rig Tension', loadLimit = 500 }: { title?: string; loadLimit?: number } = {}) {
+export function RigTension({ title = 'Rig Tension', loadLimit = 500, hookLoad, torque, rpm, standpipe }: { title?: string; loadLimit?: number; hookLoad: number; torque: number; rpm: number; standpipe: number }) {
   const X = getX();
   const n = neo();
-  const hookLoad = useLive(320, 25, 2200);
-  const torque = useLive(18500, 1200, 2800);
-  const rpm = useLive(120, 8, 3000);
-  const standpipe = useLive(3200, 200, 3500);
 
   const hookPct = Math.min(100, Math.max(0, (hookLoad / loadLimit) * 100));
   const torquePct = Math.min(100, Math.max(0, (torque / 30000) * 100));

@@ -1,12 +1,11 @@
 import { useState, useEffect, useMemo } from 'react';
 import { getX, ease, Card, Badge, Btn, Prog, Lbl, M, Dot } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useAnim, useTick } from '../hooks';
 
 // ── Anomaly Detector ─────────────────────────────────────────────────
-export function AnomalyDetector({ title = 'Anomaly Detection', threshold = 70 }: { title?: string; threshold?: number }) {
+export function AnomalyDetector({ title = 'Anomaly Detection', threshold = 70, confidence }: { title?: string; threshold?: number; confidence: number }) {
   const X = getX();
   const tick = useTick(2000);
-  const confidence = useLive(94, 3, 2500);
 
   const data = useMemo(() => Array.from({ length: 30 }, (_, i) => {
     const base = 40 + Math.sin(i * 0.4) * 20;
@@ -145,9 +144,8 @@ export function AIInsights({ title = 'AI Insights', maxVisible = 5 }: { title?: 
 }
 
 // ── Sentiment Gauge ──────────────────────────────────────────────────
-export function SentimentGauge({ title = 'Satisfaction', layout = 'gauge' }: { title?: string; layout?: 'gauge' | 'compact' }) {
+export function SentimentGauge({ title = 'Satisfaction', layout = 'gauge', score }: { title?: string; layout?: 'gauge' | 'compact'; score: number }) {
   const X = getX();
-  const score = useLive(78, 5, 3000);
   const animScore = useAnim(78);
   const [trend] = useState<'up' | 'down'>('up');
 

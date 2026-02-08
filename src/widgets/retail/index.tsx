@@ -1,15 +1,13 @@
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
 import { getX, ease, Card, Badge, Lbl, M, Dot, Prog } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useAnim, useTick } from '../hooks';
 
 // ── POS Analytics ───────────────────────────────────────────────────
-export function POSAnalytics({ title = 'POS Analytics', currency = '$' }: {
-  title?: string; currency?: string;
-} = {}) {
+export function POSAnalytics({ title = 'POS Analytics', currency = '$', revenue, avgTx }: {
+  title?: string; currency?: string; revenue: number; avgTx: number;
+}) {
   const X = getX();
   const txCount = useAnim(847, 1400);
-  const revenue = useLive(24380, 800, 4000);
-  const avgTx = useLive(28.8, 2.5, 3000);
   const hourly = useMemo(() => Array.from({ length: 24 }, (_, h) => {
     if (h < 6) return Math.random() * 120;
     if (h < 10) return 400 + Math.random() * 500;
@@ -104,11 +102,10 @@ export function InventoryLevel({ title = 'Inventory Levels', showReorderLine = t
 }
 
 // ── Foot Traffic ────────────────────────────────────────────────────
-export function FootTraffic({ title = 'Foot Traffic', maxCapacity = 300 }: {
-  title?: string; maxCapacity?: number;
-} = {}) {
+export function FootTraffic({ title = 'Foot Traffic', maxCapacity = 300, occupancy }: {
+  title?: string; maxCapacity?: number; occupancy: number;
+}) {
   const X = getX();
-  const occupancy = useLive(186, 12, 3000);
   const hourly = useMemo(() => Array.from({ length: 24 }, (_, h) => {
     if (h < 7) return Math.floor(Math.random() * 10);
     if (h < 10) return 40 + Math.floor(Math.random() * 60);
@@ -163,9 +160,9 @@ export function FootTraffic({ title = 'Foot Traffic', maxCapacity = 300 }: {
 }
 
 // ── Queue Monitor ───────────────────────────────────────────────────
-export function QueueMonitor({ title = 'Queue Monitor', longQueueThreshold = 5 }: {
-  title?: string; longQueueThreshold?: number;
-} = {}) {
+export function QueueMonitor({ title = 'Queue Monitor', longQueueThreshold = 5, r1, r2, r3, r4 }: {
+  title?: string; longQueueThreshold?: number; r1: number; r2: number; r3: number; r4: number;
+}) {
   const X = getX();
   const registers = useMemo(() => [
     { id: 1, name: 'Register 1', customers: 3, avgWait: 2.4 },
@@ -173,10 +170,6 @@ export function QueueMonitor({ title = 'Queue Monitor', longQueueThreshold = 5 }
     { id: 3, name: 'Register 3', customers: 1, avgWait: 0.8 },
     { id: 4, name: 'Register 4', customers: 0, avgWait: 0 },
   ], []);
-  const r1 = useLive(3, 1.5, 4000);
-  const r2 = useLive(5, 2, 3500);
-  const r3 = useLive(1, 1, 4500);
-  const r4 = useLive(0, 0.8, 5000);
   const liveCounts = [Math.max(0, Math.round(r1)), Math.max(0, Math.round(r2)), Math.max(0, Math.round(r3)), Math.max(0, Math.round(r4))];
   const waits = [2.4, 4.1, 0.8, 0];
   const totalInQueue = liveCounts.reduce((a, b) => a + b, 0);
@@ -334,12 +327,11 @@ export function ShrinkageAlert({ title = 'Shrinkage Alerts', severityFilter = 'a
 }
 
 // ── Loyalty Dashboard ───────────────────────────────────────────────
-export function LoyaltyDash({ title = 'Loyalty Program', redemptionTarget = 70 }: {
-  title?: string; redemptionTarget?: number;
-} = {}) {
+export function LoyaltyDash({ title = 'Loyalty Program', redemptionTarget = 70, pointsDist }: {
+  title?: string; redemptionTarget?: number; pointsDist: number;
+}) {
   const X = getX();
   const members = useAnim(12480, 1400);
-  const pointsDist = useLive(284000, 5000, 5000);
   const redemptionRate = 67;
   const animRedemption = useAnim(redemptionRate, 1200);
   const tiers = useMemo(() => [

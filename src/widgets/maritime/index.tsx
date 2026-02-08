@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { getX, ease, Card, Badge, Lbl, M, Dot, Prog } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useAnim, useTick } from '../hooks';
 
 // ── Vessel Tracker ──────────────────────────────────────────────────
 export function VesselTracker({ title = 'Vessel Tracker', speedUnit = 'kn' }: { title?: string; speedUnit?: string }) {
@@ -16,21 +16,21 @@ export function VesselTracker({ title = 'Vessel Tracker', speedUnit = 'kn' }: { 
   ], []);
 
   const headings = [
-    useLive(vessels[0].hdgBase, 5, 2500),
-    useLive(vessels[1].hdgBase, 4, 2800),
-    useLive(vessels[2].hdgBase, 0, 3000),
-    useLive(vessels[3].hdgBase, 2, 3200),
-    useLive(vessels[4].hdgBase, 6, 2200),
-    useLive(vessels[5].hdgBase, 3, 2600),
+    vessels[0].hdgBase,
+    vessels[1].hdgBase,
+    vessels[2].hdgBase,
+    vessels[3].hdgBase,
+    vessels[4].hdgBase,
+    vessels[5].hdgBase,
   ];
 
   const speeds = [
-    useLive(vessels[0].spdBase, 1.5, 2000),
-    useLive(vessels[1].spdBase, 1.2, 2200),
-    useLive(vessels[2].spdBase, 0, 3000),
-    useLive(vessels[3].spdBase, 0, 3000),
-    useLive(vessels[4].spdBase, 1.8, 2400),
-    useLive(vessels[5].spdBase, 1.0, 2600),
+    vessels[0].spdBase,
+    vessels[1].spdBase,
+    vessels[2].spdBase,
+    vessels[3].spdBase,
+    vessels[4].spdBase,
+    vessels[5].spdBase,
   ];
 
   const sc: Record<string, string> = { underway: X.teal, anchored: X.amber, berthed: X.purple };
@@ -134,10 +134,8 @@ export function ContainerYard({ title = 'Container Yard', capacityWarning = 90 }
 }
 
 // ── Tide Monitor ────────────────────────────────────────────────────
-export function TideMonitor({ title = 'Tide Monitor', depthUnit = 'meters' }: { title?: string; depthUnit?: string }) {
+export function TideMonitor({ title = 'Tide Monitor', depthUnit = 'meters', tideLevel }: { title?: string; depthUnit?: string; tideLevel: number }) {
   const X = getX();
-
-  const tideLevel = useLive(3.8, 0.4, 2000);
   const highTide = '14:22';
   const lowTide = '08:47';
   const nextHigh = '20:38';
@@ -224,10 +222,10 @@ export function CraneOps({ title = 'Quay Cranes', efficiencyTarget = 90 }: { tit
   ];
 
   const loads = [
-    useLive(cranes[0].loadBase, 6, 1500),
-    useLive(cranes[1].loadBase, 8, 1800),
-    useLive(cranes[2].loadBase, 0, 3000),
-    useLive(cranes[3].loadBase, 0, 3000),
+    cranes[0].loadBase,
+    cranes[1].loadBase,
+    cranes[2].loadBase,
+    cranes[3].loadBase,
   ];
 
   const sc: Record<string, string> = { operating: X.teal, idle: X.amber, maintenance: X.red };

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { getX, ease, Card, Badge, Btn, Prog, Lbl, M, Dot } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useAnim, useTick } from '../hooks';
 
 function neo() {
   const X = getX();
@@ -18,8 +18,8 @@ function neo() {
 export function AttitudeIndicator({ title = 'Attitude', pitch = 10, roll = 15 }: { title?: string; pitch?: number; roll?: number } = {}) {
   const X = getX();
   const n = neo();
-  const livePitch = useLive(pitch, 5, 1800);
-  const liveRoll = useLive(roll, 8, 1600);
+  const livePitch = pitch;
+  const liveRoll = roll;
   const animPitch = useAnim(livePitch, 800);
   const animRoll = useAnim(liveRoll, 800);
 
@@ -136,10 +136,9 @@ export function AttitudeIndicator({ title = 'Attitude', pitch = 10, roll = 15 }:
 }
 
 // ── Altimeter ───────────────────────────────────────────────────────
-export function Altimeter({ title = 'Altimeter', maxAlt = 35000 }: { title?: string; maxAlt?: number } = {}) {
+export function Altimeter({ title = 'Altimeter', altitude, maxAlt = 35000 }: { title?: string; altitude: number; maxAlt?: number }) {
   const X = getX();
   const n = neo();
-  const altitude = useLive(24500, 500, 2500);
   const animAlt = useAnim(altitude, 1200);
 
   const altStr = String(Math.round(Math.abs(animAlt))).padStart(5, '0');
@@ -274,10 +273,9 @@ export function Altimeter({ title = 'Altimeter', maxAlt = 35000 }: { title?: str
 }
 
 // ── Airspeed Indicator ──────────────────────────────────────────────
-export function AirspeedIndicator({ title = 'Airspeed', vne = 250 }: { title?: string; vne?: number } = {}) {
+export function AirspeedIndicator({ title = 'Airspeed', airspeed, vne = 250 }: { title?: string; airspeed: number; vne?: number }) {
   const X = getX();
   const n = neo();
-  const airspeed = useLive(165, 15, 2000);
   const animSpeed = useAnim(airspeed, 1000);
 
   const maxScale = 280;
@@ -424,11 +422,9 @@ export function AirspeedIndicator({ title = 'Airspeed', vne = 250 }: { title?: s
 }
 
 // ── Heading Compass ─────────────────────────────────────────────────
-export function HeadingCompass({ title = 'Heading' }: { title?: string } = {}) {
+export function HeadingCompass({ title = 'Heading', heading, wobble }: { title?: string; heading: number; wobble: number }) {
   const X = getX();
   const n = neo();
-  const heading = useLive(270, 20, 2000);
-  const wobble = useLive(0, 1.5, 800);
 
   const cardinals: [number, string][] = [[0, 'N'], [90, 'E'], [180, 'S'], [270, 'W']];
 
@@ -557,10 +553,9 @@ export function HeadingCompass({ title = 'Heading' }: { title?: string } = {}) {
 }
 
 // ── Vertical Speed ──────────────────────────────────────────────────
-export function VerticalSpeed({ title = 'Vertical Speed' }: { title?: string } = {}) {
+export function VerticalSpeed({ title = 'Vertical Speed', vsi }: { title?: string; vsi: number }) {
   const X = getX();
   const n = neo();
-  const vsi = useLive(500, 300, 2000);
   const animVsi = useAnim(vsi, 1000);
 
   const maxVsi = 2000;

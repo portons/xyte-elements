@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { getX, ease, Card, Badge, Btn, Prog, Lbl, M, Dot } from '../primitives';
-import { useAnim, useLive, useTick } from '../hooks';
+import { useAnim, useTick } from '../hooks';
 
 function neo() {
   const X = getX();
@@ -20,9 +20,9 @@ export function FermentationVessel({ title = 'Fermentation', vesselCount = 3 }: 
   const n = neo();
   const count = Math.min(Math.max(vesselCount, 1), 4);
 
-  const temps = [useLive(18.5, 1.2, 2800), useLive(20.1, 0.8, 3200), useLive(16.4, 1.5, 3000), useLive(19.8, 0.9, 3500)];
-  const pressures = [useLive(14.2, 1.0, 3000), useLive(12.8, 0.6, 3400), useLive(15.1, 1.3, 2600), useLive(13.5, 0.7, 3100)];
-  const fills = [useLive(72, 5, 3500), useLive(88, 3, 2800), useLive(45, 6, 3200), useLive(61, 4, 3000)];
+  const temps = [18.5, 20.1, 16.4, 19.8];
+  const pressures = [14.2, 12.8, 15.1, 13.5];
+  const fills = [72, 88, 45, 61];
   const animFills = [useAnim(fills[0], 1200), useAnim(fills[1], 1300), useAnim(fills[2], 1100), useAnim(fills[3], 1400)];
 
   const statuses: Array<{ label: string; color: string }> = [];
@@ -127,7 +127,7 @@ export function FermentationVessel({ title = 'Fermentation', vesselCount = 3 }: 
 export function BrewTempCurve({ title = 'Temp Curve', targetTemp = 20 }: { title?: string; targetTemp?: number } = {}) {
   const X = getX();
   const n = neo();
-  const currentTemp = useLive(targetTemp, 2.5, 2000);
+  const currentTemp = targetTemp;
   const animTemp = useAnim(currentTemp, 1000);
   const tick = useTick(2000);
 
@@ -264,12 +264,9 @@ export function BrewTempCurve({ title = 'Temp Curve', targetTemp = 20 }: { title
 }
 
 // ── Carbonation Level ────────────────────────────────────────────────
-export function CarbonationLevel({ title = 'CO\u2082 Level', co2Unit = 'psi' }: { title?: string; co2Unit?: string } = {}) {
+export function CarbonationLevel({ title = 'CO\u2082 Level', co2Unit = 'psi', pressure, volumes, temp }: { title?: string; co2Unit?: string; pressure: number; volumes: number; temp: number }) {
   const X = getX();
   const n = neo();
-  const pressure = useLive(12.5, 2, 2500);
-  const volumes = useLive(2.4, 0.3, 3000);
-  const temp = useLive(4.2, 0.8, 3500);
 
   const maxPressure = 30;
   const normalizedP = Math.min(1, Math.max(0, pressure / maxPressure));
@@ -411,13 +408,12 @@ export function CarbonationLevel({ title = 'CO\u2082 Level', co2Unit = 'psi' }: 
 }
 
 // ── Mash Tun Control ─────────────────────────────────────────────────
-export function MashTunControl({ title = 'Mash Tun', recipeSteps = 4 }: { title?: string; recipeSteps?: number } = {}) {
+export function MashTunControl({ title = 'Mash Tun', recipeSteps = 4, temp }: { title?: string; recipeSteps?: number; temp: number }) {
   const X = getX();
   const n = neo();
   const steps = Math.min(Math.max(recipeSteps, 2), 6);
   const [currentStep, setCurrentStep] = useState(0);
   const [running, setRunning] = useState(false);
-  const temp = useLive(65, 3, 2500);
   const elapsed = useTick(1000);
 
   const stepNames = ['Mash In', 'Protein Rest', 'Sacch Rest', 'Mash Out', 'Sparge', 'Vorlauf'].slice(0, steps);
@@ -584,10 +580,9 @@ export function MashTunControl({ title = 'Mash Tun', recipeSteps = 4 }: { title?
 }
 
 // ── Gravity Reading ──────────────────────────────────────────────────
-export function GravityReading({ title = 'Gravity', ogTarget = 1.055 }: { title?: string; ogTarget?: number } = {}) {
+export function GravityReading({ title = 'Gravity', ogTarget = 1.055, sg }: { title?: string; ogTarget?: number; sg: number }) {
   const X = getX();
   const n = neo();
-  const sg = useLive(1.042, 0.004, 3000);
   const fgTarget = 1.012;
   const animSg = useAnim(sg, 1000);
 
@@ -773,14 +768,14 @@ export function BatchTracker({ title = 'Batch Tracker', maxBatches = 6 }: { titl
   };
 
   const progValues = [
-    useLive(45, 4, 3000),
-    useLive(72, 3, 3200),
-    useLive(88, 2, 2800),
-    useLive(18, 5, 3500),
-    useLive(35, 3, 3100),
-    useLive(100, 0, 5000),
-    useLive(55, 4, 2900),
-    useLive(68, 3, 3300),
+    45,
+    72,
+    88,
+    18,
+    35,
+    100,
+    55,
+    68,
   ];
 
   const days = [7, 14, 21, 2, 30, 28, 10, 16];
